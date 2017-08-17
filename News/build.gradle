@@ -19,9 +19,15 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://maven.google.com' }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+    supportVersion = "26.0.1"
+    lifecycleVersion = '1.0.0-alpha9'
 }
