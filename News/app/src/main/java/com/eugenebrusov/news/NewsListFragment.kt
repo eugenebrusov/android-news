@@ -24,21 +24,22 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_news_list, container, false)
+        return inflater?.inflate(R.layout.fragment_news_list, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val adapter = NewsListAdapter()
+
         val recyclerView = view as? RecyclerView
         recyclerView?.setHasFixedSize(true)
         recyclerView?.layoutManager = LinearLayoutManager(context)
-        recyclerView?.adapter = NewsListAdapter()
+        recyclerView?.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(NewsListViewModel::class.java)
         viewModel?.newsList?.observe(this, Observer<NewsList> { response ->
-            Log.d(LogTag,
-                    "NewsListViewModel updated with ${response?.results?.size} items")
+            adapter.newsList = response
         })
     }
 
