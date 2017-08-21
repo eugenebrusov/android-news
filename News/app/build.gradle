@@ -9,7 +9,7 @@ android {
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.eugenebrusov.news"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -26,8 +26,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
     implementation "com.android.support:appcompat-v7:$rootProject.supportVersion"
     implementation "com.android.support:design:$rootProject.supportVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.supportVersion"
+
     implementation "android.arch.lifecycle:runtime:$rootProject.lifecycleVersion"
     implementation "android.arch.lifecycle:extensions:$rootProject.lifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.lifecycleVersion"
