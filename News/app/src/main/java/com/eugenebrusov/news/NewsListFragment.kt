@@ -12,7 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eugenebrusov.news.models.NewsList
+import com.eugenebrusov.news.models.NewsResults
 
 class NewsListFragment : Fragment(), LifecycleRegistryOwner {
 
@@ -38,8 +38,9 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner {
         recyclerView?.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(NewsListViewModel::class.java)
-        viewModel?.newsList?.observe(this, Observer<NewsList> { response ->
-            adapter.newsList = response
+        viewModel?.mNewsResults?.observe(this, Observer<NewsResults> { response ->
+            Log.e(LogTag, "response $response")
+            adapter.mNewsResults = response
         })
     }
 

@@ -8,6 +8,6 @@ import retrofit2.http.GET
  * Created by Eugene Brusov on 8/17/17.
  */
 interface NewsClient {
-    @GET("search?api-key=42b6624f-060e-4ee1-8218-32fcfcf3e8c1")
+    @GET("search?api-key=42b6624f-060e-4ee1-8218-32fcfcf3e8c1&show-tags=contributor&show-fields=all&show-refinements=all")
     fun getNews() : Call<NewsResponse>
 }

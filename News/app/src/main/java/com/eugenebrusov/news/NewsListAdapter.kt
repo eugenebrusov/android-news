@@ -4,8 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import com.eugenebrusov.news.models.NewsList
+import com.bumptech.glide.Glide
+import com.eugenebrusov.news.models.NewsResults
 import kotlinx.android.synthetic.main.item_news.view.*
 
 /**
@@ -13,14 +15,14 @@ import kotlinx.android.synthetic.main.item_news.view.*
  */
 class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
-    var newsList : NewsList? = null
+    var mNewsResults: NewsResults? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
     override fun getItemCount(): Int {
-        return newsList?.results?.size ?: 0
+        return mNewsResults?.results?.size ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -28,15 +30,14 @@ class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val news = newsList?.results?.get(position)
-        holder?.titleTextView?.text = news?.webTitle
+        val news = mNewsResults?.results?.get(position)?.fields
+
+        holder?.titleTextView?.text = news?.headline
+        Glide.with(holder?.itemView?.context).load(news?.thumbnail).into(holder?.imageView)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var titleTextView: TextView
-
-        init {
-            titleTextView = itemView.title_text
-        }
+        val titleTextView: TextView = itemView.title_text
+        val imageView: ImageView = itemView.image_view
     }
 }
