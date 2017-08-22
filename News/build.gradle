@@ -31,4 +31,5 @@ ext {
     supportVersion = '26.0.1'
     lifecycleVersion = '1.0.0-alpha9'
     retrofitVersion = '2.3.0'
+    glideVersion = '4.0.0'
 }
