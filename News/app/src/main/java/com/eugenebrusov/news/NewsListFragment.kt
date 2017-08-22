@@ -8,15 +8,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.models.NewsResults
 
 class NewsListFragment : Fragment(), LifecycleRegistryOwner {
-
-    private val LogTag = NewsListFragment::class.java.simpleName
 
     private val lifecycleRegistry = LifecycleRegistry(this)
 
@@ -39,7 +36,6 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner {
 
         viewModel = ViewModelProviders.of(this).get(NewsListViewModel::class.java)
         viewModel?.newsResults?.observe(this, Observer<NewsResults> { response ->
-            Log.e(LogTag, "response $response")
             adapter.newsResults = response
         })
     }
