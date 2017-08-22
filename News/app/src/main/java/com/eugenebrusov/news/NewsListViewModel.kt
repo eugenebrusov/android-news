@@ -18,7 +18,7 @@ class NewsListViewModel : ViewModel() {
 
     private val LogTag = NewsListViewModel::class.java.simpleName
 
-    var mNewsResults: LiveData<NewsResults>? = null
+    var newsResults: LiveData<NewsResults>? = null
         get() {
             if (field == null) {
                 val data = MutableLiveData<NewsResults>()

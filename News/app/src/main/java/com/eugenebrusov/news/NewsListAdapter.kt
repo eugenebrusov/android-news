@@ -15,14 +15,14 @@ import kotlinx.android.synthetic.main.item_news.view.*
  */
 class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
-    var mNewsResults: NewsResults? = null
+    var newsResults: NewsResults? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
     override fun getItemCount(): Int {
-        return mNewsResults?.results?.size ?: 0
+        return newsResults?.results?.size ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -30,7 +30,7 @@ class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val news = mNewsResults?.results?.get(position)?.fields
+        val news = newsResults?.results?.get(position)?.fields
 
         holder?.titleTextView?.text = news?.headline
         Glide.with(holder?.itemView?.context).load(news?.thumbnail).into(holder?.imageView)

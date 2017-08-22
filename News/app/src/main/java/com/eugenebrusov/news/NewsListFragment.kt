@@ -38,9 +38,9 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner {
         recyclerView?.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(NewsListViewModel::class.java)
-        viewModel?.mNewsResults?.observe(this, Observer<NewsResults> { response ->
+        viewModel?.newsResults?.observe(this, Observer<NewsResults> { response ->
             Log.e(LogTag, "response $response")
-            adapter.mNewsResults = response
+            adapter.newsResults = response
         })
     }
 
