@@ -10,6 +10,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.eugenebrusov.news.models.NewsResults
 import kotlinx.android.synthetic.main.item_news.view.*
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 /**
@@ -46,7 +49,9 @@ class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
         Glide.with(holder?.itemView?.context).load(tag?.bylineImageUrl).apply(options).into(holder?.bylineImageView)
 
         holder?.webTitleTextView?.text = tag?.webTitle
-        holder?.webPublicationDate?.text = result?.webPublicationDate
+
+        val date: Date? = try {SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(result?.webPublicationDate)} catch (e: ParseException) { null }
+        holder?.webPublicationDate?.text = try {SimpleDateFormat("MMM d, yyyy").format(date)} catch (e: ParseException) { null }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
