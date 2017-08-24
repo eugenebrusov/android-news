@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.eugenebrusov.news.models.NewsResults
 import kotlinx.android.synthetic.main.item_news.view.*
+
 
 /**
  * Created by Eugene Brusov on 8/18/17.
@@ -30,14 +32,28 @@ class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val news = newsResults?.results?.get(position)?.fields
+        val result = newsResults?.results?.get(position)
 
-        holder?.titleTextView?.text = news?.headline
-        Glide.with(holder?.itemView?.context).load(news?.thumbnail).into(holder?.imageView)
+        val fields = result?.fields
+
+        Glide.with(holder?.itemView?.context).load(fields?.thumbnail).into(holder?.thumbnailImageView)
+        holder?.headlineTextView?.text = fields?.headline
+
+        val tag = if (result?.tags?.isNotEmpty() == true) result?.tags?.get(0) else null
+
+        val options = RequestOptions()
+        options.circleCrop()
+        Glide.with(holder?.itemView?.context).load(tag?.bylineImageUrl).apply(options).into(holder?.bylineImageView)
+
+        holder?.webTitleTextView?.text = tag?.webTitle
+        holder?.webPublicationDate?.text = result?.webPublicationDate
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleTextView: TextView = itemView.title_text
-        val imageView: ImageView = itemView.image_view
+        val thumbnailImageView: ImageView = itemView.thumbnail_image
+        val headlineTextView: TextView = itemView.headline_text
+        val bylineImageView: ImageView = itemView.byline_image
+        val webTitleTextView: TextView = itemView.web_title_text
+        val webPublicationDate: TextView = itemView.web_publication_date_text
     }
 }
