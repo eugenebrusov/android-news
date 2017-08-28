@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +15,12 @@ import android.view.ViewGroup
 import com.eugenebrusov.news.models.NewsResults
 
 class NewsListFragment : Fragment(), LifecycleRegistryOwner {
+
+    interface OnNewsClickListener {
+        fun onNewsSelected(id: String)
+    }
+
+    private var newsClickListener: OnNewsClickListener? = null
 
     private val lifecycleRegistry = LifecycleRegistry(this)
 
@@ -38,6 +45,22 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner {
         viewModel?.newsResults?.observe(this, Observer<NewsResults> { response ->
             adapter.newsResults = response
         })
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        try {
+            newsClickListener = context as OnNewsClickListener
+        }
+        catch (e: ClassCastException) {
+            throw ClassCastException(context?.toString() + " must implement OnNewsClickListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        newsClickListener = null
     }
 
     override fun getLifecycle(): LifecycleRegistry {
