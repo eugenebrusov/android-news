@@ -12,13 +12,17 @@ import com.eugenebrusov.news.models.NewsResults
 import kotlinx.android.synthetic.main.item_news.view.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 
 
 /**
  * Created by Eugene Brusov on 8/18/17.
  */
-class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+class NewsListAdapter(val newsClickListener: OnNewsClickListener) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+
+    interface OnNewsClickListener {
+        fun onNewsSelected(id: String)
+    }
 
     var newsResults: NewsResults? = null
         set(value) {
@@ -42,7 +46,7 @@ class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
         Glide.with(holder?.itemView?.context).load(fields?.thumbnail).into(holder?.thumbnailImageView)
         holder?.headlineTextView?.text = fields?.headline
 
-        val tag = if (result?.tags?.isNotEmpty() == true) result?.tags?.get(0) else null
+        val tag = if (result?.tags?.isNotEmpty() == true) result.tags[0] else null
 
         val options = RequestOptions()
         options.circleCrop()
@@ -50,8 +54,12 @@ class NewsListAdapter:RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
         holder?.webTitleTextView?.text = tag?.webTitle
 
-        val date: Date? = try {SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(result?.webPublicationDate)} catch (e: ParseException) { null }
-        holder?.webPublicationDate?.text = try {SimpleDateFormat("MMM d, yyyy").format(date)} catch (e: ParseException) { null }
+        val date: Date? = try {SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(result?.webPublicationDate)} catch (e: ParseException) { null }
+        holder?.webPublicationDate?.text = try {SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
+
+        holder?.itemView?.setOnClickListener {
+            newsClickListener.onNewsSelected("stub_id")
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

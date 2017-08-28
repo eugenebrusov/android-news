@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.models.NewsResults
 
-class NewsListFragment : Fragment(), LifecycleRegistryOwner {
+class NewsListFragment : Fragment(), LifecycleRegistryOwner, NewsListAdapter.OnNewsClickListener {
 
     interface OnNewsClickListener {
         fun onNewsSelected(id: String)
@@ -34,7 +34,7 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val adapter = NewsListAdapter()
+        val adapter = NewsListAdapter(this)
 
         val recyclerView = view as? RecyclerView
         recyclerView?.setHasFixedSize(true)
@@ -65,5 +65,9 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner {
 
     override fun getLifecycle(): LifecycleRegistry {
         return lifecycleRegistry
+    }
+
+    override fun onNewsSelected(id: String) {
+        newsClickListener?.onNewsSelected(id)
     }
 }
