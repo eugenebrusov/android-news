@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Html
@@ -55,7 +56,13 @@ class NewsDetailFragment : Fragment(), LifecycleRegistryOwner {
                 web_publication_date_text?.text = try {
                     SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
 
-                body_text.text = Html.fromHtml(fields?.body)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    body_text.text = Html.fromHtml(fields?.body, Html.FROM_HTML_MODE_COMPACT)
+                } else {
+                    @Suppress("DEPRECATION")
+                    body_text.text = Html.fromHtml(fields?.body)
+                }
+
             })
         }
 
