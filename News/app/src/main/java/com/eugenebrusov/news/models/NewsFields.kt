@@ -6,4 +6,4 @@ package com.eugenebrusov.news.models
 data class NewsFields(val headline: String,
                       val trailText: String,
                       val thumbnail: String,
-                      val bodyText: String)
+                      val body: String)

@@ -7,6 +7,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +55,7 @@ class NewsDetailFragment : Fragment(), LifecycleRegistryOwner {
                 web_publication_date_text?.text = try {
                     SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
 
-                body_text.text = fields?.bodyText
+                body_text.text = Html.fromHtml(fields?.body)
             })
         }
 
