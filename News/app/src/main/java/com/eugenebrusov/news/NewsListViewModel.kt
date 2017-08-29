@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.eugenebrusov.news.api.NewsRetriever
 import com.eugenebrusov.news.models.NewsResults
-import com.eugenebrusov.news.models.NewsResponse
+import com.eugenebrusov.news.models.NewsListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,14 +22,14 @@ class NewsListViewModel : ViewModel() {
         get() {
             if (field == null) {
                 val data = MutableLiveData<NewsResults>()
-                NewsRetriever().getNews(object : Callback<NewsResponse> {
-                    override fun onResponse(call: Call<NewsResponse>?, response: Response<NewsResponse>?) {
+                NewsRetriever().getNews(object : Callback<NewsListResponse> {
+                    override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
                         response?.isSuccessful.let {
                             data.value = response?.body()?.response
                         }
                     }
 
-                    override fun onFailure(call: Call<NewsResponse>?, t: Throwable?) {
+                    override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
                         Log.e(LogTag, "onFailure", t)
                     }
                 })

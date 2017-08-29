@@ -1,6 +1,7 @@
 package com.eugenebrusov.news.api
 
-import com.eugenebrusov.news.models.NewsResponse
+import com.eugenebrusov.news.models.NewsDetailResponse
+import com.eugenebrusov.news.models.NewsListResponse
 import okhttp3.OkHttpClient
 import retrofit2.Callback
 import retrofit2.Retrofit
@@ -20,7 +21,11 @@ class NewsRetriever {
         client = retrofit.create(NewsClient::class.java)
     }
 
-    fun getNews(callback: Callback<NewsResponse>) {
+    fun getNews(callback: Callback<NewsListResponse>) {
         client.getNews().enqueue(callback)
+    }
+
+    fun getNewsDetail(id: String, callback: Callback<NewsDetailResponse>) {
+        client.getNewsDetail(id).enqueue(callback)
     }
 }

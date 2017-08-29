@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
 
     override fun onNewsSelected(id: String) {
         val intent = Intent(this, NewsDetailActivity::class.java)
-        intent.putExtra(NewsDetailActivity.NEWS_ID, id)
+        intent.putExtra(NewsDetailFragment.NEWS_ID, id)
         startActivity(intent)
     }
 }

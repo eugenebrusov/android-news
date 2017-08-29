@@ -58,7 +58,10 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener) : RecyclerView
         holder?.webPublicationDate?.text = try {SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
 
         holder?.itemView?.setOnClickListener {
-            newsClickListener.onNewsSelected("stub_id")
+            val id = result?.id
+            if (id != null) {
+                newsClickListener.onNewsSelected(id)
+            }
         }
     }
 
