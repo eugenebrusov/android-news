@@ -48,9 +48,7 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener) : RecyclerView
 
         val tag = if (result?.tags?.isNotEmpty() == true) result.tags[0] else null
 
-        val options = RequestOptions()
-        options.circleCrop()
-        Glide.with(holder?.itemView?.context).load(tag?.bylineImageUrl).apply(options).into(holder?.bylineImageView)
+        Glide.with(holder?.itemView?.context).load(tag?.bylineImageUrl).apply(RequestOptions().circleCrop()).into(holder?.bylineImageView)
 
         holder?.webTitleTextView?.text = tag?.webTitle
 
