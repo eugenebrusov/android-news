@@ -18,7 +18,11 @@ import java.util.*
 /**
  * Created by Eugene Brusov on 8/18/17.
  */
-class NewsListAdapter(val newsClickListener: OnNewsClickListener) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageRequestListener: OnPageRequestedListener) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+
+    interface OnPageRequestedListener {
+        fun onNextPageRequested()
+    }
 
     interface OnNewsClickListener {
         fun onNewsSelected(id: String)
@@ -29,6 +33,8 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener) : RecyclerView
             field = value
             notifyDataSetChanged()
         }
+
+    private var isLoading: Boolean? = false
 
     override fun getItemCount(): Int {
         return newsResults?.results?.size ?: 0
@@ -71,6 +77,10 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener) : RecyclerView
             if (id != null) {
                 newsClickListener.onNewsSelected(id)
             }
+        }
+
+        if ((position == newsResults?.results?.size?.minus(1)) && (isLoading == false)) {
+            pageRequestListener.onNextPageRequested()
         }
     }
 
