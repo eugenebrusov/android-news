@@ -48,12 +48,23 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener) : RecyclerView
 
         val tag = if (result?.tags?.isNotEmpty() == true) result.tags[0] else null
 
-        Glide.with(holder?.itemView?.context).load(tag?.bylineImageUrl).apply(RequestOptions().circleCrop()).into(holder?.bylineImageView)
-
-        holder?.webTitleTextView?.text = tag?.webTitle
-
         val date: Date? = try {SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(result?.webPublicationDate)} catch (e: ParseException) { null }
-        holder?.webPublicationDate?.text = try {SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
+        val webPublicationDate: String? = try {SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
+
+        if ((tag?.webTitle?.isNotEmpty() == true) && (webPublicationDate?.isNotEmpty() == true)) {
+            holder?.bylineImageView?.visibility = View.VISIBLE
+            if (tag.bylineImageUrl?.isNotEmpty() == true) {
+                Glide.with(holder?.itemView?.context).load(tag.bylineImageUrl).apply(RequestOptions().circleCrop()).into(holder?.bylineImageView)
+            } else {
+                holder?.bylineImageView?.setImageResource(R.drawable.ic_person_black_24dp)
+            }
+
+            holder?.webTitleTextView?.text = tag.webTitle
+
+            holder?.webPublicationDate?.text = webPublicationDate
+        } else {
+            holder?.bylineImageView?.visibility = View.GONE
+        }
 
         holder?.itemView?.setOnClickListener {
             val id = result?.id
