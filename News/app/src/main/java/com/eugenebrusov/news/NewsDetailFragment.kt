@@ -5,10 +5,8 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +16,8 @@ import com.eugenebrusov.news.models.NewsResult
 import kotlinx.android.synthetic.main.fragment_news_detail.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class NewsDetailFragment : Fragment(), LifecycleRegistryOwner {
 
@@ -56,13 +55,8 @@ class NewsDetailFragment : Fragment(), LifecycleRegistryOwner {
                 web_publication_date_text?.text = try {
                     SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    body_text.text = Html.fromHtml(fields?.body, Html.FROM_HTML_MODE_COMPACT)
-                } else {
-                    @Suppress("DEPRECATION")
-                    body_text.text = Html.fromHtml(fields?.body)
-                }
-
+                var bodyText = fields?.bodyText?.replace(". ", ".\n\n")
+                body_text.text = bodyText
             })
         }
 
