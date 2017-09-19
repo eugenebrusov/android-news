@@ -59,6 +59,9 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
 
         if ((tag?.webTitle?.isNotEmpty() == true) && (webPublicationDate?.isNotEmpty() == true)) {
             holder?.bylineImageView?.visibility = View.VISIBLE
+            holder?.webTitleTextView?.visibility = View.VISIBLE
+            holder?.webPublicationDate?.visibility = View.VISIBLE
+
             if (tag.bylineImageUrl?.isNotEmpty() == true) {
                 Glide.with(holder?.itemView?.context).load(tag.bylineImageUrl).apply(RequestOptions().circleCrop()).into(holder?.bylineImageView)
             } else {
@@ -70,6 +73,8 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
             holder?.webPublicationDate?.text = webPublicationDate
         } else {
             holder?.bylineImageView?.visibility = View.GONE
+            holder?.webTitleTextView?.visibility = View.GONE
+            holder?.webPublicationDate?.visibility = View.GONE
         }
 
         holder?.itemView?.setOnClickListener {
