@@ -44,16 +44,28 @@ class NewsDetailFragment : Fragment(), LifecycleRegistryOwner {
 
                 val tag = if (response?.tags?.isNotEmpty() == true) response.tags[0] else null
 
-                val options = RequestOptions()
-                options.circleCrop()
-                Glide.with(this).load(tag?.bylineImageUrl).apply(options).into(byline_image)
-
-                web_title_text.text = tag?.webTitle
-
                 val date: Date? = try {
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(response?.webPublicationDate)} catch (e: ParseException) { null }
-                web_publication_date_text?.text = try {
-                    SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
+                val webPublicationDate: String? = try {SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)} catch (e: ParseException) { null }
+
+                if (tag?.webTitle?.isNotEmpty() == true) {
+                    byline_image.visibility = View.VISIBLE
+                    web_title_text.visibility = View.VISIBLE
+                    web_publication_date_text.visibility = View.VISIBLE
+
+                    if (tag.bylineImageUrl?.isNotEmpty() == true) {
+                        Glide.with(this).load(tag.bylineImageUrl).apply(RequestOptions().circleCrop()).into(byline_image)
+                    } else {
+                        byline_image.setImageResource(R.drawable.ic_person_black_24dp)
+                    }
+
+                    web_title_text.text = tag?.webTitle
+                    web_publication_date_text.text = webPublicationDate
+                } else {
+                    byline_image.visibility = View.GONE
+                    web_title_text.visibility = View.GONE
+                    web_publication_date_text.visibility = View.GONE
+                }
 
                 var bodyText = fields?.bodyText?.replace(". ", ".\n\n")
                 body_text.text = bodyText
