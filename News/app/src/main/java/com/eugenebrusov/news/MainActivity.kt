@@ -16,8 +16,8 @@ class MainActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
 
     override fun onNewsSelected(id: String, imageUrl: String?) {
         val intent = Intent(this, NewsDetailActivity::class.java)
-        intent.putExtra(NewsDetailFragment.NEWS_ID, id)
-        intent.putExtra(NewsDetailFragment.NEWS_IMAGE_URL, imageUrl)
+        intent.putExtra(NewsDetailActivity.NEWS_ID, id)
+        intent.putExtra(NewsDetailActivity.NEWS_IMAGE_URL, imageUrl)
         startActivity(intent)
     }
 }
