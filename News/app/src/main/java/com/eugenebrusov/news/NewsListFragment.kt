@@ -17,7 +17,7 @@ import com.eugenebrusov.news.models.NewsResults
 class NewsListFragment : Fragment(), LifecycleRegistryOwner, NewsListAdapter.OnNewsClickListener, NewsListAdapter.OnPageRequestedListener {
 
     interface OnNewsClickListener {
-        fun onNewsSelected(id: String)
+        fun onNewsSelected(id: String, imageUrl: String?)
     }
 
     private var newsClickListener: OnNewsClickListener? = null
@@ -67,8 +67,8 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner, NewsListAdapter.OnN
         return lifecycleRegistry
     }
 
-    override fun onNewsSelected(id: String) {
-        newsClickListener?.onNewsSelected(id)
+    override fun onNewsSelected(id: String, imageUrl: String?) {
+        newsClickListener?.onNewsSelected(id, imageUrl)
     }
 
     override fun onNextPageRequested() {

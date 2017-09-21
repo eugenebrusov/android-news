@@ -25,7 +25,7 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
     }
 
     interface OnNewsClickListener {
-        fun onNewsSelected(id: String)
+        fun onNewsSelected(id: String, imageUrl: String?)
     }
 
     var newsResults: NewsResults? = null
@@ -80,7 +80,7 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
         holder?.itemView?.setOnClickListener {
             val id = result?.id
             if (id != null) {
-                newsClickListener.onNewsSelected(id)
+                newsClickListener.onNewsSelected(id, fields?.thumbnail)
             }
         }
 

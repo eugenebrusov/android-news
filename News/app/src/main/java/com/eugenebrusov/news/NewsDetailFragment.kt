@@ -39,7 +39,6 @@ class NewsDetailFragment : Fragment(), LifecycleRegistryOwner {
             viewModel?.newsResult(id)?.observe(this, Observer<NewsResult> { response ->
                 val fields = response?.fields
 
-                Glide.with(this).load(fields?.thumbnail).into(thumbnail_image)
                 headline_text.text = fields?.headline
 
                 val tag = if (response?.tags?.isNotEmpty() == true) response.tags[0] else null
@@ -80,13 +79,15 @@ class NewsDetailFragment : Fragment(), LifecycleRegistryOwner {
 
     companion object {
 
-        val NEWS_ID = "id"
+        val NEWS_ID = "news_id"
+        val NEWS_IMAGE_URL = "news_image_url"
 
-        fun newInstance(id: String): NewsDetailFragment {
+        fun newInstance(id: String, imageUrl: String?): NewsDetailFragment {
             val fragment = NewsDetailFragment()
 
             val bundle = Bundle()
             bundle.putString(NEWS_ID, id)
+            bundle.putString(NEWS_IMAGE_URL, imageUrl)
             fragment.arguments = bundle
 
             return fragment
