@@ -3,6 +3,7 @@ package com.eugenebrusov.news
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.eugenebrusov.news.models.NewsResult
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
@@ -14,10 +15,9 @@ class MainActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
         setSupportActionBar(toolbar)
     }
 
-    override fun onNewsSelected(id: String, imageUrl: String?) {
+    override fun onNewsSelected(result: NewsResult) {
         val intent = Intent(this, NewsDetailActivity::class.java)
-        intent.putExtra(NewsDetailActivity.NEWS_ID, id)
-        intent.putExtra(NewsDetailActivity.NEWS_IMAGE_URL, imageUrl)
+        intent.putExtra(NewsDetailActivity.NEWS_RESULT, result)
         startActivity(intent)
     }
 }

@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.models.NewsResults
 import kotlinx.android.synthetic.main.item_news.view.*
 import java.text.ParseException
@@ -25,7 +26,7 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
     }
 
     interface OnNewsClickListener {
-        fun onNewsSelected(id: String, imageUrl: String?)
+        fun onNewsSelected(result: NewsResult)
     }
 
     var newsResults: NewsResults? = null
@@ -78,9 +79,8 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
         }
 
         holder?.itemView?.setOnClickListener {
-            val id = result?.id
-            if (id != null) {
-                newsClickListener.onNewsSelected(id, fields?.thumbnail)
+            if (result != null) {
+                newsClickListener.onNewsSelected(result)
             }
         }
 

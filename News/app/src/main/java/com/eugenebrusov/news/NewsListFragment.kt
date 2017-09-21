@@ -12,12 +12,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.models.NewsResults
 
 class NewsListFragment : Fragment(), LifecycleRegistryOwner, NewsListAdapter.OnNewsClickListener, NewsListAdapter.OnPageRequestedListener {
 
     interface OnNewsClickListener {
-        fun onNewsSelected(id: String, imageUrl: String?)
+        fun onNewsSelected(result: NewsResult)
     }
 
     private var newsClickListener: OnNewsClickListener? = null
@@ -67,8 +68,8 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner, NewsListAdapter.OnN
         return lifecycleRegistry
     }
 
-    override fun onNewsSelected(id: String, imageUrl: String?) {
-        newsClickListener?.onNewsSelected(id, imageUrl)
+    override fun onNewsSelected(result: NewsResult) {
+        newsClickListener?.onNewsSelected(result)
     }
 
     override fun onNextPageRequested() {

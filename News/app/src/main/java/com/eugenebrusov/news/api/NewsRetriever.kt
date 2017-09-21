@@ -24,8 +24,4 @@ class NewsRetriever {
     fun getNews(page: Int, callback: Callback<NewsListResponse>) {
         client.getNews(page).enqueue(callback)
     }
-
-    fun getNewsDetail(id: String, callback: Callback<NewsDetailResponse>) {
-        client.getNewsDetail(id).enqueue(callback)
-    }
 }
