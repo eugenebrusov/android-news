@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">News</string>
+    <string name="transition_thumbnail">TransitionThumbnail</string>
 </resources>

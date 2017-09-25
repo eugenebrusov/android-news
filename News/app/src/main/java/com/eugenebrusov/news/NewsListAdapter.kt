@@ -26,7 +26,7 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
     }
 
     interface OnNewsClickListener {
-        fun onNewsSelected(result: NewsResult)
+        fun onNewsSelected(result: NewsResult, sharedImage: ImageView)
     }
 
     var newsResults: NewsResults? = null
@@ -80,7 +80,7 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
 
         holder?.itemView?.setOnClickListener {
             if (result != null) {
-                newsClickListener.onNewsSelected(result)
+                newsClickListener.onNewsSelected(result, holder.thumbnailImageView)
             }
         }
 
