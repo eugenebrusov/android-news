@@ -13,6 +13,10 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.view.WindowManager
+import android.os.Build
+import android.support.v4.content.ContextCompat
+
 
 class NewsDetailActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
@@ -24,6 +28,12 @@ class NewsDetailActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        }
 
         val result = intent.getParcelableExtra<NewsResult>(NEWS_RESULT)
 
