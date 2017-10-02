@@ -16,7 +16,7 @@ import java.util.Locale
 import android.view.WindowManager
 import android.os.Build
 import android.support.v4.content.ContextCompat
-
+import android.view.MenuItem
 
 class NewsDetailActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
@@ -79,5 +79,12 @@ class NewsDetailActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     companion object {
         const val NEWS_RESULT = "news_result"
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> finishAfterTransition()
+        }
+        return true
     }
 }
