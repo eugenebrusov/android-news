@@ -55,3 +55,5 @@ freeline/
 freeline_project_description.json
 
 News/app/src/main/java/com/eugenebrusov/news/Constants.kt
+
+builds/
