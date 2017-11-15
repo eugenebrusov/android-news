@@ -17,15 +17,13 @@ import com.eugenebrusov.news.R
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.models.NewsResults
 
-class NewsListFragment : Fragment(), LifecycleRegistryOwner, NewsListAdapter.OnNewsClickListener, NewsListAdapter.OnPageRequestedListener {
+class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsListAdapter.OnPageRequestedListener {
 
     interface OnNewsClickListener {
         fun onNewsSelected(result: NewsResult, sharedImage: ImageView)
     }
 
     private var newsClickListener: OnNewsClickListener? = null
-
-    private val lifecycleRegistry = LifecycleRegistry(this)
 
     private var viewModel : NewsListViewModel? = null
 
@@ -64,10 +62,6 @@ class NewsListFragment : Fragment(), LifecycleRegistryOwner, NewsListAdapter.OnN
     override fun onDetach() {
         super.onDetach()
         newsClickListener = null
-    }
-
-    override fun getLifecycle(): LifecycleRegistry {
-        return lifecycleRegistry
     }
 
     override fun onNewsSelected(result: NewsResult, sharedImage: ImageView) {
