@@ -1,14 +1,16 @@
-package com.eugenebrusov.news
+package com.eugenebrusov.news.newslist
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
+import com.eugenebrusov.news.NewsDetailActivity
+import com.eugenebrusov.news.R
 import com.eugenebrusov.news.models.NewsResult
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
+class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme);

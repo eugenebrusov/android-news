@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.eugenebrusov.news.MainActivity">
+    tools:context="com.eugenebrusov.news.newslist.NewsListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -22,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <fragment android:name="com.eugenebrusov.news.NewsListFragment"
+    <fragment android:name="com.eugenebrusov.news.newslist.NewsListFragment"
         android:id="@+id/news_list_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

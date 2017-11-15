@@ -1,4 +1,4 @@
-package com.eugenebrusov.news
+package com.eugenebrusov.news.newslist
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.eugenebrusov.news.R
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.models.NewsResults
 import kotlinx.android.synthetic.main.item_news.view.*
