@@ -1,4 +1,4 @@
-package com.eugenebrusov.news
+package com.eugenebrusov.news.newslist
 
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.eugenebrusov.news.R
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.models.NewsResults
 

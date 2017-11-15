@@ -3,6 +3,6 @@
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.eugenebrusov.news.NewsListFragment">
+    tools:context="com.eugenebrusov.news.newslist.NewsListFragment">
 
 </android.support.v7.widget.RecyclerView>
