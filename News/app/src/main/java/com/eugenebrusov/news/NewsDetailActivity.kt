@@ -18,9 +18,7 @@ import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.view.MenuItem
 
-class NewsDetailActivity : AppCompatActivity(), LifecycleRegistryOwner {
-
-    private val lifecycleRegistry = LifecycleRegistry(this)
+class NewsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +69,6 @@ class NewsDetailActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
         var bodyText = fields?.bodyText?.replace(". ", ".\n\n")
         body_text.text = bodyText
-    }
-
-    override fun getLifecycle(): LifecycleRegistry {
-        return lifecycleRegistry
     }
 
     companion object {

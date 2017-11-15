@@ -19,7 +19,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://maven.google.com' }
     }
 }
 
@@ -28,8 +27,8 @@ task clean(type: Delete) {
 }
 
 ext {
-    supportVersion = '26.0.2'
-    lifecycleVersion = '1.0.0-alpha9'
+    supportVersion = '26.1.0'
+    archLifecycleVersion = '1.0.0'
     retrofitVersion = '2.3.0'
     glideVersion = '4.0.0'
 }
