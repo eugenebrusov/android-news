@@ -1,9 +1,11 @@
 package com.eugenebrusov.news.newslist
 
+import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.eugenebrusov.news.api.NewsRetriever
+import com.eugenebrusov.news.data.source.Repository
 import com.eugenebrusov.news.models.NewsListResponse
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.models.NewsResults
@@ -14,7 +16,7 @@ import retrofit2.Response
 /**
  * Created by Eugene Brusov on 8/17/17.
  */
-class NewsListViewModel : ViewModel() {
+class NewsListViewModel(application: Application, repository: Repository) : ViewModel() {
 
     private val LogTag = NewsListViewModel::class.java.simpleName
 
