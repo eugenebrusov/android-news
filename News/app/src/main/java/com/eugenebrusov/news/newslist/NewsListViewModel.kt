@@ -1,8 +1,10 @@
 package com.eugenebrusov.news.newslist
 
 import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import android.databinding.ObservableArrayList
+import android.databinding.ObservableList
 import android.util.Log
 import com.eugenebrusov.news.api.NewsRetriever
 import com.eugenebrusov.news.data.source.Repository
@@ -16,9 +18,11 @@ import retrofit2.Response
 /**
  * Created by Eugene Brusov on 8/17/17.
  */
-class NewsListViewModel(application: Application, repository: Repository) : ViewModel() {
+class NewsListViewModel(context: Application, repository: Repository) : AndroidViewModel(context) {
 
     private val LogTag = NewsListViewModel::class.java.simpleName
+
+    val items: ObservableList<NewsResult> = ObservableArrayList<NewsResult>()
 
     var newsResults: MutableLiveData<NewsResults>? = null
         get() {
