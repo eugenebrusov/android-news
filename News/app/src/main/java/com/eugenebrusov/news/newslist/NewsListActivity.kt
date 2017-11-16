@@ -9,12 +9,13 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import com.eugenebrusov.news.NewsDetailActivity
 import com.eugenebrusov.news.R
+import com.eugenebrusov.news.ViewModelFactory
 import com.eugenebrusov.news.models.NewsResult
 import kotlinx.android.synthetic.main.activity_news_list.*
 
 class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
 
-    private var viewModel : NewsListViewModel? = null
+    private lateinit var viewModel : NewsListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme);
@@ -24,6 +25,16 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
         setSupportActionBar(toolbar)
 
         viewModel = obtainViewModel(this)
+
+        // TODO implement code below
+//        mViewModel.getOpenTaskEvent().observe(this, Observer<String> { taskId ->
+//            if (taskId != null) {
+//                openTaskDetails(taskId)
+//            }
+//        })
+//
+//        // Subscribe to "new task" event
+//        mViewModel.getNewTaskEvent().observe(this, Observer<Void> { addNewTask() })
     }
 
     override fun onNewsSelected(result: NewsResult, sharedImage: ImageView) {
@@ -36,8 +47,10 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
 
     companion object {
         fun obtainViewModel(activity: FragmentActivity) : NewsListViewModel {
-            // TODO add a ViewModelFactory
-            val viewModel = ViewModelProviders.of(activity).get(NewsListViewModel::class.java)
+            // Use a Factory to inject dependencies into the ViewModel
+            val factory = ViewModelFactory.getInstance(activity.application)
+
+            val viewModel = ViewModelProviders.of(activity, factory).get(NewsListViewModel::class.java)
 
             return viewModel
         }
