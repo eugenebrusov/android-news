@@ -25,7 +25,7 @@ class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsLi
 
     private var newsClickListener: OnNewsClickListener? = null
 
-    private var viewModel : NewsListViewModel? = null
+    private lateinit var viewModel : NewsListViewModel
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -42,7 +42,7 @@ class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsLi
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = adapter
 
-        viewModel = ViewModelProviders.of(this).get(NewsListViewModel::class.java)
+        viewModel = NewsListActivity.obtainViewModel(activity)
         viewModel?.newsResults?.observe(this, Observer<NewsResults> { response ->
             adapter.newsResults = response
         })
