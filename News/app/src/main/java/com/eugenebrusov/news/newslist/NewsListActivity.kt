@@ -10,7 +10,7 @@ import android.widget.ImageView
 import com.eugenebrusov.news.NewsDetailActivity
 import com.eugenebrusov.news.R
 import com.eugenebrusov.news.models.NewsResult
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_news_list.*
 
 class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
 
@@ -19,7 +19,7 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_news_list)
 
         setSupportActionBar(toolbar)
 
