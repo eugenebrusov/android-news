@@ -38,11 +38,6 @@ class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsLi
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
-//        val recyclerView = view as? RecyclerView
-//        recyclerView?.setHasFixedSize(true)
-//        recyclerView?.layoutManager = LinearLayoutManager(context)
-//        recyclerView?.adapter = adapter
-//
 //        viewModel = NewsListActivity.obtainViewModel(activity)
 //        viewModel?.newsResults?.observe(this, Observer<NewsResults> { response ->
 //            adapter.newsResults = response
