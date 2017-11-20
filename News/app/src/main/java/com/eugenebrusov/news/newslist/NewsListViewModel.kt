@@ -81,6 +81,8 @@ class NewsListViewModel(context: Application, repository: Repository) : AndroidV
                         clear()
                         addAll(response?.body()?.response?.results as Iterable<NewsResult>)
                     }
+                } else {
+                    // TODO implement behavior for non-successful response
                 }
             }
 
