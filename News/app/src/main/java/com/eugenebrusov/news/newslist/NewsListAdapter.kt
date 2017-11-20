@@ -1,6 +1,7 @@
 package com.eugenebrusov.news.newslist
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,16 +31,25 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
         fun onNewsSelected(result: NewsResult, sharedImage: ImageView)
     }
 
-    var newsResults: NewsResults? = null
-        set(value) {
-            field = value
+    private lateinit var items: List<NewsResult>
+
+//    var newsResults: NewsResults? = null
+//        set(value) {
+//            field = value
+//            notifyDataSetChanged()
+//        }
+
+    fun replaceData(items: List<NewsResult>?) {
+        if (items != null) {
+            this.items = items
             notifyDataSetChanged()
         }
+    }
 
     private var isLoading: Boolean? = false
 
     override fun getItemCount(): Int {
-        return newsResults?.results?.size ?: 0
+        return items.size ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -47,7 +57,7 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val result = newsResults?.results?.get(position)
+        val result = items.get(position)
 
         val fields = result?.fields
 
@@ -85,9 +95,9 @@ class NewsListAdapter(val newsClickListener: OnNewsClickListener, val pageReques
             }
         }
 
-        if ((position == newsResults?.results?.size?.minus(1)) && (isLoading == false)) {
-            pageRequestListener.onNextPageRequested()
-        }
+//        if ((position == newsResults?.results?.size?.minus(1)) && (isLoading == false)) {
+//            pageRequestListener.onNextPageRequested()
+//        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

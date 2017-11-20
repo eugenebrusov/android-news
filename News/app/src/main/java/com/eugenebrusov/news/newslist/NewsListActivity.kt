@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import com.eugenebrusov.news.NewsDetailActivity
@@ -24,7 +23,7 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
 
         setSupportActionBar(toolbar)
 
-        viewModel = obtainViewModel(this)
+        viewModel = obtainViewModel()
 
         // TODO implement code below
 //        mViewModel.getOpenTaskEvent().observe(this, Observer<String> { taskId ->
@@ -45,14 +44,7 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
         startActivity(intent, bundle)
     }
 
-    companion object {
-        fun obtainViewModel(activity: FragmentActivity) : NewsListViewModel {
-            // Use a Factory to inject dependencies into the ViewModel
-            val factory = ViewModelFactory.getInstance(activity.application)
+    fun obtainViewModel():NewsListViewModel =
+            ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(NewsListViewModel::class.java)
 
-            val viewModel = ViewModelProviders.of(activity, factory).get(NewsListViewModel::class.java)
-
-            return viewModel
-        }
-    }
 }

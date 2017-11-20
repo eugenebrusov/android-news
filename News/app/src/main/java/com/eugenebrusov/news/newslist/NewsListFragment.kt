@@ -3,6 +3,7 @@ package com.eugenebrusov.news.newslist
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsLi
 
     private var newsClickListener: OnNewsClickListener? = null
 
-    private lateinit var viewModel : NewsListViewModel
     private lateinit var binding: FragmentNewsListBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +30,14 @@ class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsLi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-//        val adapter = NewsListAdapter(this, this)
-//
+        val viewModel = (activity as NewsListActivity).obtainViewModel()
+        binding.viewModel = viewModel
+
+        val adapter = NewsListAdapter(this, this)
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = adapter
+
 //        val recyclerView = view as? RecyclerView
 //        recyclerView?.setHasFixedSize(true)
 //        recyclerView?.layoutManager = LinearLayoutManager(context)
@@ -59,11 +65,16 @@ class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsLi
         newsClickListener = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.viewModel?.start()
+    }
+
     override fun onNewsSelected(result: NewsResult, sharedImage: ImageView) {
         newsClickListener?.onNewsSelected(result, sharedImage)
     }
 
     override fun onNextPageRequested() {
-        viewModel?.loadNextPage()
+        //viewModel?.loadNextPage()
     }
 }

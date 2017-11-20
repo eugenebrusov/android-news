@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableArrayList
+import android.databinding.ObservableField
 import android.databinding.ObservableList
 import android.util.Log
 import com.eugenebrusov.news.api.NewsRetriever
@@ -22,7 +23,11 @@ class NewsListViewModel(context: Application, repository: Repository) : AndroidV
 
     private val LogTag = NewsListViewModel::class.java.simpleName
 
-    val items: ObservableList<NewsResult> = ObservableArrayList<NewsResult>()
+    val items: ObservableList<NewsResult> = ObservableArrayList()
+
+    fun start() {
+        loadNews()
+    }
 
     var newsResults: MutableLiveData<NewsResults>? = null
         get() {
@@ -58,6 +63,23 @@ class NewsListViewModel(context: Application, repository: Repository) : AndroidV
                         val response = response?.body()?.response
                         response?.results = list
                         newsResults?.value = response
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
+                Log.e(LogTag, "onFailure", t)
+            }
+        })
+    }
+
+    private fun loadNews() {
+        NewsRetriever().getNews(1, object : Callback<NewsListResponse> {
+            override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
+                if ((response?.isSuccessful == true) && (response?.body()?.response != null)) {
+                    with(items) {
+                        clear()
+                        addAll(response?.body()?.response?.results as Iterable<NewsResult>)
                     }
                 }
             }
