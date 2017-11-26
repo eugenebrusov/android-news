@@ -12,7 +12,8 @@ import com.eugenebrusov.news.models.NewsResult
  */
 class NewsListAdapter(
         val newsClickListener: OnNewsClickListener,
-        val pageRequestListener: OnPageRequestedListener)
+        val pageRequestListener: OnPageRequestedListener,
+        val viewModel: NewsListViewModel)
     : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
     interface OnPageRequestedListener {
@@ -37,8 +38,14 @@ class NewsListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        return ViewHolder(ItemNewsBinding
-                .inflate(LayoutInflater.from(parent?.context), parent, false))
+        val binding = ItemNewsBinding
+                .inflate(LayoutInflater.from(parent?.context), parent, false)
+        binding.listener = object : NewsItemUserActionsListener {
+            override fun onNewsItemClicked(newsId: String) {
+                viewModel.openNewsDetailsEvent.value = newsId
+            }
+        }
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {

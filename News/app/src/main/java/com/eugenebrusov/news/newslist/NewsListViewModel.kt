@@ -7,6 +7,7 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import android.databinding.ObservableList
 import android.util.Log
+import com.eugenebrusov.news.SingleLiveEvent
 import com.eugenebrusov.news.api.NewsRetriever
 import com.eugenebrusov.news.data.source.Repository
 import com.eugenebrusov.news.models.NewsListResponse
@@ -24,6 +25,7 @@ class NewsListViewModel(context: Application, repository: Repository) : AndroidV
     private val LogTag = NewsListViewModel::class.java.simpleName
 
     val items: ObservableList<NewsResult> = ObservableArrayList()
+    internal val openNewsDetailsEvent = SingleLiveEvent<String>()
 
     fun start() {
         loadNews()

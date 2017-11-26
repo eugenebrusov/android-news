@@ -33,7 +33,7 @@ class NewsListFragment : Fragment(), NewsListAdapter.OnNewsClickListener, NewsLi
         val viewModel = (activity as NewsListActivity).obtainViewModel()
         binding.viewModel = viewModel
 
-        val adapter = NewsListAdapter(this, this)
+        val adapter = NewsListAdapter(this, this, viewModel)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter

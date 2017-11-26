@@ -1,5 +1,6 @@
 package com.eugenebrusov.news.newslist
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -23,17 +24,13 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
 
         setSupportActionBar(toolbar)
 
-        viewModel = obtainViewModel()
-
-        // TODO implement code below
-//        mViewModel.getOpenTaskEvent().observe(this, Observer<String> { taskId ->
-//            if (taskId != null) {
-//                openTaskDetails(taskId)
-//            }
-//        })
-//
-//        // Subscribe to "new task" event
-//        mViewModel.getNewTaskEvent().observe(this, Observer<Void> { addNewTask() })
+        viewModel = obtainViewModel().apply {
+            openNewsDetailsEvent.observe(this@NewsListActivity, Observer<String> { newsId ->
+                if (newsId?.isNotEmpty() == true) {
+                    openNewsDetails(newsId)
+                }
+            })
+        }
     }
 
     override fun onNewsSelected(result: NewsResult, sharedImage: ImageView) {
@@ -42,6 +39,15 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
 
         val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, sharedImage, sharedImage.transitionName).toBundle()
         startActivity(intent, bundle)
+    }
+
+    private fun openNewsDetails(newsId: String) {
+        val intent = Intent(this, NewsDetailActivity::class.java)
+        intent.putExtra(NewsDetailActivity.NEWS_RESULT, newsId)
+
+        startActivity(intent)
+//        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, sharedImage, sharedImage.transitionName).toBundle()
+//        startActivity(intent, bundle)
     }
 
     fun obtainViewModel():NewsListViewModel =
