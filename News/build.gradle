@@ -31,5 +31,5 @@ ext {
     supportVersion = '26.1.0'
     archLifecycleVersion = '1.0.0'
     retrofitVersion = '2.3.0'
-    glideVersion = '4.0.0'
+    glideVersion = '4.3.1'
 }
