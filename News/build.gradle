@@ -32,4 +32,6 @@ ext {
     archLifecycleVersion = '1.0.0'
     retrofitVersion = '2.3.0'
     glideVersion = '4.3.1'
+    junitVersion = '4.12'
+    mockitoVersion = '2.8.47'
 }
