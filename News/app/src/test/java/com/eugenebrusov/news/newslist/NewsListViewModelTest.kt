@@ -8,6 +8,6 @@ import org.junit.Test
 class NewsListViewModelTest {
     @Test
     fun loadNewsListFromRepositoryAndLoadIntoView() {
-
+        newsListViewModel.loadNews()
     }
 }
