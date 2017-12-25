@@ -9,6 +9,7 @@ import android.databinding.ObservableList
 import android.util.Log
 import com.eugenebrusov.news.SingleLiveEvent
 import com.eugenebrusov.news.api.NewsRetriever
+import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.Repository
 import com.eugenebrusov.news.models.NewsListResponse
 import com.eugenebrusov.news.models.NewsResult
@@ -20,7 +21,10 @@ import retrofit2.Response
 /**
  * Created by Eugene Brusov on 8/17/17.
  */
-class NewsListViewModel(context: Application, repository: Repository) : AndroidViewModel(context) {
+class NewsListViewModel(
+        val context: Application,
+        val repository: Repository
+) : AndroidViewModel(context) {
 
     private val LogTag = NewsListViewModel::class.java.simpleName
 
@@ -75,22 +79,19 @@ class NewsListViewModel(context: Application, repository: Repository) : AndroidV
         })
     }
 
-    private fun loadNews() {
-        NewsRetriever().getNews(1, object : Callback<NewsListResponse> {
-            override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
-                if ((response?.isSuccessful == true) && (response?.body()?.response != null)) {
-                    with(items) {
-                        clear()
-                        addAll(response?.body()?.response?.results as Iterable<NewsResult>)
-                    }
-                } else {
-                    // TODO implement behavior for non-successful response
+    fun loadNews() {
+        repository.getNews(1, object : DataSource.LoadNewsListCallback {
+            override fun onNewsListLoaded(list: List<NewsResult>) {
+                with(items) {
+                    clear()
+                    addAll(list)
                 }
             }
 
-            override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
-                Log.e(LogTag, "onFailure", t)
+            override fun onDataNotAvailable() {
+                Log.e(LogTag, "onFailure")
             }
+
         })
     }
 }
