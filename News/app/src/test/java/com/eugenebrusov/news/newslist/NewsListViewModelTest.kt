@@ -7,7 +7,7 @@ import com.eugenebrusov.news.newslist.util.capture
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.eq
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
@@ -34,6 +34,6 @@ class NewsListViewModelTest {
     fun loadNewsListFromRepositoryAndLoadIntoView() {
         newsListViewModel.loadNews()
 
-        verify(repository).getNews(eq(1), capture(loadNewsListCallbackCaptor))
+        verify(repository).getNews(anyInt(), capture(loadNewsListCallbackCaptor))
     }
 }
