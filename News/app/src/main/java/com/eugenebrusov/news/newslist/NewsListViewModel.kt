@@ -35,55 +35,12 @@ class NewsListViewModel(
         loadNews()
     }
 
-    var newsResults: MutableLiveData<NewsResults>? = null
-        get() {
-            if (field == null) {
-                val data = MutableLiveData<NewsResults>()
-                NewsRetriever().getNews(object : Callback<NewsListResponse> {
-                    override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
-                        response?.isSuccessful.let {
-                            data.value = response?.body()?.response
-                        }
-                    }
-
-                    override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
-                        Log.e(LogTag, "onFailure", t)
-                    }
-                })
-                field = data
-            }
-            return field
-        }
-        private set
-
-    fun loadNextPage() {
-        NewsRetriever().getNews(object : Callback<NewsListResponse> {
-            override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
-                response?.isSuccessful.let {
-                    if (response?.body()?.response != null) {
-                        val list = mutableListOf<NewsResult>()
-                        list?.addAll(newsResults?.value?.results as Iterable<NewsResult>)
-                        list?.addAll(response?.body()?.response?.results as Iterable<NewsResult>)
-
-                        val response = response?.body()?.response
-                        response?.results = list
-                        newsResults?.value = response
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
-                Log.e(LogTag, "onFailure", t)
-            }
-        })
-    }
-
     fun loadNews() {
         repository.getNews(object : DataSource.LoadNewsListCallback {
-            override fun onNewsListLoaded(list: List<NewsResult>) {
-                with(items) {
+            override fun onNewsListLoaded(items: List<NewsResult>) {
+                with(this@NewsListViewModel.items) {
                     clear()
-                    addAll(list)
+                    addAll(items)
                 }
             }
 
