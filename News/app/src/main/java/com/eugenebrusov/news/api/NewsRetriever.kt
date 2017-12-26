@@ -21,7 +21,7 @@ class NewsRetriever {
         client = retrofit.create(NewsClient::class.java)
     }
 
-    fun getNews(page: Int, callback: Callback<NewsListResponse>) {
-        client.getNews(page).enqueue(callback)
+    fun getNews(callback: Callback<NewsListResponse>) {
+        client.getNews().enqueue(callback)
     }
 }

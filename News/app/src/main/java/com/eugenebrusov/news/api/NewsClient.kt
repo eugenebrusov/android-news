@@ -13,5 +13,5 @@ import retrofit2.http.Query
  */
 interface NewsClient {
     @GET("search?api-key=${Constants.API_KEY}&show-tags=contributor&show-fields=all&show-refinements=all")
-    fun getNews(@Query("page") page: Int) : Call<NewsListResponse>
+    fun getNews() : Call<NewsListResponse>
 }

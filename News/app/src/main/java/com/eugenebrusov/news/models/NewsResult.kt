@@ -10,6 +10,9 @@ data class NewsResult(val id: String?,
                       val webPublicationDate: String?,
                       val fields: NewsFields?,
                       val tags: List<NewsTag>?) : Parcelable {
+
+    constructor() : this(null, null, null, null)
+
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),

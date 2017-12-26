@@ -50,7 +50,7 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
 //        startActivity(intent, bundle)
     }
 
-    fun obtainViewModel():NewsListViewModel =
+    fun obtainViewModel(): NewsListViewModel =
             ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(NewsListViewModel::class.java)
 
 }
