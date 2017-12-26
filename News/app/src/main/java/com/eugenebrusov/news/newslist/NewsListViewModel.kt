@@ -39,7 +39,7 @@ class NewsListViewModel(
         get() {
             if (field == null) {
                 val data = MutableLiveData<NewsResults>()
-                NewsRetriever().getNews(1, object : Callback<NewsListResponse> {
+                NewsRetriever().getNews(object : Callback<NewsListResponse> {
                     override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
                         response?.isSuccessful.let {
                             data.value = response?.body()?.response
@@ -57,8 +57,7 @@ class NewsListViewModel(
         private set
 
     fun loadNextPage() {
-        val page = newsResults?.value?.currentPage?.plus(1) ?: 1
-        NewsRetriever().getNews(page, object : Callback<NewsListResponse> {
+        NewsRetriever().getNews(object : Callback<NewsListResponse> {
             override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
                 response?.isSuccessful.let {
                     if (response?.body()?.response != null) {
@@ -80,7 +79,7 @@ class NewsListViewModel(
     }
 
     fun loadNews() {
-        repository.getNews(1, object : DataSource.LoadNewsListCallback {
+        repository.getNews(object : DataSource.LoadNewsListCallback {
             override fun onNewsListLoaded(list: List<NewsResult>) {
                 with(items) {
                     clear()

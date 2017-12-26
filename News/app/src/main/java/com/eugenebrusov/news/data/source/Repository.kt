@@ -11,8 +11,8 @@ import retrofit2.Response
  */
 class Repository {
 
-    fun getNews(page: Int, callback: DataSource.LoadNewsListCallback) {
-        NewsRetriever().getNews(page, object : Callback<NewsListResponse> {
+    fun getNews(callback: DataSource.LoadNewsListCallback) {
+        NewsRetriever().getNews(object : Callback<NewsListResponse> {
             override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
                 if (response?.isSuccessful == true) {
                     val results = response?.body()?.response?.results
