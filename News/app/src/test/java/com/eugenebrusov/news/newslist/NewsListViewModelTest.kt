@@ -44,14 +44,19 @@ class NewsListViewModelTest {
             // When the view model is asked to load data
             loadNews()
 
+            // Progress indicator is shown
+            assertTrue(dataLoading.get())
+
             // Callback is captured and invoked with stubbed data
             verify(repository).getNews(capture(loadNewsListCallbackCaptor))
             loadNewsListCallbackCaptor.value.onNewsListLoaded(this@NewsListViewModelTest.items)
 
-
             // Data loaded
             assertFalse(items.isEmpty())
             assertTrue(items.size == this@NewsListViewModelTest.items.size)
+
+            // Progress indicator is hidden
+            assertFalse(dataLoading.get())
         }
     }
 }

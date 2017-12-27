@@ -3,8 +3,8 @@ package com.eugenebrusov.news.newslist
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.databinding.ObservableArrayList
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableList
-import android.util.Log
 import com.eugenebrusov.news.SingleLiveEvent
 import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.Repository
@@ -18,9 +18,8 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    private val LogTag = NewsListViewModel::class.java.simpleName
-
     val items: ObservableList<NewsResult> = ObservableArrayList()
+    val dataLoading = ObservableBoolean(false)
     internal val openNewsDetailsEvent = SingleLiveEvent<String>()
 
     fun start() {
@@ -28,18 +27,21 @@ class NewsListViewModel(
     }
 
     fun loadNews() {
+        dataLoading.set(true)
+
         repository.getNews(object : DataSource.LoadNewsListCallback {
             override fun onNewsListLoaded(items: List<NewsResult>) {
                 with(this@NewsListViewModel.items) {
                     clear()
                     addAll(items)
                 }
+
+                dataLoading.set(false)
             }
 
             override fun onDataNotAvailable() {
-                Log.e(LogTag, "onFailure")
+                dataLoading.set(false)
             }
-
         })
     }
 }
