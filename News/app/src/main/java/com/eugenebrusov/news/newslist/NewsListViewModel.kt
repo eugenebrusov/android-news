@@ -20,6 +20,7 @@ class NewsListViewModel(
 
     val items: ObservableList<NewsResult> = ObservableArrayList()
     val dataLoading = ObservableBoolean(false)
+    val dataError = ObservableBoolean(false)
     internal val openNewsDetailsEvent = SingleLiveEvent<String>()
 
     fun start() {
@@ -27,6 +28,7 @@ class NewsListViewModel(
     }
 
     fun loadNews() {
+        dataError.set(false)
         dataLoading.set(true)
 
         repository.getNews(object : DataSource.LoadNewsListCallback {
@@ -40,6 +42,8 @@ class NewsListViewModel(
             }
 
             override fun onDataNotAvailable() {
+                items.clear()
+                dataError.set(true)
                 dataLoading.set(false)
             }
         })
