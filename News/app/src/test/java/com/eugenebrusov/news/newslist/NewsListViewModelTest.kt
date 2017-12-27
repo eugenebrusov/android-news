@@ -65,4 +65,30 @@ class NewsListViewModelTest {
         }
     }
 
+    @Test
+    fun loadNewsListFromRepository_failedToLoadData() {
+        with(newsListViewModel) {
+            // When the view model is asked to load data
+            loadNews()
+
+            // Error view is hidden
+            assertFalse(dataError.get())
+
+            // Progress indicator is shown
+            assertTrue(dataLoading.get())
+
+            // Callback is captured and data not available callback invoked
+            verify(repository).getNews(capture(loadNewsListCallbackCaptor))
+            loadNewsListCallbackCaptor.value.onDataNotAvailable()
+
+            // Items cleared
+            assertTrue(items.size == 0)
+
+            // Progress indicator is hidden
+            assertFalse(dataLoading.get())
+
+            // Error view is visible
+            assertTrue(dataError.get())
+        }
+    }
 }
