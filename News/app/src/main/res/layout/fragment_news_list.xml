@@ -7,10 +7,19 @@
             type="com.eugenebrusov.news.newslist.NewsListViewModel" />
     </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:items="@{viewModel.items}" />
+        app:onRefreshListener="@{viewModel::onRefresh}"
+        app:refreshing="@{viewModel.dataLoading}">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:items="@{viewModel.items}" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </layout>

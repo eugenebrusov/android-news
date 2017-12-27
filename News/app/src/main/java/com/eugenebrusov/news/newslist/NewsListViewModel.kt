@@ -44,4 +44,8 @@ class NewsListViewModel(
             }
         })
     }
+
+    fun onRefresh() {
+        loadNews()
+    }
 }
