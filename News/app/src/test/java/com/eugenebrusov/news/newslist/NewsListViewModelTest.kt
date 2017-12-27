@@ -39,10 +39,13 @@ class NewsListViewModelTest {
     }
 
     @Test
-    fun loadNewsListFromRepositoryAndLoadIntoView() {
+    fun loadNewsListFromRepository_dataLoaded() {
         with(newsListViewModel) {
             // When the view model is asked to load data
             loadNews()
+
+            // Error view is hidden
+            assertFalse(dataError.get())
 
             // Progress indicator is shown
             assertTrue(dataLoading.get())
@@ -52,11 +55,14 @@ class NewsListViewModelTest {
             loadNewsListCallbackCaptor.value.onNewsListLoaded(this@NewsListViewModelTest.items)
 
             // Data loaded
-            assertFalse(items.isEmpty())
             assertTrue(items.size == this@NewsListViewModelTest.items.size)
 
             // Progress indicator is hidden
             assertFalse(dataLoading.get())
+
+            // Error view is still hidden
+            assertFalse(dataError.get())
         }
     }
+
 }
