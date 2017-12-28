@@ -10,18 +10,11 @@ import com.eugenebrusov.news.models.NewsResult
 /**
  * Created by Eugene Brusov on 8/18/17.
  */
-class NewsListAdapter(
-        val newsClickListener: OnNewsClickListener,
-        val pageRequestListener: OnPageRequestedListener,
-        val viewModel: NewsListViewModel)
+class NewsListAdapter(val viewModel: NewsListViewModel)
     : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
     interface OnPageRequestedListener {
         fun onNextPageRequested()
-    }
-
-    interface OnNewsClickListener {
-        fun onNewsSelected(result: NewsResult, sharedImage: ImageView)
     }
 
     private lateinit var items: List<NewsResult>

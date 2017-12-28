@@ -13,7 +13,7 @@ import com.eugenebrusov.news.ViewModelFactory
 import com.eugenebrusov.news.models.NewsResult
 import kotlinx.android.synthetic.main.activity_news_list.*
 
-class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListener {
+class NewsListActivity : AppCompatActivity() {
 
     private lateinit var viewModel : NewsListViewModel
 
@@ -33,14 +33,6 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
         }
     }
 
-    override fun onNewsSelected(result: NewsResult, sharedImage: ImageView) {
-        val intent = Intent(this, NewsDetailActivity::class.java)
-        intent.putExtra(NewsDetailActivity.NEWS_RESULT, result)
-
-        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, sharedImage, sharedImage.transitionName).toBundle()
-        startActivity(intent, bundle)
-    }
-
     private fun openNewsDetails(newsId: String) {
         val intent = Intent(this, NewsDetailActivity::class.java)
         intent.putExtra(NewsDetailActivity.NEWS_RESULT, newsId)
@@ -51,6 +43,7 @@ class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsClickListen
     }
 
     fun obtainViewModel(): NewsListViewModel =
-            ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(NewsListViewModel::class.java)
+            ViewModelProviders.of(this,
+                    ViewModelFactory.getInstance(application)).get(NewsListViewModel::class.java)
 
 }
