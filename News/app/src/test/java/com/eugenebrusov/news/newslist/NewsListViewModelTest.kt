@@ -1,25 +1,31 @@
 package com.eugenebrusov.news.newslist
 
 import android.app.Application
+import android.arch.core.executor.testing.InstantTaskExecutorRule
+import android.arch.lifecycle.Observer
 import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.Repository
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.newslist.util.capture
+import com.eugenebrusov.news.newslist.util.mock
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.anyString
+import org.mockito.MockitoAnnotations
 
 /**
  * Created by Eugene Brusov on 12/25/17.
  */
 class NewsListViewModelTest {
 
+    @get:Rule var instantExecutorRule = InstantTaskExecutorRule()
     @Mock private lateinit var context: Application
     @Mock private lateinit var repository: Repository
     @Captor private lateinit var loadNewsListCallbackCaptor: ArgumentCaptor<DataSource.LoadNewsListCallback>
@@ -90,5 +96,18 @@ class NewsListViewModelTest {
             // Error view is visible
             assertTrue(dataError.get())
         }
+    }
+
+    @Test
+    fun clickOnNewsItem_ShowsDetailUi() {
+        val observer = mock<Observer<String>>()
+
+        with(newsListViewModel) {
+            openNewsDetailsEvent.observe(TestUtils.TEST_OBSERVER, observer)
+
+            openNewsDetailsEvent.value = anyString()
+        }
+
+        verify<Observer<String>>(observer).onChanged(anyString())
     }
 }
