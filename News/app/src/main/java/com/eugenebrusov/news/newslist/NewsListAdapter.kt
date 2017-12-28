@@ -13,10 +13,6 @@ import com.eugenebrusov.news.models.NewsResult
 class NewsListAdapter(val viewModel: NewsListViewModel)
     : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
-    interface OnPageRequestedListener {
-        fun onNextPageRequested()
-    }
-
     private lateinit var items: List<NewsResult>
 
     fun replaceData(items: List<NewsResult>?) {
