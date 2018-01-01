@@ -7,9 +7,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
- * Created by Eugene Brusov on 11/16/17.
+ * Concrete implementation to load tasks
+ * from the data sources into a cache.
  */
-class Repository {
+class Repository(
+        val remoteDataSource: DataSource,
+        val localDataSource: DataSource
+) : DataSource {
 
     fun getNews(callback: DataSource.LoadNewsListCallback) {
         NewsRetriever().getNews(object : Callback<NewsListResponse> {
@@ -30,6 +34,19 @@ class Repository {
                 callback.onDataNotAvailable()
             }
         })
+    }
+
+    companion object {
+
+        private var INSTANCE: Repository? = null
+
+        @JvmStatic fun getInstance(remoteDataSource: DataSource,
+                                   localDataSource: DataSource) =
+                INSTANCE ?: synchronized(Repository::class.java) {
+                    INSTANCE ?: Repository(remoteDataSource, localDataSource)
+                            .also { INSTANCE = it }
+                }
+
     }
 
 }

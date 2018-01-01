@@ -3,9 +3,11 @@ package com.eugenebrusov.news.data.source
 import com.eugenebrusov.news.models.NewsResult
 
 /**
- * Created by Eugene Brusov on 12/25/17.
+ * Main entry point for accessing news data.
+ *
  */
-class DataSource {
+interface DataSource {
+
     interface LoadNewsListCallback {
 
         fun onNewsListLoaded(items: List<NewsResult>)
