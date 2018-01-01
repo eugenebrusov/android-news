@@ -7,4 +7,7 @@ import com.eugenebrusov.news.data.source.DataSource
  */
 object RemoteDataSource : DataSource {
 
+    override fun getNews(callback: DataSource.LoadNewsListCallback) {
+
+    }
 }

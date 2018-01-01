@@ -14,4 +14,6 @@ interface DataSource {
 
         fun onDataNotAvailable()
     }
+
+    fun getNews(callback: LoadNewsListCallback)
 }

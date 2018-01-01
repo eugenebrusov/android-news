@@ -11,6 +11,10 @@ class LocalDataSource private constructor(
         val dao: Dao
 ) : DataSource {
 
+    override fun getNews(callback: DataSource.LoadNewsListCallback) {
+
+    }
+
     companion object {
 
         private var INSTANCE: LocalDataSource? = null

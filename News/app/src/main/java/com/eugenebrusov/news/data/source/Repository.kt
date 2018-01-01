@@ -15,7 +15,7 @@ class Repository(
         val localDataSource: DataSource
 ) : DataSource {
 
-    fun getNews(callback: DataSource.LoadNewsListCallback) {
+    override fun getNews(callback: DataSource.LoadNewsListCallback) {
         NewsRetriever().getNews(object : Callback<NewsListResponse> {
             override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
                 if (response?.isSuccessful == true) {
