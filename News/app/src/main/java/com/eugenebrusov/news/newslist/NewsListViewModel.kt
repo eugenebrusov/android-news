@@ -18,7 +18,7 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    val items: ObservableList<NewsResult> = ObservableArrayList()
+    val items: ObservableList<NewsResult> = ObservableArrayList<NewsResult>()
     val dataLoading = ObservableBoolean(false)
     val dataError = ObservableBoolean(false)
     internal val openNewsDetailsEvent = SingleLiveEvent<String>()
