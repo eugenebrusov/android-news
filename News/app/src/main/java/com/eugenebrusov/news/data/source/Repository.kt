@@ -45,6 +45,14 @@ class Repository(
                     INSTANCE ?: Repository(remoteDataSource, localDataSource)
                             .also { INSTANCE = it }
                 }
+
+        /**
+         * Used to force [getInstance] to create a new instance
+         * next time it's called.
+         */
+        @JvmStatic fun destroyInstance() {
+            INSTANCE = null
+        }
     }
 
 }

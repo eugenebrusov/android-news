@@ -3,6 +3,7 @@ package com.eugenebrusov.news.data.source
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.newslist.util.any
 import com.eugenebrusov.news.newslist.util.capture
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -31,6 +32,11 @@ class RepositoryTest {
 
         // Get a reference to the class under test
         repository = Repository.getInstance(remoteDataSource, localDataSource)
+    }
+
+    @After
+    fun destroyRepository() {
+        Repository.destroyInstance()
     }
 
     @Test
