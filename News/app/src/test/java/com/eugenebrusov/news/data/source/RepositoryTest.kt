@@ -2,7 +2,6 @@ package com.eugenebrusov.news.data.source
 
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.newslist.util.any
-import com.eugenebrusov.news.newslist.util.capture
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -37,29 +36,6 @@ class RepositoryTest {
     @After
     fun destroyRepository() {
         Repository.destroyInstance()
-    }
-
-    @Test
-    fun getNews_repositoryCachesAfterFirstApiCall() {
-        // When news are requested from repository
-        repository.getNews(loadNewsListCallback) // First call to API
-
-        // Use the Mockito Captor to capture the callback
-        verify(localDataSource).getNews(capture(newsListCallbackCaptor))
-
-        // Local data source doesn't have data yet
-        newsListCallbackCaptor.value.onDataNotAvailable()
-
-        // Verify the remote data source is queried
-        verify(remoteDataSource).getNews(capture(newsListCallbackCaptor))
-
-        // Trigger callback so news are cached
-        newsListCallbackCaptor.value.onNewsListLoaded(items)
-
-        repository.getNews(loadNewsListCallback) // Second call to API
-
-        // Then news were only requested once from Service API
-        verify(remoteDataSource).getNews(any<DataSource.LoadNewsListCallback>())
     }
 
     @Test
