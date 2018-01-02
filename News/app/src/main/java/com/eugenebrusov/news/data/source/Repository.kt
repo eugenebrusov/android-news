@@ -27,8 +27,10 @@ class Repository(
      */
     override fun getNews(callback: DataSource.LoadNewsListCallback) {
         if (cacheIsDirty) {
+            // If the cache is dirty we need to fetch new data from the network.
             remoteDataSource.getNews(callback)
         } else {
+            // Query the local storage if available. If not, query the network.
             localDataSource.getNews(callback)
         }
     }
