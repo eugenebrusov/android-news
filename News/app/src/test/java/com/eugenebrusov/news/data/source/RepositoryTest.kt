@@ -31,7 +31,7 @@ class RepositoryTest {
         // When news list is requested from the tasks repository
         repository.getNews(loadTasksCallback)
 
-        // Then tasks are loaded from the local data source
+        // Then news list is loaded from the local data source
         verify<DataSource>(localDataSource).getNews(any<DataSource.LoadNewsListCallback>())
     }
 

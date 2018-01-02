@@ -7,7 +7,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
- * Concrete implementation to load tasks
+ * Concrete implementation to load news
  * from the data sources into a cache.
  */
 class Repository(
@@ -15,25 +15,22 @@ class Repository(
         val localDataSource: DataSource
 ) : DataSource {
 
-    override fun getNews(callback: DataSource.LoadNewsListCallback) {
-        NewsRetriever().getNews(object : Callback<NewsListResponse> {
-            override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
-                if (response?.isSuccessful == true) {
-                    val results = response?.body()?.response?.results
-                    if (results != null) {
-                        callback.onNewsListLoaded(results)
-                    } else {
-                        callback.onDataNotAvailable()
-                    }
-                } else {
-                    callback.onDataNotAvailable()
-                }
-            }
+    private var cacheIsDirty = false
 
-            override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
-                callback.onDataNotAvailable()
-            }
-        })
+    /**
+     * Gets news from cache, local data source (SQLite) or remote data source, whichever is
+     * available first.
+     *
+     *
+     * Note: [LoadNewsListCallback.onDataNotAvailable] is fired if all data sources fail to
+     * get the data.
+     */
+    override fun getNews(callback: DataSource.LoadNewsListCallback) {
+        if (cacheIsDirty) {
+            remoteDataSource.getNews(callback)
+        } else {
+            localDataSource.getNews(callback)
+        }
     }
 
     companion object {
@@ -46,7 +43,6 @@ class Repository(
                     INSTANCE ?: Repository(remoteDataSource, localDataSource)
                             .also { INSTANCE = it }
                 }
-
     }
 
 }
