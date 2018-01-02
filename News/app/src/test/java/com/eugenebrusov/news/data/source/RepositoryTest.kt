@@ -35,7 +35,7 @@ class RepositoryTest {
 
     @Test
     fun getNews_repositoryCachesAfterFirstApiCall() {
-        // When tasks are requested from repository
+        // When news are requested from repository
         repository.getNews(loadNewsListCallback) // First call to API
 
         // Use the Mockito Captor to capture the callback
@@ -47,7 +47,7 @@ class RepositoryTest {
         // Verify the remote data source is queried
         verify(remoteDataSource).getNews(capture(newsListCallbackCaptor))
 
-        // Trigger callback so tasks are cached
+        // Trigger callback so news are cached
         newsListCallbackCaptor.value.onNewsListLoaded(items)
 
         repository.getNews(loadNewsListCallback) // Second call to API
@@ -58,7 +58,7 @@ class RepositoryTest {
 
     @Test
     fun getNews_requestsNewsListFromLocalDataSource() {
-        // When news list is requested from the tasks repository
+        // When news list is requested from the news repository
         repository.getNews(loadNewsListCallback)
 
         // Then news list is loaded from the local data source
