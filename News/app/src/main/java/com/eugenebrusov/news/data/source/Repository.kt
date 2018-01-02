@@ -1,11 +1,5 @@
 package com.eugenebrusov.news.data.source
 
-import com.eugenebrusov.news.api.NewsRetriever
-import com.eugenebrusov.news.models.NewsListResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
 /**
  * Concrete implementation to load news
  * from the data sources into a cache.
