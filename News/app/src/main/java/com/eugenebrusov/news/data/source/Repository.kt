@@ -1,5 +1,7 @@
 package com.eugenebrusov.news.data.source
 
+import com.eugenebrusov.news.models.NewsResult
+
 /**
  * Concrete implementation to load news
  * from the data sources into a cache.
@@ -25,7 +27,16 @@ class Repository(
             remoteDataSource.getNews(callback)
         } else {
             // Query the local storage if available. If not, query the network.
-            localDataSource.getNews(callback)
+            localDataSource.getNews(object : DataSource.LoadNewsListCallback {
+                override fun onNewsListLoaded(items: List<NewsResult>) {
+                    // callback.onNewsListLoaded(items)
+                }
+
+                override fun onDataNotAvailable() {
+                    remoteDataSource.getNews(callback)
+                }
+
+            })
         }
     }
 

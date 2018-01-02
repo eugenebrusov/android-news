@@ -2,6 +2,7 @@ package com.eugenebrusov.news.data.source
 
 import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.newslist.util.any
+import com.eugenebrusov.news.newslist.util.capture
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +27,7 @@ class RepositoryTest {
 
     @Before
     fun setupRepository() {
-        // To inject the mocks in the test the initMocks method needs to be called.
+        // To inject the mocks in the test the initMocks method needs to be called
         MockitoAnnotations.initMocks(this)
 
         // Get a reference to the class under test
@@ -45,6 +46,26 @@ class RepositoryTest {
 
         // Then news list is loaded from the local data source
         verify(localDataSource).getNews(any<DataSource.LoadNewsListCallback>())
+    }
+
+    @Test
+    fun getNewsWithLocalDataSourceUnavailable_newsListRetrievedFromRemote() {
+        // When news list is requested from the news repository
+        repository.getNews(loadNewsListCallback)
+
+        // Then news list is failed to load from localDataSource,
+        // callback is captured to invoke onDataNotAvailable
+        verify(localDataSource).getNews(capture(newsListCallbackCaptor))
+
+        // The local data source has no data available
+        newsListCallbackCaptor.value.onDataNotAvailable()
+
+        // The remote data source has data available
+        verify(remoteDataSource).getNews(capture(newsListCallbackCaptor))
+        newsListCallbackCaptor.value.onNewsListLoaded(items)
+
+        // Verify the news from the remote data source are returned
+        verify(loadNewsListCallback).onNewsListLoaded(items)
     }
 
 }
