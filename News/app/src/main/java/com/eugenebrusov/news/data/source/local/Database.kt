@@ -4,12 +4,12 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.eugenebrusov.news.data.source.News
+import com.eugenebrusov.news.data.source.NewsItem
 
 /**
- * The Room Database that contains the News table.
+ * The Room Database that contains the NewsItem table.
  */
-@Database(entities = arrayOf(News::class), version = 1)
+@Database(entities = arrayOf(NewsItem::class), version = 1)
 abstract class Database : RoomDatabase() {
 
     abstract fun dao(): Dao

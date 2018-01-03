@@ -12,7 +12,17 @@ class LocalDataSource private constructor(
 ) : DataSource {
 
     override fun getNews(callback: DataSource.LoadNewsListCallback) {
-
+        appExecutors.diskIO.execute {
+            val news = dao.getNews()
+            appExecutors.mainThread.execute {
+                if (news.isEmpty()) {
+                    // This will be called if the table is new or just empty
+                    callback.onDataNotAvailable()
+                } else {
+                    callback.onNewsListLoaded(news)
+                }
+            }
+        }
     }
 
     companion object {

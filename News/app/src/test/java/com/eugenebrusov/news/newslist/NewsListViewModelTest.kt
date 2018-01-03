@@ -4,8 +4,8 @@ import android.app.Application
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
 import com.eugenebrusov.news.data.source.DataSource
+import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.data.source.Repository
-import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.newslist.util.capture
 import com.eugenebrusov.news.newslist.util.mock
 import org.junit.Assert.assertFalse
@@ -16,8 +16,8 @@ import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 import org.mockito.Mock
-import org.mockito.Mockito.verify
 import org.mockito.Mockito.anyString
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 /**
@@ -30,7 +30,7 @@ class NewsListViewModelTest {
     @Mock private lateinit var repository: Repository
     @Captor private lateinit var loadNewsListCallbackCaptor: ArgumentCaptor<DataSource.LoadNewsListCallback>
     private lateinit var newsListViewModel: NewsListViewModel
-    private lateinit var items: List<NewsResult>
+    private lateinit var items: List<NewsItem>
 
     @Before
     fun setupViewModel() {
@@ -41,7 +41,7 @@ class NewsListViewModelTest {
         newsListViewModel = NewsListViewModel(context, repository)
 
         // Initialise the NewsResult array
-        items = listOf(NewsResult(), NewsResult(), NewsResult())
+        items = listOf(NewsItem(), NewsItem(), NewsItem())
     }
 
     @Test
