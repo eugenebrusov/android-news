@@ -9,6 +9,7 @@ import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 import org.mockito.Mock
+import org.mockito.Mockito.atLeastOnce
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
@@ -66,6 +67,36 @@ class RepositoryTest {
 
         // Verify the news from the remote data source are returned
         verify(loadNewsListCallback).onNewsListLoaded(items)
+    }
+
+    @Test
+    fun getNews_repositoryCachesAfterFirstApiCall() {
+        // When news list is requested from the news repository
+        repository.getNews(loadNewsListCallback) // First call to API
+
+        // Capture callback to invoke onDataNotAvailable,
+        // since localDataSource doesn't have any data at the very beginning
+        verify(localDataSource).getNews(capture(newsListCallbackCaptor))
+        newsListCallbackCaptor.value.onDataNotAvailable()
+
+        // Verify the remote data source is queried
+        verify(remoteDataSource).getNews(capture(newsListCallbackCaptor))
+
+        // Trigger callback so tasks are cached
+        newsListCallbackCaptor.value.onNewsListLoaded(items)
+
+        // Request news list again
+        // to check data returned from cache and not from local or remote data sources
+        repository.getNews(loadNewsListCallback) // Second call to API
+
+        // Verify the remoteDataSource isn't invoked more than once
+        verify(remoteDataSource).getNews(any<DataSource.LoadNewsListCallback>())
+
+        // Verify the localDataSource isn't invoked more than once
+        verify(localDataSource).getNews(any<DataSource.LoadNewsListCallback>())
+
+        // Verify the news from the cache are returned
+        verify(loadNewsListCallback, atLeastOnce()).onNewsListLoaded(items)
     }
 
 }
