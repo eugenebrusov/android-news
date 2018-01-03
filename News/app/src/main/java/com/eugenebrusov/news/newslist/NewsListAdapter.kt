@@ -28,16 +28,16 @@ class NewsListAdapter(val viewModel: NewsListViewModel)
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val binding = ItemNewsBinding
                 .inflate(LayoutInflater.from(parent?.context), parent, false)
-        binding.listener = object : NewsItemUserActionsListener {
-            override fun onNewsItemClicked(newsId: String) {
-                viewModel.openNewsDetailsEvent.value = newsId
-            }
-        }
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.binding?.newsItem = items.get(position)
+        holder?.binding?.listener = object : NewsItemUserActionsListener {
+            override fun onNewsItemClicked() {
+                viewModel.openNewsDetailsEvent.value = position
+            }
+        }
         holder?.binding?.executePendingBindings()
     }
 

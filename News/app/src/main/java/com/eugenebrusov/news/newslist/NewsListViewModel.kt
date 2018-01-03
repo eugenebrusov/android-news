@@ -21,7 +21,7 @@ class NewsListViewModel(
     val items: ObservableList<NewsItem> = ObservableArrayList<NewsItem>()
     val dataLoading = ObservableBoolean(false)
     val dataError = ObservableBoolean(false)
-    internal val openNewsDetailsEvent = SingleLiveEvent<String>()
+    internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
 
     fun start() {
         loadNews()
@@ -51,5 +51,14 @@ class NewsListViewModel(
 
     fun onRefresh() {
         loadNews()
+    }
+
+    fun newsItem(itemId: String): NewsItem? {
+        items.forEach {
+            if (it.id.equals(itemId)) {
+                return it
+            }
+        }
+        return null
     }
 }
