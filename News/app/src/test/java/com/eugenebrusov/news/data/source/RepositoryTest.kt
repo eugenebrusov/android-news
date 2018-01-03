@@ -1,6 +1,5 @@
 package com.eugenebrusov.news.data.source
 
-import com.eugenebrusov.news.models.NewsResult
 import com.eugenebrusov.news.newslist.util.any
 import com.eugenebrusov.news.newslist.util.capture
 import org.junit.After
@@ -24,7 +23,7 @@ class RepositoryTest {
     @Mock private lateinit var loadNewsListCallback: DataSource.LoadNewsListCallback
     @Captor private lateinit var newsListCallbackCaptor:
             ArgumentCaptor<DataSource.LoadNewsListCallback>
-    private var items: List<NewsResult> = listOf(NewsResult(), NewsResult(), NewsResult())
+    private var items: List<NewsItem> = listOf(NewsItem(), NewsItem(), NewsItem())
 
     @Before
     fun setupRepository() {

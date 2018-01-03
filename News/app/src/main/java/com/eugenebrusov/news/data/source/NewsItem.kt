@@ -13,7 +13,7 @@ import java.util.UUID
 @Entity(tableName = "news")
 data class NewsItem @JvmOverloads constructor(
         @PrimaryKey @ColumnInfo(name = "entryId") var entryId: String = UUID.randomUUID().toString(),
-        @ColumnInfo(name = "id") var id: String = ""
+        @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString()
 ) {
 
 }
