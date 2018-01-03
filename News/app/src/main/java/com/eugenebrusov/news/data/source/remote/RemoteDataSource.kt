@@ -49,4 +49,12 @@ object RemoteDataSource : DataSource {
             }
         })
     }
+
+    override fun saveNewsItems(newsItems: List<NewsItem>) {
+        // Not required for the remote data source
+    }
+
+    override fun deleteAllNews() {
+        // Not required for the remote data source
+    }
 }

@@ -1,6 +1,7 @@
 package com.eugenebrusov.news.data.source.local
 
 import com.eugenebrusov.news.data.source.DataSource
+import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.util.AppExecutors
 
 /**
@@ -22,6 +23,20 @@ class LocalDataSource private constructor(
                     callback.onNewsListLoaded(news)
                 }
             }
+        }
+    }
+
+    override fun saveNewsItems(newsItems: List<NewsItem>) {
+        appExecutors.diskIO.execute {
+            newsItems.forEach {
+                dao.insertNewsItem(it)
+            }
+        }
+    }
+
+    override fun deleteAllNews() {
+        appExecutors.diskIO.execute {
+            dao.deleteNews()
         }
     }
 

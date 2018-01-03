@@ -14,4 +14,8 @@ interface DataSource {
     }
 
     fun getNews(callback: LoadNewsListCallback)
+
+    fun saveNewsItems(newsItems: List<NewsItem>)
+
+    fun deleteAllNews()
 }

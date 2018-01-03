@@ -15,7 +15,7 @@ class Repository(
         val localDataSource: DataSource
 ) : DataSource {
 
-    var cachedNewsItem: LinkedHashMap<String, NewsItem> = LinkedHashMap()
+    var cachedNewsItems: LinkedHashMap<String, NewsItem> = LinkedHashMap()
 
     private var cacheIsDirty = false
 
@@ -29,14 +29,24 @@ class Repository(
      */
     override fun getNews(callback: DataSource.LoadNewsListCallback) {
         // Respond immediately with cache if available and not dirty
-        if (cachedNewsItem.isNotEmpty() && !cacheIsDirty) {
-            callback.onNewsListLoaded(ArrayList(cachedNewsItem.values))
+        if (cachedNewsItems.isNotEmpty() && !cacheIsDirty) {
+            callback.onNewsListLoaded(ArrayList(cachedNewsItems.values))
             return
         }
 
         if (cacheIsDirty) {
             // If the cache is dirty we need to fetch new data from the network.
-            remoteDataSource.getNews(callback)
+            remoteDataSource.getNews(object : DataSource.LoadNewsListCallback {
+                override fun onNewsListLoaded(items: List<NewsItem>) {
+                    refreshCache(items)
+                    refreshLocalDataSource(items)
+                    callback.onNewsListLoaded(ArrayList(cachedNewsItems.values))
+                }
+
+                override fun onDataNotAvailable() {
+                    callback.onDataNotAvailable()
+                }
+            })
         } else {
             // Query the local storage if available. If not, query the network.
             localDataSource.getNews(object : DataSource.LoadNewsListCallback {
@@ -49,7 +59,7 @@ class Repository(
                         override fun onNewsListLoaded(items: List<NewsItem>) {
                             refreshCache(items)
                             refreshLocalDataSource(items)
-                            callback.onNewsListLoaded(ArrayList(cachedNewsItem.values))
+                            callback.onNewsListLoaded(ArrayList(cachedNewsItems.values))
                         }
 
                         override fun onDataNotAvailable() {
@@ -62,16 +72,28 @@ class Repository(
         }
     }
 
+    override fun saveNewsItems(newsItems: List<NewsItem>) {
+        remoteDataSource.saveNewsItems(newsItems)
+        localDataSource.saveNewsItems(newsItems)
+    }
+
+    override fun deleteAllNews() {
+        remoteDataSource.deleteAllNews()
+        localDataSource.deleteAllNews()
+        cachedNewsItems.clear()
+    }
+
     private fun refreshCache(news: List<NewsItem>) {
-        cachedNewsItem.clear()
+        cachedNewsItems.clear()
         news.forEach {
-            cachedNewsItem.put(it.id, it)
+            cachedNewsItems.put(it.id, it)
         }
         cacheIsDirty = false
     }
 
     private fun refreshLocalDataSource(news: List<NewsItem>) {
-        // TODO implement
+        localDataSource.deleteAllNews()
+        localDataSource.saveNewsItems(news)
     }
 
     companion object {
