@@ -6,8 +6,8 @@
     <data>
         <import type="android.view.View.OnClickListener" />
 
-        <variable name="newsResult"
-            type="com.eugenebrusov.news.models.NewsResult" />
+        <variable name="newsItem"
+            type="com.eugenebrusov.news.data.source.NewsItem" />
 
         <variable name="listener"
             type="com.eugenebrusov.news.newslist.NewsItemUserActionsListener" />
@@ -20,7 +20,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="@{() -> listener.onNewsItemClicked(newsResult.id)}">
+        android:onClick="@{() -> listener.onNewsItemClicked(newsItem.id)}">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
                 android:transitionName="@string/transition_thumbnail"
-                app:thumbnail="@{newsResult.fields.thumbnail}"
+                app:thumbnail="@{newsItem.thumbnail}"
                 app:layout_constraintDimensionRatio="H,16:9"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
                 android:layout_marginEnd="16dp"
                 android:lineSpacingExtra="4dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:text="@{newsResult.fields.headline}"
+                android:text="@{newsItem.headline}"
                 app:layout_constraintTop_toBottomOf="@+id/thumbnail_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
-                app:byline="@{newsResult.tags[0]}"
+                app:byline="@{newsItem.bylineImageUrl}"
                 app:layout_constraintTop_toBottomOf="@+id/headline_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/bottom_space"
@@ -76,7 +76,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:webTitle="@{newsResult.tags[0]}"
+                app:webTitle="@{newsItem.webTitle}"
                 app:layout_constraintTop_toTopOf="@+id/byline_image"
                 app:layout_constraintStart_toEndOf="@+id/byline_image"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                app:webPublicationDate="@{newsResult.webPublicationDate}"
+                app:webPublicationDate="@{newsItem.webPublicationDate}"
                 app:layout_constraintStart_toEndOf="@+id/byline_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/web_title_text"

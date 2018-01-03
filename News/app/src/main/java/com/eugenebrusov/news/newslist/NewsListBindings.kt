@@ -6,11 +6,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.eugenebrusov.news.models.NewsResult
+import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.models.NewsTag
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
 
 /**
  * Created by eugene on 11/20/17.
@@ -18,7 +19,7 @@ import java.util.*
 object NewsListBindings {
 
     @BindingAdapter("app:items")
-    @JvmStatic fun setItems(recyclerView: RecyclerView, items: List<NewsResult>?) {
+    @JvmStatic fun setItems(recyclerView: RecyclerView, items: List<NewsItem>?) {
         with(recyclerView.adapter as NewsListAdapter) {
             replaceData(items)
         }
@@ -30,20 +31,20 @@ object NewsListBindings {
     }
 
     @BindingAdapter("app:byline")
-    @JvmStatic fun setByline(imageView: ImageView, newsTag: NewsTag?) {
+    @JvmStatic fun setByline(imageView: ImageView, bylineImageUrl: String) {
         Glide.with(imageView.context)
-                .load(newsTag?.bylineImageUrl)
+                .load(bylineImageUrl)
                 .apply(RequestOptions().circleCrop())
                 .into(imageView)
     }
 
     @BindingAdapter("app:webTitle")
-    @JvmStatic fun setWebTitle(textView: TextView, newsTag: NewsTag?) {
-        textView.text = newsTag?.webTitle
+    @JvmStatic fun setWebTitle(textView: TextView, webTitle: String) {
+        textView.text = webTitle
     }
 
     @BindingAdapter("app:webPublicationDate")
-    @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: String?) {
+    @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: String) {
         val date: Date? =
                 try {
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)

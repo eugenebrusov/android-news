@@ -7,8 +7,8 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableList
 import com.eugenebrusov.news.SingleLiveEvent
 import com.eugenebrusov.news.data.source.DataSource
+import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.data.source.Repository
-import com.eugenebrusov.news.models.NewsResult
 
 /**
  * Created by Eugene Brusov on 8/17/17.
@@ -18,7 +18,7 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    val items: ObservableList<NewsResult> = ObservableArrayList<NewsResult>()
+    val items: ObservableList<NewsItem> = ObservableArrayList<NewsItem>()
     val dataLoading = ObservableBoolean(false)
     val dataError = ObservableBoolean(false)
     internal val openNewsDetailsEvent = SingleLiveEvent<String>()
@@ -32,7 +32,7 @@ class NewsListViewModel(
         dataLoading.set(true)
 
         repository.getNews(object : DataSource.LoadNewsListCallback {
-            override fun onNewsListLoaded(items: List<NewsResult>) {
+            override fun onNewsListLoaded(items: List<NewsItem>) {
                 with(this@NewsListViewModel.items) {
                     clear()
                     addAll(items)

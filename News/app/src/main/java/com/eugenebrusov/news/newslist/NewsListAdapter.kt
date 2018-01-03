@@ -3,9 +3,8 @@ package com.eugenebrusov.news.newslist
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
+import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.databinding.ItemNewsBinding
-import com.eugenebrusov.news.models.NewsResult
 
 /**
  * Created by Eugene Brusov on 8/18/17.
@@ -13,9 +12,9 @@ import com.eugenebrusov.news.models.NewsResult
 class NewsListAdapter(val viewModel: NewsListViewModel)
     : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
-    private lateinit var items: List<NewsResult>
+    private lateinit var items: List<NewsItem>
 
-    fun replaceData(items: List<NewsResult>?) {
+    fun replaceData(items: List<NewsItem>?) {
         if (items != null) {
             this.items = items
             notifyDataSetChanged()
@@ -38,7 +37,7 @@ class NewsListAdapter(val viewModel: NewsListViewModel)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.binding?.newsResult = items.get(position)
+        holder?.binding?.newsItem = items.get(position)
         holder?.binding?.executePendingBindings()
     }
 
