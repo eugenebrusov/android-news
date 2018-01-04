@@ -9,6 +9,9 @@ import android.view.WindowManager
 import com.eugenebrusov.news.R
 import kotlinx.android.synthetic.main.activity_news_detail.*
 
+/**
+ * Displays news details screen
+ */
 class NewsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +21,7 @@ class NewsDetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // Set transparent status bar on devices with SDK 21+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -62,14 +66,19 @@ class NewsDetailActivity : AppCompatActivity() {
 //        body_text.text = bodyText
     }
 
-    companion object {
-        const val NEWS_RESULT = "news_result"
-    }
-
+    /**
+     * Overriding back button tap and perform back transition with animation
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
             android.R.id.home -> finishAfterTransition()
         }
         return true
+    }
+
+    companion object {
+
+        const val EXTRA_NEWS_ID = "news_id"
+
     }
 }

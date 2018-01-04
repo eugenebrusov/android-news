@@ -41,7 +41,7 @@ class NewsListFragment : Fragment() {
                                 as NewsListAdapter.ViewHolder
 
                         val intent = Intent(context, NewsDetailActivity::class.java)
-                        intent.putExtra(NewsDetailActivity.NEWS_RESULT, holder.binding.newsItem?.id)
+                        intent.putExtra(NewsDetailActivity.EXTRA_NEWS_ID, holder.binding.newsItem?.id)
 
                         val bundle = ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(
