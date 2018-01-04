@@ -14,6 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.Mockito.anyString
@@ -100,14 +101,14 @@ class NewsListViewModelTest {
 
     @Test
     fun clickOnNewsItem_ShowsDetailUi() {
-        val observer = mock<Observer<String>>()
+        val observer = mock<Observer<Int>>()
 
         with(newsListViewModel) {
             openNewsDetailsEvent.observe(TestUtils.TEST_OBSERVER, observer)
 
-            openNewsDetailsEvent.value = anyString()
+            openNewsDetailsEvent.value = anyInt()
         }
 
-        verify<Observer<String>>(observer).onChanged(anyString())
+        verify(observer).onChanged(anyInt())
     }
 }
