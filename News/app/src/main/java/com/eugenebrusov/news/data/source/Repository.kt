@@ -72,6 +72,43 @@ class Repository(
         }
     }
 
+    /**
+     * Gets news item from local data source (sqlite) unless the table is new or empty. In that case it
+     * uses the network data source.
+     *
+     *
+     * Note: [LoadNewsItemCallback.onDataNotAvailable] is fired if both data sources fail to
+     * get the data.
+     */
+    override fun getNewsItem(newsItemId: String, callback: DataSource.LoadNewsItemCallback) {
+        val newsItemInCache = cachedNewsItems[newsItemId]
+
+        // Respond immediately with cache if available
+        if (newsItemInCache != null) {
+            callback.onNewsItemLoaded(newsItemInCache)
+        }
+
+        // Try to load news item from local data source
+        // If news item doesn't exist load from remote data source
+        localDataSource.getNewsItem(newsItemId, object : DataSource.LoadNewsItemCallback {
+            override fun onNewsItemLoaded(item: NewsItem) {
+                callback.onNewsItemLoaded(item)
+            }
+
+            override fun onDataNotAvailable() {
+                remoteDataSource.getNewsItem(newsItemId, object : DataSource.LoadNewsItemCallback{
+                    override fun onNewsItemLoaded(item: NewsItem) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onDataNotAvailable() {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+                })
+            }
+        })
+    }
+
     override fun saveNewsItems(newsItems: List<NewsItem>) {
         remoteDataSource.saveNewsItems(newsItems)
         localDataSource.saveNewsItems(newsItems)

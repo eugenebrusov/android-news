@@ -50,6 +50,10 @@ object RemoteDataSource : DataSource {
         })
     }
 
+    override fun getNewsItem(newsItemId: String, callback: DataSource.LoadNewsItemCallback) {
+        // TODO implement
+    }
+
     override fun saveNewsItems(newsItems: List<NewsItem>) {
         // Not required for the remote data source
     }

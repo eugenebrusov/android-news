@@ -26,6 +26,10 @@ class LocalDataSource private constructor(
         }
     }
 
+    override fun getNewsItem(newsItemId: String, callback: DataSource.LoadNewsItemCallback) {
+        // TODO implement
+    }
+
     override fun saveNewsItems(newsItems: List<NewsItem>) {
         appExecutors.diskIO.execute {
             newsItems.forEach {

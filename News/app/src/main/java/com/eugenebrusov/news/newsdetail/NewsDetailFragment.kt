@@ -1,4 +1,4 @@
-package com.eugenebrusov.news.newslist
+package com.eugenebrusov.news.newsdetail
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
