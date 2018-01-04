@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewsDetailActivity"
+            android:name=".newsdetail.NewsDetailActivity"
             android:parentActivityName=".newslist.NewsListActivity" />
     </application>
 

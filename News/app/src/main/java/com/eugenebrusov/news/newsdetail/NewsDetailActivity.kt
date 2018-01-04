@@ -1,4 +1,4 @@
-package com.eugenebrusov.news
+package com.eugenebrusov.news.newsdetail
 
 import android.os.Build
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.WindowManager
+import com.eugenebrusov.news.R
 import kotlinx.android.synthetic.main.activity_news_detail.*
 
 class NewsDetailActivity : AppCompatActivity() {

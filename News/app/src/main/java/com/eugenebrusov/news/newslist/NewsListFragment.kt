@@ -9,7 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eugenebrusov.news.NewsDetailActivity
+import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import com.eugenebrusov.news.databinding.FragmentNewsListBinding
 
 class NewsListFragment : Fragment() {
@@ -37,7 +37,8 @@ class NewsListFragment : Fragment() {
                 this@NewsListFragment,
                 Observer<Int> { position ->
                     if (position != null) {
-                        val holder = binding.recyclerView.findViewHolderForLayoutPosition(position) as NewsListAdapter.ViewHolder
+                        val holder = binding.recyclerView.findViewHolderForLayoutPosition(position)
+                                as NewsListAdapter.ViewHolder
 
                         val intent = Intent(context, NewsDetailActivity::class.java)
                         intent.putExtra(NewsDetailActivity.NEWS_RESULT, holder.binding.newsItem?.id)
