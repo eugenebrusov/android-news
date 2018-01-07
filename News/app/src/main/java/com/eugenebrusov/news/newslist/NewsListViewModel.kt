@@ -53,12 +53,4 @@ class NewsListViewModel(
         loadNews()
     }
 
-    fun newsItem(itemId: String): NewsItem? {
-        items.forEach {
-            if (it.id.equals(itemId)) {
-                return it
-            }
-        }
-        return null
-    }
 }
