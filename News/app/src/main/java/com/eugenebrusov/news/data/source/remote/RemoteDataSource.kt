@@ -1,20 +1,29 @@
 package com.eugenebrusov.news.data.source.remote
 
-import com.eugenebrusov.news.api.NewsRetriever
+import com.eugenebrusov.news.Constants
 import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.models.NewsListResponse
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Concrete implementation of the data source pulling data from REST API
  */
 object RemoteDataSource : DataSource {
 
+    private val service = Retrofit.Builder().baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(OkHttpClient().newBuilder().build())
+            .build()
+            .create(Service::class.java)
+
     override fun getNews(callback: DataSource.LoadNewsListCallback) {
-        NewsRetriever().getNews(object : Callback<NewsListResponse> {
+        service.getNews().enqueue(object : Callback<NewsListResponse> {
             override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
                 if (response?.isSuccessful == true) {
                     val results = response.body()?.response?.results
@@ -51,7 +60,7 @@ object RemoteDataSource : DataSource {
     }
 
     override fun getNewsItem(newsItemId: String, callback: DataSource.LoadNewsItemCallback) {
-        // TODO implement
+        // Not required for the remote data source
     }
 
     override fun saveNewsItems(newsItems: List<NewsItem>) {
