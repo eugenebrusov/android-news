@@ -3,7 +3,7 @@ package com.eugenebrusov.news.data.source.remote
 import com.eugenebrusov.news.Constants
 import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.NewsItem
-import com.eugenebrusov.news.models.NewsListResponse
+import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,7 +1,7 @@
 package com.eugenebrusov.news.data.source.remote
 
 import com.eugenebrusov.news.Constants
-import com.eugenebrusov.news.models.NewsListResponse
+import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
 import retrofit2.Call
 import retrofit2.http.GET
 

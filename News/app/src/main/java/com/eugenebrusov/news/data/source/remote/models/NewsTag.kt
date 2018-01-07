@@ -1,4 +1,4 @@
-package com.eugenebrusov.news.models
+package com.eugenebrusov.news.data.source.remote.models
 
 /**
  * Created by Eugene Brusov on 8/24/17.
