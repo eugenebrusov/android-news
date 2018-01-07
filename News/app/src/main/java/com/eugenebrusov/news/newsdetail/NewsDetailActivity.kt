@@ -1,5 +1,6 @@
 package com.eugenebrusov.news.newsdetail
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.WindowManager
 import com.eugenebrusov.news.R
+import com.eugenebrusov.news.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_news_detail.*
 
 /**
@@ -70,11 +72,15 @@ class NewsDetailActivity : AppCompatActivity() {
      * Overriding back button tap and perform back transition with animation
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             android.R.id.home -> finishAfterTransition()
         }
         return true
     }
+
+    fun obtainViewModel(): NewsDetailViewModel =
+            ViewModelProviders.of(this,
+                    ViewModelFactory.getInstance(application)).get(NewsDetailViewModel::class.java)
 
     companion object {
 

@@ -4,10 +4,8 @@
 
     <data>
 
-        <!--<import type="android.view.View" />-->
-
-        <!--<variable name="viewModel"-->
-            <!--type="com.eugenebrusov.news.newslist.NewsListViewModel" />-->
+        <variable name="viewModel"
+            type="com.eugenebrusov.news.newsdetail.NewsDetailViewModel" />
 
     </data>
 
@@ -29,6 +27,7 @@
                 android:layout_marginEnd="16dp"
                 android:lineSpacingExtra="4dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:text="@{viewModel.newsItem.headline}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +40,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                app:byline="@{viewModel.newsItem.bylineImageUrl}"
                 app:layout_constraintTop_toBottomOf="@+id/headline_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/body_text"/>
@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:text="@{viewModel.newsItem.webTitle}"
                 app:layout_constraintTop_toTopOf="@+id/byline_image"
                 app:layout_constraintStart_toEndOf="@+id/byline_image" />
 
@@ -60,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:webPublicationDate="@{viewModel.newsItem.webPublicationDate}"
                 app:layout_constraintTop_toBottomOf="@+id/web_title_text"
                 app:layout_constraintStart_toEndOf="@+id/byline_image" />
 
@@ -73,6 +75,7 @@
                 android:layout_marginBottom="16dp"
                 android:lineSpacingExtra="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:text="@{viewModel.newsItem.bodyText}"
                 app:layout_constraintTop_toBottomOf="@+id/byline_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

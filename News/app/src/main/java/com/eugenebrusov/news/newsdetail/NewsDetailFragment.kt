@@ -19,10 +19,14 @@ class NewsDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        val viewModel = (activity as NewsDetailActivity).obtainViewModel()
+        binding.viewModel = viewModel
     }
 
     override fun onResume() {
         super.onResume()
-        //binding.viewModel?.start()
+
+        binding.viewModel?.start(activity.intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID))
     }
 }

@@ -51,6 +51,7 @@ class Repository(
             // Query the local storage if available. If not, query the network.
             localDataSource.getNews(object : DataSource.LoadNewsListCallback {
                 override fun onNewsListLoaded(items: List<NewsItem>) {
+                    refreshCache(items)
                     callback.onNewsListLoaded(items)
                 }
 

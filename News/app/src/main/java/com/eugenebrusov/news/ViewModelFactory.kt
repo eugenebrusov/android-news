@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.support.annotation.VisibleForTesting
 import com.eugenebrusov.news.data.source.Repository
+import com.eugenebrusov.news.newsdetail.NewsDetailViewModel
 import com.eugenebrusov.news.newslist.NewsListViewModel
 
 /**
@@ -21,6 +22,8 @@ class ViewModelFactory private constructor(
                 when {
                     isAssignableFrom(NewsListViewModel::class.java) ->
                         NewsListViewModel(application, repository)
+                    isAssignableFrom(NewsDetailViewModel::class.java) ->
+                        NewsDetailViewModel(application, repository)
                     else ->
                         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
                 }

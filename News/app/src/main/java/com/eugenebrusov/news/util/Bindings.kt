@@ -1,4 +1,4 @@
-package com.eugenebrusov.news.newslist
+package com.eugenebrusov.news.util
 
 import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
@@ -7,16 +7,16 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.eugenebrusov.news.data.source.NewsItem
-import com.eugenebrusov.news.models.NewsTag
+import com.eugenebrusov.news.newslist.NewsListAdapter
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.Date
+import java.util.Locale
 
 /**
- * Created by eugene on 11/20/17.
+ * Created by Eugene Brusov on 1/7/18.
  */
-object NewsListBindings {
+object Bindings {
 
     @BindingAdapter("app:items")
     @JvmStatic fun setItems(recyclerView: RecyclerView, items: List<NewsItem>?) {
@@ -38,11 +38,6 @@ object NewsListBindings {
                 .into(imageView)
     }
 
-    @BindingAdapter("app:webTitle")
-    @JvmStatic fun setWebTitle(textView: TextView, webTitle: String) {
-        textView.text = webTitle
-    }
-
     @BindingAdapter("app:webPublicationDate")
     @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: String) {
         val date: Date? =
@@ -56,5 +51,4 @@ object NewsListBindings {
                 } catch (e: ParseException) { null }
         textView.text = formattedDate
     }
-
 }
