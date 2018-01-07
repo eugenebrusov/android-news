@@ -1,9 +1,5 @@
 package com.eugenebrusov.news.models
 
-import android.os.Parcel
-import android.os.Parcelable
-import java.util.UUID
-
 /**
  * Created by Eugene Brusov on 8/22/17.
  */
