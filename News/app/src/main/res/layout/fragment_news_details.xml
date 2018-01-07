@@ -75,7 +75,7 @@
                 android:layout_marginBottom="16dp"
                 android:lineSpacingExtra="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:text="@{viewModel.newsItem.bodyText}"
+                app:body="@{viewModel.newsItem.bodyText}"
                 app:layout_constraintTop_toBottomOf="@+id/byline_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
