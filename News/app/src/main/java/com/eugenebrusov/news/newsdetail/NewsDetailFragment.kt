@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.databinding.FragmentNewsDetailsBinding
 
+/**
+ * Main UI for the news detail screen
+ */
 class NewsDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentNewsDetailsBinding

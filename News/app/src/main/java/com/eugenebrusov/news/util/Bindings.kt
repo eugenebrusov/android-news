@@ -54,7 +54,6 @@ object Bindings {
 
     @BindingAdapter("app:body")
     @JvmStatic fun setBody(textView: TextView, bodyText: String) {
-        var bodyText = bodyText.replace(". ", ".\n\n")
-        textView.text = bodyText
+        textView.text = bodyText.replace(". ", ".\n\n")
     }
 }
