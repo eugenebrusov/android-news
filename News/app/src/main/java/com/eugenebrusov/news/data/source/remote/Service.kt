@@ -9,6 +9,7 @@ import retrofit2.http.GET
  * API endpoints defined by the service interface
  */
 interface Service {
+
     @GET("search?api-key=${Constants.API_KEY}&show-tags=contributor&show-fields=all&show-refinements=all")
     fun getNews() : Call<NewsListResponse>
 }
