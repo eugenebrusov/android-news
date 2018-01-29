@@ -1,64 +1,56 @@
 package com.eugenebrusov.news.newslist
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.util.Log
-import com.eugenebrusov.news.api.NewsRetriever
-import com.eugenebrusov.news.models.NewsListResponse
-import com.eugenebrusov.news.models.NewsResult
-import com.eugenebrusov.news.models.NewsResults
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.databinding.ObservableArrayList
+import android.databinding.ObservableBoolean
+import android.databinding.ObservableList
+import com.eugenebrusov.news.SingleLiveEvent
+import com.eugenebrusov.news.data.source.DataSource
+import com.eugenebrusov.news.data.source.NewsItem
+import com.eugenebrusov.news.data.source.Repository
 
 /**
  * Created by Eugene Brusov on 8/17/17.
  */
-class NewsListViewModel : ViewModel() {
+class NewsListViewModel(
+        val context: Application,
+        val repository: Repository
+) : AndroidViewModel(context) {
 
-    private val LogTag = NewsListViewModel::class.java.simpleName
+    val items: ObservableList<NewsItem> = ObservableArrayList<NewsItem>()
+    val dataLoading = ObservableBoolean(false)
+    val dataError = ObservableBoolean(false)
+    internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
 
-    var newsResults: MutableLiveData<NewsResults>? = null
-        get() {
-            if (field == null) {
-                val data = MutableLiveData<NewsResults>()
-                NewsRetriever().getNews(1, object : Callback<NewsListResponse> {
-                    override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
-                        response?.isSuccessful.let {
-                            data.value = response?.body()?.response
-                        }
-                    }
+    fun start() {
+        loadNews()
+    }
 
-                    override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
-                        Log.e(LogTag, "onFailure", t)
-                    }
-                })
-                field = data
-            }
-            return field
-        }
-        private set
+    fun loadNews() {
+        dataError.set(false)
+        dataLoading.set(true)
 
-    fun loadNextPage() {
-        val page = newsResults?.value?.currentPage?.plus(1) ?: 1
-        NewsRetriever().getNews(page, object : Callback<NewsListResponse> {
-            override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
-                response?.isSuccessful.let {
-                    if (response?.body()?.response != null) {
-                        val list = mutableListOf<NewsResult>()
-                        list?.addAll(newsResults?.value?.results as Iterable<NewsResult>)
-                        list?.addAll(response?.body()?.response?.results as Iterable<NewsResult>)
-
-                        val response = response?.body()?.response
-                        response?.results = list
-                        newsResults?.value = response
-                    }
+        repository.getNews(object : DataSource.LoadNewsListCallback {
+            override fun onNewsListLoaded(items: List<NewsItem>) {
+                with(this@NewsListViewModel.items) {
+                    clear()
+                    addAll(items)
                 }
+
+                dataLoading.set(false)
             }
 
-            override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
-                Log.e(LogTag, "onFailure", t)
+            override fun onDataNotAvailable() {
+                items.clear()
+                dataError.set(true)
+                dataLoading.set(false)
             }
         })
     }
+
+    fun onRefresh() {
+        loadNews()
+    }
+
 }

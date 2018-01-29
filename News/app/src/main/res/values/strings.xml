@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">News</string>
     <string name="transition_thumbnail">TransitionThumbnail</string>
+
+    <!-- News list -->
+    <string name="news_list_error_message">Unable to load data</string>
+    <string name="news_list_try_again">Try again</string>
 </resources>
