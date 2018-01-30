@@ -12,11 +12,12 @@ import com.eugenebrusov.news.databinding.ItemNewsBinding
 class NewsListAdapter(val viewModel: NewsListViewModel)
     : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
-    private lateinit var items: List<NewsItem>
+    private var items = ArrayList<NewsItem>()
 
     fun replaceData(items: List<NewsItem>?) {
         if (items != null) {
-            this.items = items
+            this.items.clear()
+            this.items.addAll(items)
             notifyDataSetChanged()
         }
     }
