@@ -2,9 +2,7 @@ package com.eugenebrusov.news.newslist
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.databinding.ObservableArrayList
-import android.databinding.ObservableBoolean
-import android.databinding.ObservableList
+import android.arch.lifecycle.MutableLiveData
 import com.eugenebrusov.news.SingleLiveEvent
 import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.NewsItem
@@ -18,9 +16,9 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    val items: ObservableList<NewsItem> = ObservableArrayList<NewsItem>()
-    val dataLoading = ObservableBoolean(false)
-    val dataError = ObservableBoolean(false)
+    val items = MutableLiveData<List<NewsItem>>()
+    val dataLoading = MutableLiveData<Boolean>()
+    val dataError = MutableLiveData<Boolean>()
     internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
 
     fun start() {
@@ -28,23 +26,21 @@ class NewsListViewModel(
     }
 
     fun loadNews() {
-        dataError.set(false)
-        dataLoading.set(true)
+        dataError.value = false
+        dataLoading.value = true
 
         repository.getNews(object : DataSource.LoadNewsListCallback {
             override fun onNewsListLoaded(items: List<NewsItem>) {
-                with(this@NewsListViewModel.items) {
-                    clear()
-                    addAll(items)
-                }
+                this@NewsListViewModel.items.value = items
 
-                dataLoading.set(false)
+                dataLoading.value = false
             }
 
             override fun onDataNotAvailable() {
-                items.clear()
-                dataError.set(true)
-                dataLoading.set(false)
+                this@NewsListViewModel.items.value = null
+
+                dataError.value = true
+                dataLoading.value = false
             }
         })
     }

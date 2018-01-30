@@ -2,6 +2,7 @@ package com.eugenebrusov.news.newsdetail
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
 import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.NewsItem
@@ -15,16 +16,16 @@ class NewsDetailViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    val newsItem = ObservableField<NewsItem>()
+    val newsItem = MutableLiveData<NewsItem>()
 
     fun start(newsItemId: String) {
         repository.getNewsItem(newsItemId, object : DataSource.LoadNewsItemCallback {
             override fun onNewsItemLoaded(item: NewsItem) {
-                newsItem.set(item)
+                newsItem.value = item
             }
 
             override fun onDataNotAvailable() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                TODO("not implemented")
             }
         })
     }
