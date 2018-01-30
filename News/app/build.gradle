@@ -6,7 +6,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.eugenebrusov.news"
         minSdkVersion 21
