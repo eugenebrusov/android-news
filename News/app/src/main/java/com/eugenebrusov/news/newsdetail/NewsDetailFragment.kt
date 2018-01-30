@@ -16,7 +16,9 @@ class NewsDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = FragmentNewsDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentNewsDetailsBinding.inflate(inflater, container, false).apply {
+            setLifecycleOwner(this@NewsDetailFragment)
+        }
         return binding.root
     }
 
