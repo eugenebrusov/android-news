@@ -26,12 +26,12 @@ object Bindings {
     }
 
     @BindingAdapter("app:thumbnail")
-    @JvmStatic fun setThumbnail(imageView: ImageView, thumbnail: String) {
+    @JvmStatic fun setThumbnail(imageView: ImageView, thumbnail: String?) {
         Glide.with(imageView.context).load(thumbnail).into(imageView)
     }
 
     @BindingAdapter("app:byline")
-    @JvmStatic fun setByline(imageView: ImageView, bylineImageUrl: String) {
+    @JvmStatic fun setByline(imageView: ImageView, bylineImageUrl: String?) {
         Glide.with(imageView.context)
                 .load(bylineImageUrl)
                 .apply(RequestOptions().circleCrop())
@@ -39,21 +39,25 @@ object Bindings {
     }
 
     @BindingAdapter("app:webPublicationDate")
-    @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: String) {
-        val date: Date? =
-                try {
-                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-                            .parse(webPublicationDate)
-                } catch (e: ParseException) { null }
-        val formattedDate: String? =
-                try {
-                    SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)
-                } catch (e: ParseException) { null }
-        textView.text = formattedDate
+    @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: String?) {
+        if (webPublicationDate == null) {
+            textView.text = ""
+        } else {
+            val date: Date? =
+                    try {
+                        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+                                .parse(webPublicationDate)
+                    } catch (e: ParseException) { null }
+            val formattedDate: String? =
+                    try {
+                        SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)
+                    } catch (e: ParseException) { null }
+            textView.text = formattedDate
+        }
     }
 
     @BindingAdapter("app:body")
-    @JvmStatic fun setBody(textView: TextView, bodyText: String) {
-        textView.text = bodyText.replace(". ", ".\n\n")
+    @JvmStatic fun setBody(textView: TextView, bodyText: String?) {
+        textView.text = bodyText?.replace(". ", ".\n\n")
     }
 }
