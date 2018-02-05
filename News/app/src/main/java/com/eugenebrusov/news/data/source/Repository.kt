@@ -1,5 +1,9 @@
 package com.eugenebrusov.news.data.source
 
+import android.arch.lifecycle.LiveData
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
+import com.eugenebrusov.news.data.source.local.LocalDataSource
 import java.util.LinkedHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.List
@@ -18,6 +22,29 @@ class Repository(
     var cachedNewsItems: LinkedHashMap<String, NewsItem> = LinkedHashMap()
 
     private var cacheIsDirty = false
+
+    private val boundaryCallback = object: PagedList.BoundaryCallback<NewsItem>() {
+        override fun onItemAtEndLoaded(itemAtEnd: NewsItem) {
+            super.onItemAtEndLoaded(itemAtEnd)
+        }
+
+        override fun onZeroItemsLoaded() {
+            super.onZeroItemsLoaded()
+        }
+
+        override fun onItemAtFrontLoaded(itemAtFront: NewsItem) {
+            super.onItemAtFrontLoaded(itemAtFront)
+        }
+    }
+
+    fun loadNews(request: String): LiveData<PagedList<NewsItem>> {
+        // create a data source factory from Room
+        val dataSourceFactory = (localDataSource as LocalDataSource).loadNews(request)
+        val builder = LivePagedListBuilder(dataSourceFactory, 10)
+                .setBoundaryCallback(boundaryCallback)
+
+        return builder.build()
+    }
 
     /**
      * Gets news from cache, local data source (SQLite) or remote data source, whichever is

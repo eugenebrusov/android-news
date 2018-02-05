@@ -44,6 +44,10 @@ class LocalDataSource private constructor(
         }
     }
 
+    fun loadNews(request: String): android.arch.paging.DataSource.Factory<Int, NewsItem> {
+        return dao.loadNews(request)
+    }
+
     companion object {
 
         private var INSTANCE: LocalDataSource? = null

@@ -1,14 +1,17 @@
 package com.eugenebrusov.news.newslist
 
 import android.arch.lifecycle.Observer
+import android.arch.paging.PagedList
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import com.eugenebrusov.news.databinding.FragmentNewsListBinding
 
@@ -36,7 +39,7 @@ class NewsListFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         viewModel.openNewsDetailsEvent.observe(
-                this@NewsListFragment,
+                this,
                 Observer<Int> { position ->
                     if (position != null) {
                         val holder = binding.recyclerView.findViewHolderForLayoutPosition(position)
@@ -54,6 +57,12 @@ class NewsListFragment : Fragment() {
                         startActivity(intent, bundle)
                     }
                 })
+
+        viewModel.newsItems.observe(this, Observer<PagedList<NewsItem>> {
+            Log.e("NewsListFragment", "newsItems.observe $it")
+        })
+
+        viewModel.loadNews("%saying%")
     }
 
     override fun onResume() {

@@ -1,5 +1,6 @@
 package com.eugenebrusov.news.data.source.local
 
+import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
@@ -10,6 +11,9 @@ import com.eugenebrusov.news.data.source.NewsItem
  * Data Access Object for the news table
  */
 @Dao interface Dao {
+
+    @Query("SELECT * FROM news WHERE headline LIKE :request")
+    fun loadNews(request: String) : DataSource.Factory<Int, NewsItem>
 
     /**
      * Select all news from the news table

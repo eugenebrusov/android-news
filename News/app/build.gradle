@@ -74,6 +74,7 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
 
     implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    implementation "android.arch.paging:runtime:$rootProject.archPagingVersion"
 
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"

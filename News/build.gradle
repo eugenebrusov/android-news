@@ -30,6 +30,7 @@ task clean(type: Delete) {
 ext {
     supportVersion = '26.1.0'
     archLifecycleVersion = '1.0.0'
+    archPagingVersion = '1.0.0-alpha5'
     retrofitVersion = '2.3.0'
     glideVersion = '4.3.1'
     junitVersion = '4.12'
