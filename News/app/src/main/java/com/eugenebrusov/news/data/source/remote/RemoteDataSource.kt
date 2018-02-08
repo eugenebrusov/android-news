@@ -31,7 +31,9 @@ object RemoteDataSource : DataSource {
                         val items = mutableListOf<NewsItem>()
                         results.forEach {
                             val newsItem = NewsItem().apply {
-                                id = it.id ?: ""
+                                if (it.id != null) {
+                                    id = it.id
+                                }
                                 webPublicationDate = it.webPublicationDate ?: ""
                                 headline = it.fields?.headline ?: ""
                                 trailText = it.fields?.trailText ?: ""
@@ -68,7 +70,9 @@ object RemoteDataSource : DataSource {
                         val items = mutableListOf<NewsItem>()
                         results.forEach {
                             val newsItem = NewsItem().apply {
-                                id = it.id ?: ""
+                                if (it.id != null) {
+                                    id = it.id
+                                }
                                 webPublicationDate = it.webPublicationDate ?: ""
                                 headline = it.fields?.headline ?: ""
                                 trailText = it.fields?.trailText ?: ""
