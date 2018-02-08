@@ -1,4 +1,4 @@
-package com.eugenebrusov.news.data.source
+package com.eugenebrusov.news.data
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

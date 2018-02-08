@@ -1,7 +1,7 @@
 package com.eugenebrusov.news.data.source.local
 
 import com.eugenebrusov.news.data.source.DataSource
-import com.eugenebrusov.news.data.source.NewsItem
+import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.util.AppExecutors
 
 /**
@@ -44,8 +44,18 @@ class LocalDataSource private constructor(
         }
     }
 
+    fun insertNewsItems(newsItems: List<NewsItem>) {
+        appExecutors.diskIO.execute {
+            dao.insertNewsItems(newsItems)
+        }
+    }
+
     fun loadNews(request: String): android.arch.paging.DataSource.Factory<Int, NewsItem> {
         return dao.loadNews(request)
+    }
+
+    fun loadNews(): android.arch.paging.DataSource.Factory<Int, NewsItem> {
+        return dao.loadNews()
     }
 
     companion object {

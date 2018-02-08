@@ -1,5 +1,7 @@
 package com.eugenebrusov.news.data.source
 
+import com.eugenebrusov.news.data.NewsItem
+
 /**
  * Main entry point for accessing news data
  *

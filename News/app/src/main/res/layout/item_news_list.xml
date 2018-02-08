@@ -7,7 +7,7 @@
         <import type="android.view.View.OnClickListener" />
 
         <variable name="newsItem"
-            type="com.eugenebrusov.news.data.source.NewsItem" />
+            type="com.eugenebrusov.news.data.NewsItem" />
 
         <variable name="listener"
             type="com.eugenebrusov.news.newslist.NewsItemUserActionsListener" />

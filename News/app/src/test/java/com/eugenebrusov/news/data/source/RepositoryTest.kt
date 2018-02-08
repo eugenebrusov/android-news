@@ -1,5 +1,6 @@
 package com.eugenebrusov.news.data.source
 
+import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.newslist.util.any
 import com.eugenebrusov.news.newslist.util.capture
 import org.junit.After

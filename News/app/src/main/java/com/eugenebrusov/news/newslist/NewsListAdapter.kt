@@ -3,8 +3,8 @@ package com.eugenebrusov.news.newslist
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.eugenebrusov.news.data.source.NewsItem
-import com.eugenebrusov.news.databinding.ItemNewsBinding
+import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.databinding.ItemNewsListBinding
 
 /**
  * Created by Eugene Brusov on 8/18/17.
@@ -27,7 +27,7 @@ class NewsListAdapter(val viewModel: NewsListViewModel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val binding = ItemNewsBinding
+        val binding = ItemNewsListBinding
                 .inflate(LayoutInflater.from(parent?.context), parent, false)
         return ViewHolder(binding)
     }
@@ -42,5 +42,5 @@ class NewsListAdapter(val viewModel: NewsListViewModel)
         holder?.binding?.executePendingBindings()
     }
 
-    class ViewHolder(val binding: ItemNewsBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: ItemNewsListBinding) : RecyclerView.ViewHolder(binding.root)
 }

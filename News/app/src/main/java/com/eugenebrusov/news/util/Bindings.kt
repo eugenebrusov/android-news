@@ -1,13 +1,15 @@
 package com.eugenebrusov.news.util
 
+import android.arch.paging.PagedList
 import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.eugenebrusov.news.data.source.NewsItem
+import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.newslist.NewsListAdapter
+import com.eugenebrusov.news.newslist.NewsListPagedAdapter
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -19,9 +21,9 @@ import java.util.Locale
 object Bindings {
 
     @BindingAdapter("app:items")
-    @JvmStatic fun setItems(recyclerView: RecyclerView, items: List<NewsItem>?) {
-        with(recyclerView.adapter as NewsListAdapter) {
-            replaceData(items)
+    @JvmStatic fun setItems(recyclerView: RecyclerView, items: PagedList<NewsItem>?) {
+        with(recyclerView.adapter as NewsListPagedAdapter) {
+            setList(items)
         }
     }
 

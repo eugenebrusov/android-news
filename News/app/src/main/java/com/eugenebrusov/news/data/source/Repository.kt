@@ -3,8 +3,14 @@ package com.eugenebrusov.news.data.source
 import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
+import android.arch.paging.PagingRequestHelper
+import android.support.annotation.MainThread
+import android.util.Log
+import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.data.source.local.LocalDataSource
+import com.eugenebrusov.news.data.source.remote.RemoteDataSource
 import java.util.LinkedHashMap
+import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 import kotlin.collections.List
 import kotlin.collections.forEach
@@ -24,23 +30,59 @@ class Repository(
     private var cacheIsDirty = false
 
     private val boundaryCallback = object: PagedList.BoundaryCallback<NewsItem>() {
-        override fun onItemAtEndLoaded(itemAtEnd: NewsItem) {
-            super.onItemAtEndLoaded(itemAtEnd)
-        }
 
+        val ioExecutor = Executors.newSingleThreadExecutor()
+        val helper = PagingRequestHelper(ioExecutor)
+
+        @MainThread
         override fun onZeroItemsLoaded() {
-            super.onZeroItemsLoaded()
+            Log.e("boundaryCallback", "onZeroItemsLoaded()")
+            helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
+                (remoteDataSource as RemoteDataSource).getNews(object : DataSource.LoadNewsListCallback {
+                    override fun onNewsListLoaded(items: List<NewsItem>) {
+                        ioExecutor.execute {
+                            Log.e("boundaryCallback", "onNewsListLoaded()")
+                            (localDataSource as LocalDataSource).insertNewsItems(items)
+                            it.recordSuccess()
+                        }
+                    }
+
+                    override fun onDataNotAvailable() {
+                        Log.e("boundaryCallback", "onDataNotAvailable()")
+                        it.recordFailure(Throwable("onDataNotAvailable"))
+                    }
+                })
+            }
         }
 
-        override fun onItemAtFrontLoaded(itemAtFront: NewsItem) {
-            super.onItemAtFrontLoaded(itemAtFront)
+        override fun onItemAtEndLoaded(itemAtEnd: NewsItem) {
+            helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
+                (remoteDataSource as RemoteDataSource).getNewsBefore(itemAtEnd.webPublicationDate, object : DataSource.LoadNewsListCallback {
+                    override fun onNewsListLoaded(items: List<NewsItem>) {
+                        ioExecutor.execute {
+                            Log.e("boundaryCallback", "onNewsListLoaded()")
+                            (localDataSource as LocalDataSource).insertNewsItems(items)
+                            it.recordSuccess()
+                        }
+                    }
+
+                    override fun onDataNotAvailable() {
+                        Log.e("boundaryCallback", "onDataNotAvailable()")
+                        it.recordFailure(Throwable("onDataNotAvailable"))
+                    }
+                })
+            }
         }
+
+//        override fun onItemAtFrontLoaded(itemAtFront: NewsItem) {
+//            super.onItemAtFrontLoaded(itemAtFront)
+//        }
     }
 
     fun loadNews(request: String): LiveData<PagedList<NewsItem>> {
         // create a data source factory from Room
-        val dataSourceFactory = (localDataSource as LocalDataSource).loadNews(request)
-        val builder = LivePagedListBuilder(dataSourceFactory, 10)
+        val dataSourceFactory = (localDataSource as LocalDataSource).loadNews()
+        val builder = LivePagedListBuilder(dataSourceFactory, 30)
                 .setBoundaryCallback(boundaryCallback)
 
         return builder.build()

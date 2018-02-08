@@ -2,7 +2,7 @@ package com.eugenebrusov.news.data.source.remote
 
 import com.eugenebrusov.news.Constants
 import com.eugenebrusov.news.data.source.DataSource
-import com.eugenebrusov.news.data.source.NewsItem
+import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -21,6 +21,43 @@ object RemoteDataSource : DataSource {
             .client(OkHttpClient().newBuilder().build())
             .build()
             .create(Service::class.java)
+
+    fun getNewsBefore(date: String, callback: DataSource.LoadNewsListCallback) {
+        service.getNews(date).enqueue(object : Callback<NewsListResponse> {
+            override fun onResponse(call: Call<NewsListResponse>?, response: Response<NewsListResponse>?) {
+                if (response?.isSuccessful == true) {
+                    val results = response.body()?.response?.results
+                    if (results != null && results.isNotEmpty()) {
+                        val items = mutableListOf<NewsItem>()
+                        results.forEach {
+                            val newsItem = NewsItem().apply {
+                                id = it.id ?: ""
+                                webPublicationDate = it.webPublicationDate ?: ""
+                                headline = it.fields?.headline ?: ""
+                                trailText = it.fields?.trailText ?: ""
+                                thumbnail = it.fields?.thumbnail ?: ""
+                                bodyText = it.fields?.bodyText ?: ""
+                                if (it.tags?.isNotEmpty() == true) {
+                                    webTitle = it.tags[0].webTitle ?: ""
+                                    bylineImageUrl = it.tags[0].bylineImageUrl ?: ""
+                                }
+                            }
+                            items.add(newsItem)
+                        }
+                        callback.onNewsListLoaded(items)
+                    } else {
+                        callback.onDataNotAvailable()
+                    }
+                } else {
+                    callback.onDataNotAvailable()
+                }
+            }
+
+            override fun onFailure(call: Call<NewsListResponse>?, t: Throwable?) {
+                callback.onDataNotAvailable()
+            }
+        })
+    }
 
     override fun getNews(callback: DataSource.LoadNewsListCallback) {
         service.getNews().enqueue(object : Callback<NewsListResponse> {

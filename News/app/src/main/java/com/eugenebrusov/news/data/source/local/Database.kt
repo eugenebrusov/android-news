@@ -4,7 +4,7 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.eugenebrusov.news.data.source.NewsItem
+import com.eugenebrusov.news.data.NewsItem
 
 /**
  * The Room Database that contains the NewsItem table.

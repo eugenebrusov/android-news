@@ -11,7 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eugenebrusov.news.data.source.NewsItem
+import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import com.eugenebrusov.news.databinding.FragmentNewsListBinding
 
@@ -33,10 +33,9 @@ class NewsListFragment : Fragment() {
         val viewModel = (activity as NewsListActivity).obtainViewModel()
         binding.viewModel = viewModel
 
-        val adapter = NewsListAdapter(viewModel)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = NewsListPagedAdapter()
 
         viewModel.openNewsDetailsEvent.observe(
                 this,
@@ -58,15 +57,15 @@ class NewsListFragment : Fragment() {
                     }
                 })
 
-        viewModel.newsItems.observe(this, Observer<PagedList<NewsItem>> {
-            Log.e("NewsListFragment", "newsItems.observe $it")
-        })
+//        viewModel.newsItems.observe(this, Observer<PagedList<NewsItem>> {
+//            Log.e("NewsListFragment", "newsItems.observe $it")
+//        })
 
-        viewModel.loadNews("%saying%")
+        viewModel.loadNews("%s%")
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.viewModel?.start()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        binding.viewModel?.start()
+//    }
 }

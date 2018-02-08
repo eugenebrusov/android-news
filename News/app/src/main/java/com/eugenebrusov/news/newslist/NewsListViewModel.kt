@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations.switchMap
 import com.eugenebrusov.news.SingleLiveEvent
 import com.eugenebrusov.news.data.source.DataSource
-import com.eugenebrusov.news.data.source.NewsItem
+import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.data.source.Repository
 
 /**
