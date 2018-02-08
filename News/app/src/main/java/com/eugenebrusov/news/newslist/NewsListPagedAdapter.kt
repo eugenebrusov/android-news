@@ -28,16 +28,16 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (hasExtraRow() && position == itemCount - 1) {
-            R.layout.item_news_list_network_state
-        } else {
-            R.layout.item_news_list
-        }
+//        return if (hasExtraRow() && position == itemCount - 1) {
+//            R.layout.item_news_list_network_state
+//        } else {
+            return R.layout.item_news_list
+//        }
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount() + if (hasExtraRow()) 1 else 0
-    }
+//    override fun getItemCount(): Int {
+//        return super.getItemCount() + if (hasExtraRow()) 1 else 0
+//    }
 
     private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
 
