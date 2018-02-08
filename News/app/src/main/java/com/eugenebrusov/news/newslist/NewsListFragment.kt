@@ -63,9 +63,4 @@ class NewsListFragment : Fragment() {
 
         viewModel.loadNews("%s%")
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        binding.viewModel?.start()
-//    }
 }
