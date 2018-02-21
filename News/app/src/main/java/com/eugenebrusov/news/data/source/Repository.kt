@@ -17,8 +17,7 @@ import kotlin.collections.forEach
 import kotlin.collections.isNotEmpty
 
 /**
- * Concrete implementation to load news
- * from the data sources into a cache.
+ * Concrete implementation to load news from the data sources.
  */
 class Repository(
         val remoteDataSource: DataSource,
