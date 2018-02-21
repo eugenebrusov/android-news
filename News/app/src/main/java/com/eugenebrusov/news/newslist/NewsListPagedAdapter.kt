@@ -23,7 +23,10 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         when (getItemViewType(position)) {
             R.layout.item_news_list ->
-                (holder as NewsListItemViewHolder).binding.newsItem = getItem(position)
+                (holder as NewsListItemViewHolder).apply {
+                    binding.newsItem = getItem(position)
+                    binding.executePendingBindings()
+                }
         }
     }
 

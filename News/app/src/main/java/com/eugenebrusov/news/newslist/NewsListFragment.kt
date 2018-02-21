@@ -1,19 +1,16 @@
 package com.eugenebrusov.news.newslist
 
 import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eugenebrusov.news.data.NewsItem
-import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import com.eugenebrusov.news.databinding.FragmentNewsListBinding
+import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 
 class NewsListFragment : Fragment() {
 

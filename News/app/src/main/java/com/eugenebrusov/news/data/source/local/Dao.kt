@@ -12,15 +12,12 @@ import com.eugenebrusov.news.data.NewsItem
  */
 @Dao interface Dao {
 
-    @Query("SELECT * FROM news WHERE headline LIKE :request")
-    fun loadNews(request: String) : DataSource.Factory<Int, NewsItem>
-
     /**
      * Select all news from the news table
      *
      * @return all news
      */
-    @Query("SELECT * FROM news")
+    @Query("SELECT * FROM news ORDER BY webPublicationDate DESC")
     fun loadNews(): DataSource.Factory<Int, NewsItem>
 
     /**

@@ -73,16 +73,12 @@ class Repository(
                 })
             }
         }
-
-//        override fun onItemAtFrontLoaded(itemAtFront: NewsItem) {
-//            super.onItemAtFrontLoaded(itemAtFront)
-//        }
     }
 
     fun loadNews(request: String): LiveData<PagedList<NewsItem>> {
         // create a data source factory from Room
         val dataSourceFactory = (localDataSource as LocalDataSource).loadNews()
-        val builder = LivePagedListBuilder(dataSourceFactory, 30)
+        val builder = LivePagedListBuilder(dataSourceFactory, 20)
                 .setBoundaryCallback(boundaryCallback)
 
         return builder.build()

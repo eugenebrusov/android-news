@@ -8,9 +8,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.eugenebrusov.news.data.NewsItem
-import com.eugenebrusov.news.newslist.NewsListAdapter
 import com.eugenebrusov.news.newslist.NewsListPagedAdapter
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -41,19 +39,13 @@ object Bindings {
     }
 
     @BindingAdapter("app:webPublicationDate")
-    @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: String?) {
-        if (webPublicationDate == null) {
-            textView.text = ""
-        } else {
-            val date: Date? =
-                    try {
-                        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-                                .parse(webPublicationDate)
-                    } catch (e: ParseException) { null }
+    @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: Long?) {
+        textView.text = ""
+        if (webPublicationDate != null) {
             val formattedDate: String? =
                     try {
-                        SimpleDateFormat("MMM d, yyyy", Locale.US).format(date)
-                    } catch (e: ParseException) { null }
+                        SimpleDateFormat("MMM d, yyyy", Locale.US).format(Date(webPublicationDate))
+                    } catch (e: Exception) { null }
             textView.text = formattedDate
         }
     }
