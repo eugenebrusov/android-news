@@ -14,6 +14,7 @@ import java.util.UUID
 data class NewsItem @JvmOverloads constructor(
         @PrimaryKey @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString(),
         @ColumnInfo(name = "webPublicationDate") var webPublicationDate: Long = -1,
+        @ColumnInfo(name = "sectionName") var sectionName: String? = null,
         @ColumnInfo(name = "headline") var headline: String? = null,
         @ColumnInfo(name = "trailText") var trailText: String? = null,
         @ColumnInfo(name = "thumbnail") var thumbnail: String? = null,

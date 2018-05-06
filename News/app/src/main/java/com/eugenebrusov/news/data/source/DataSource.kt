@@ -22,8 +22,6 @@ interface DataSource {
         fun onDataNotAvailable()
     }
 
-    fun getNews(callback: LoadNewsListCallback)
-
     fun getNewsItem(newsItemId: String, callback: LoadNewsItemCallback)
 
     fun saveNewsItems(newsItems: List<NewsItem>)

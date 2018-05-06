@@ -26,17 +26,17 @@ object RemoteDataSource : DataSource {
             .build()
             .create(Service::class.java)
 
-    fun getNewsBefore(timestamp: Long, callback: DataSource.LoadNewsListCallback) {
+    fun getNewsBefore(timestamp: Long, section: String, callback: DataSource.LoadNewsListCallback) {
         val webPublicationDate: String =
                 try {
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
                             .format(Date(timestamp))
                 } catch (e: ParseException) { "" }
-        service.getNews(webPublicationDate).enqueue(processResults(callback))
+        service.getNews(webPublicationDate, section).enqueue(processResults(callback))
     }
 
-    override fun getNews(callback: DataSource.LoadNewsListCallback) {
-        service.getNews().enqueue(processResults(callback))
+    fun getNews(section: String, callback: DataSource.LoadNewsListCallback) {
+        service.getNews(section).enqueue(processResults(callback))
     }
 
     override fun getNewsItem(newsItemId: String, callback: DataSource.LoadNewsItemCallback) {
@@ -73,6 +73,7 @@ object RemoteDataSource : DataSource {
                                 }
 
                                 webPublicationDate = timestamp
+                                sectionName = it.sectionName?.toLowerCase()
                                 headline = it.fields?.headline ?: ""
                                 trailText = it.fields?.trailText ?: ""
                                 thumbnail = it.fields?.thumbnail ?: ""

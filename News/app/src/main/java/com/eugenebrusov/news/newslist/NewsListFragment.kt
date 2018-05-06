@@ -54,10 +54,6 @@ class NewsListFragment : Fragment() {
                     }
                 })
 
-//        viewModel.newsItems.observe(this, Observer<PagedList<NewsItem>> {
-//            Log.e("NewsListFragment", "newsItems.observe $it")
-//        })
-
-        viewModel.loadNews("%s%")
+        viewModel.loadNews("politics")
     }
 }

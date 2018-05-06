@@ -12,7 +12,7 @@ class LocalDataSource private constructor(
         val dao: Dao
 ) : DataSource {
 
-    override fun getNews(callback: DataSource.LoadNewsListCallback) {
+    fun getNews(callback: DataSource.LoadNewsListCallback) {
         appExecutors.diskIO.execute {
             val news = dao.getNews()
             appExecutors.mainThread.execute {
@@ -50,8 +50,8 @@ class LocalDataSource private constructor(
         }
     }
 
-    fun loadNews(): android.arch.paging.DataSource.Factory<Int, NewsItem> {
-        return dao.loadNews()
+    fun loadNews(section: String): android.arch.paging.DataSource.Factory<Int, NewsItem> {
+        return dao.loadNews(section)
     }
 
     companion object {

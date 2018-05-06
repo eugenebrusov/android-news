@@ -17,8 +17,8 @@ import com.eugenebrusov.news.data.NewsItem
      *
      * @return all news
      */
-    @Query("SELECT * FROM news ORDER BY webPublicationDate DESC")
-    fun loadNews(): DataSource.Factory<Int, NewsItem>
+    @Query("SELECT * FROM news WHERE sectionName = :section ORDER BY webPublicationDate DESC")
+    fun loadNews(section: String): DataSource.Factory<Int, NewsItem>
 
     /**
      * Select all news from the news table

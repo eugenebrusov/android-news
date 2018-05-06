@@ -14,14 +14,12 @@ interface Service {
     @GET("search?api-key=${Constants.API_KEY}" +
             "&show-tags=contributor" +
             "&show-fields=trailText,headline,bodyText,thumbnail" +
-            "&section=football" +
             "&page-size=10")
-    fun getNews() : Call<NewsListResponse>
+    fun getNews(@Query("section") section: String) : Call<NewsListResponse>
 
     @GET("search?api-key=${Constants.API_KEY}" +
             "&show-tags=contributor" +
             "&show-fields=trailText,headline,bodyText,thumbnail" +
-            "&section=football" +
             "&page-size=10")
-    fun getNews(@Query("to-date") webPublicationDate: String) : Call<NewsListResponse>
+    fun getNews(@Query("to-date") webPublicationDate: String, @Query("section") section: String) : Call<NewsListResponse>
 }

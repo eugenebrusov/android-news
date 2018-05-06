@@ -17,8 +17,8 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    private val request = MutableLiveData<String>()
-    val newsItems = switchMap(request, {
+    private val section = MutableLiveData<String>()
+    val newsItems = switchMap(section, {
         repository.loadNews(it)
     })
 
@@ -27,36 +27,36 @@ class NewsListViewModel(
     val dataError = MutableLiveData<Boolean>()
     internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
 
-    fun loadNews(request: String) {
-        this.request.value = request
+    fun loadNews(section: String) {
+        this.section.value = section
     }
 
-    fun start() {
-        loadNews()
-    }
+//    fun start() {
+//        loadNews()
+//    }
 
-    fun loadNews() {
-        dataError.value = false
-        dataLoading.value = true
-
-        repository.getNews(object : DataSource.LoadNewsListCallback {
-            override fun onNewsListLoaded(items: List<NewsItem>) {
-                this@NewsListViewModel.items.value = items
-
-                dataLoading.value = false
-            }
-
-            override fun onDataNotAvailable() {
-                this@NewsListViewModel.items.value = null
-
-                dataError.value = true
-                dataLoading.value = false
-            }
-        })
-    }
+//    fun loadNews() {
+//        dataError.value = false
+//        dataLoading.value = true
+//
+//        repository.getNews(object : DataSource.LoadNewsListCallback {
+//            override fun onNewsListLoaded(items: List<NewsItem>) {
+//                this@NewsListViewModel.items.value = items
+//
+//                dataLoading.value = false
+//            }
+//
+//            override fun onDataNotAvailable() {
+//                this@NewsListViewModel.items.value = null
+//
+//                dataError.value = true
+//                dataLoading.value = false
+//            }
+//        })
+//    }
 
     fun onRefresh() {
-        loadNews()
+        //loadNews()
     }
 
 }
