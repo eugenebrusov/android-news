@@ -5,8 +5,8 @@ import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.eugenebrusov.news.GlideApp
 import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.newslist.NewsListPagedAdapter
 import java.text.SimpleDateFormat
@@ -21,18 +21,18 @@ object Bindings {
     @BindingAdapter("app:items")
     @JvmStatic fun setItems(recyclerView: RecyclerView, items: PagedList<NewsItem>?) {
         with(recyclerView.adapter as NewsListPagedAdapter) {
-            setList(items)
+            submitList(items)
         }
     }
 
     @BindingAdapter("app:thumbnail")
     @JvmStatic fun setThumbnail(imageView: ImageView, thumbnail: String?) {
-        Glide.with(imageView.context).load(thumbnail).into(imageView)
+        GlideApp.with(imageView.context).load(thumbnail).into(imageView)
     }
 
     @BindingAdapter("app:byline")
     @JvmStatic fun setByline(imageView: ImageView, bylineImageUrl: String?) {
-        Glide.with(imageView.context)
+        GlideApp.with(imageView.context)
                 .load(bylineImageUrl)
                 .apply(RequestOptions().circleCrop())
                 .into(imageView)

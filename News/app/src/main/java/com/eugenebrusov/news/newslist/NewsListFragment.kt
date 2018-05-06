@@ -36,7 +36,7 @@ class NewsListFragment : Fragment() {
 
         viewModel.openNewsDetailsEvent.observe(
                 this,
-                Observer<Int> { position ->
+                Observer { position ->
                     if (position != null) {
                         val holder = binding.recyclerView.findViewHolderForLayoutPosition(position)
                                 as NewsListAdapter.ViewHolder
@@ -46,7 +46,7 @@ class NewsListFragment : Fragment() {
 
                         val bundle = ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(
-                                        activity,
+                                        activity as NewsListActivity,
                                         holder.binding.thumbnailImage,
                                         holder.binding.thumbnailImage.transitionName)
                                 .toBundle()

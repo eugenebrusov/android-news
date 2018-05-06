@@ -26,20 +26,20 @@ class NewsListAdapter(val viewModel: NewsListViewModel)
         return items.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemNewsListBinding
-                .inflate(LayoutInflater.from(parent?.context), parent, false)
+                .inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.binding?.newsItem = items.get(position)
-        holder?.binding?.listener = object : NewsItemUserActionsListener {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.binding.newsItem = items.get(position)
+        holder.binding.listener = object : NewsItemUserActionsListener {
             override fun onNewsItemClicked() {
                 viewModel.openNewsDetailsEvent.value = position
             }
         }
-        holder?.binding?.executePendingBindings()
+        holder.binding.executePendingBindings()
     }
 
     class ViewHolder(val binding: ItemNewsListBinding) : RecyclerView.ViewHolder(binding.root)

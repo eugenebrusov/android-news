@@ -1,7 +1,7 @@
 package com.eugenebrusov.news.newslist
 
 import android.arch.paging.PagedListAdapter
-import android.support.v7.recyclerview.extensions.DiffCallback
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
@@ -12,7 +12,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 
     private var networkState: NetworkState? = NetworkState.LOADING
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.item_news_list -> NewsListItemViewHolder.create(parent)
             R.layout.item_news_list_network_state -> NewsListItemNetworkStateViewHolder.create(parent)
@@ -20,7 +20,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             R.layout.item_news_list ->
                 (holder as NewsListItemViewHolder).apply {
@@ -45,7 +45,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
     private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
 
     companion object {
-        val ITEM_COMPARATOR = object : DiffCallback<NewsItem>() {
+        val ITEM_COMPARATOR = object : DiffUtil.ItemCallback<NewsItem>() {
 
             override fun areContentsTheSame(oldItem: NewsItem, newItem: NewsItem): Boolean =
                     oldItem.id == newItem.id
