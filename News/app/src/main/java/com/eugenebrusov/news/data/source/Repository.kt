@@ -8,9 +8,13 @@ import com.eugenebrusov.news.data.source.local.LocalDataSource
 import com.eugenebrusov.news.data.source.model.Resource
 import com.eugenebrusov.news.data.source.remote.RemoteDataSource
 import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
+import com.eugenebrusov.news.data.source.remote.util.ApiResponse
+import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+
 
 /**
  * Concrete implementation to load news from the data sources.
@@ -39,8 +43,12 @@ class Repository(
         return builder.build()
     }
 
-    fun searchNews(section: String): LiveData<Resource<List<NewsItem>>> {
+    fun searchNews(section: String): LiveData<Resource<PagedList<NewsItem>>> {
         return object : PagedListNetworkBoundResource<List<NewsItem>, NewsListResponse>() {
+
+            override fun dataSourceFactory(): android.arch.paging.DataSource.Factory<Int, NewsItem> {
+                return (localDataSource as LocalDataSource).searchNews(section)
+            }
 
             override fun processResponse(response: NewsListResponse): List<NewsItem> {
 
@@ -60,7 +68,7 @@ class Repository(
 
                         NewsItem(id = id,
                                 webPublicationDate =  webPublicationDate,
-                                sectionName = it.sectionName,
+                                sectionName = it.sectionName?.toLowerCase(),
                                 headline = it.fields?.headline,
                                 trailText = it.fields?.trailText,
                                 thumbnail = it.fields?.thumbnail,
@@ -73,17 +81,26 @@ class Repository(
                 } ?: listOf()
             }
 
-            override fun saveCallResult(item: List<NewsItem>) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun saveCallResult(items: List<NewsItem>) {
+                (localDataSource as LocalDataSource).saveNewsItems(items)
             }
 
             override fun shouldFetch(data: List<NewsItem>?): Boolean {
                 return true
             }
 
-            //override fun loadFromDb() = (localDataSource as LocalDataSource).loadNews(section)
+            override fun createInitialCall(): LiveData<ApiResponse<NewsListResponse>> {
+                return (remoteDataSource as RemoteDataSource).searchNews(section, null)
+            }
 
-            override fun createCall() = (remoteDataSource as RemoteDataSource).searchNews(section)
+            override fun createNextCall(timestamp: Long): LiveData<ApiResponse<NewsListResponse>> {
+                val toDate: String? =
+                        try {
+                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+                                    .format(Date(timestamp))
+                        } catch (e: ParseException) { null }
+                return (remoteDataSource as RemoteDataSource).searchNews(section, toDate)
+            }
 
             override fun onFetchFailed() {
                 //repoListRateLimit.reset(owner)

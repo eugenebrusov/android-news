@@ -61,8 +61,8 @@ object RemoteDataSource : DataSource {
             .build()
             .create(GuardianService::class.java)
 
-    fun searchNews(section: String): LiveData<ApiResponse<NewsListResponse>> {
-        return guardianService.search(section = section)
+    fun searchNews(section: String, toDate: String?): LiveData<ApiResponse<NewsListResponse>> {
+        return guardianService.search(section = section, toDate = toDate)
     }
 
     fun getNewsBefore(timestamp: Long, section: String, callback: DataSource.LoadNewsListCallback) {

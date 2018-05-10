@@ -50,6 +50,10 @@ class LocalDataSource private constructor(
         }
     }
 
+    fun searchNews(section: String): android.arch.paging.DataSource.Factory<Int, NewsItem> {
+        return dao.searchNews(section)
+    }
+
     fun loadNews(section: String): android.arch.paging.DataSource.Factory<Int, NewsItem> {
         return dao.loadNews(section)
     }
