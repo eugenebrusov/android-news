@@ -5,10 +5,12 @@ import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.data.source.local.LocalDataSource
+import com.eugenebrusov.news.data.source.model.Resource
 import com.eugenebrusov.news.data.source.remote.RemoteDataSource
-import java.util.LinkedHashMap
-import kotlin.collections.ArrayList
-
+import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Concrete implementation to load news from the data sources.
@@ -35,6 +37,58 @@ class Repository(
                 .setBoundaryCallback(boundaryCallback)
 
         return builder.build()
+    }
+
+    fun searchNews(section: String): LiveData<Resource<List<NewsItem>>> {
+        return object : PagedListNetworkBoundResource<List<NewsItem>, NewsListResponse>() {
+
+            override fun processResponse(response: NewsListResponse): List<NewsItem> {
+
+                val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+
+                return response.response?.results?.mapNotNull {
+                    try {
+                        val id = it.id ?: throw ParseException("Invalid news item id", 0)
+                        val webPublicationDate = format.parse(it.webPublicationDate).time
+
+                        var webTitle: String? = null
+                        var bylineImageUrl: String? = null
+                        if (it.tags?.isNotEmpty() == true) {
+                            webTitle = it.tags[0].webTitle
+                            bylineImageUrl = it.tags[0].bylineImageUrl
+                        }
+
+                        NewsItem(id = id,
+                                webPublicationDate =  webPublicationDate,
+                                sectionName = it.sectionName,
+                                headline = it.fields?.headline,
+                                trailText = it.fields?.trailText,
+                                thumbnail = it.fields?.thumbnail,
+                                bodyText = it.fields?.bodyText,
+                                webTitle = webTitle,
+                                bylineImageUrl = bylineImageUrl)
+                    } catch (e: ParseException) {
+                        null
+                    }
+                } ?: listOf()
+            }
+
+            override fun saveCallResult(item: List<NewsItem>) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun shouldFetch(data: List<NewsItem>?): Boolean {
+                return true
+            }
+
+            //override fun loadFromDb() = (localDataSource as LocalDataSource).loadNews(section)
+
+            override fun createCall() = (remoteDataSource as RemoteDataSource).searchNews(section)
+
+            override fun onFetchFailed() {
+                //repoListRateLimit.reset(owner)
+            }
+        }.asLiveData()
     }
 
 //    /**

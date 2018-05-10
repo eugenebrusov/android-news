@@ -1,19 +1,24 @@
 package com.eugenebrusov.news.data.source.remote
 
+import android.arch.lifecycle.LiveData
 import com.eugenebrusov.news.Constants
 import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.data.source.DataSource
+import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
 import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
+import com.eugenebrusov.news.data.source.remote.util.ApiResponse
+import com.eugenebrusov.news.data.source.remote.util.LiveDataCallAdapterFactory
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 
 /**
  * Concrete implementation of the data source pulling data from REST API
@@ -25,6 +30,40 @@ object RemoteDataSource : DataSource {
             .client(OkHttpClient().newBuilder().build())
             .build()
             .create(Service::class.java)
+
+    private val httpClient = OkHttpClient.Builder()
+            .addInterceptor(object : Interceptor {
+
+                @Throws(IOException::class)
+                override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+
+                    val original = chain.request()
+                    val originalHttpUrl = original.url()
+
+                    val url = originalHttpUrl.newBuilder()
+                            .addQueryParameter("api-key", Constants.API_KEY)
+                            .build()
+
+                    val requestBuilder = original.newBuilder()
+                            .url(url)
+
+                    val request = requestBuilder.build()
+                    return chain.proceed(request)
+                }
+            })
+            .build()
+
+    private val guardianService = Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .client(httpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
+            .build()
+            .create(GuardianService::class.java)
+
+    fun searchNews(section: String): LiveData<ApiResponse<NewsListResponse>> {
+        return guardianService.search(section = section)
+    }
 
     fun getNewsBefore(timestamp: Long, section: String, callback: DataSource.LoadNewsListCallback) {
         val webPublicationDate: String =

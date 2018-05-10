@@ -21,6 +21,9 @@ class NewsListViewModel(
     val newsItems = switchMap(section, {
         repository.loadNews(it)
     })
+    val resultsResource = switchMap(section, {
+        repository.searchNews(it)
+    })
 
     val items = MutableLiveData<List<NewsItem>>()
     val dataLoading = MutableLiveData<Boolean>()
@@ -30,30 +33,6 @@ class NewsListViewModel(
     fun loadNews(section: String) {
         this.section.value = section
     }
-
-//    fun start() {
-//        loadNews()
-//    }
-
-//    fun loadNews() {
-//        dataError.value = false
-//        dataLoading.value = true
-//
-//        repository.getNews(object : DataSource.LoadNewsListCallback {
-//            override fun onNewsListLoaded(items: List<NewsItem>) {
-//                this@NewsListViewModel.items.value = items
-//
-//                dataLoading.value = false
-//            }
-//
-//            override fun onDataNotAvailable() {
-//                this@NewsListViewModel.items.value = null
-//
-//                dataError.value = true
-//                dataLoading.value = false
-//            }
-//        })
-//    }
 
     fun onRefresh() {
         //loadNews()
