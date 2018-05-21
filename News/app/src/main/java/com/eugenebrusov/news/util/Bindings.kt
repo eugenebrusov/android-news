@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.bumptech.glide.request.RequestOptions
 import com.eugenebrusov.news.GlideApp
 import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.source.model.Resource
 import com.eugenebrusov.news.newslist.NewsListPagedAdapter
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -18,10 +19,10 @@ import java.util.Locale
  */
 object Bindings {
 
-    @BindingAdapter("app:items")
-    @JvmStatic fun setItems(recyclerView: RecyclerView, items: PagedList<NewsItem>?) {
+    @BindingAdapter("app:results")
+    @JvmStatic fun setItems(recyclerView: RecyclerView, results: Resource<PagedList<NewsItem>>?) {
         with(recyclerView.adapter as NewsListPagedAdapter) {
-            submitList(items)
+            this.results = results
         }
     }
 

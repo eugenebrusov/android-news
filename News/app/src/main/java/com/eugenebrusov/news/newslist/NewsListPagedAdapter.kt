@@ -1,5 +1,6 @@
 package com.eugenebrusov.news.newslist
 
+import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -7,10 +8,16 @@ import android.view.ViewGroup
 import com.eugenebrusov.news.R
 import com.eugenebrusov.news.data.NetworkState
 import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.source.model.Resource
 
 class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 
     private var networkState: NetworkState? = NetworkState.LOADING
+
+    var results: Resource<PagedList<NewsItem>>? = null
+        set(value) {
+            super.submitList(value?.data)
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
