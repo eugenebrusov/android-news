@@ -31,7 +31,7 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType> {
                 if (!loading) {
                     loading = true
                     Log.e("boundaryCallback", "onZeroItemsLoaded() #120")
-                    val apiResponse = createInitialCall()
+                    val apiResponse = createCall()
 
 //                    result.addSource(getPagedListLiveData()) { newData ->
 //                        setValue(Resource.loading(newData))
@@ -71,11 +71,7 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType> {
                 if (!loading) {
                     loading = true
                     val apiResponse
-                            = createNextCall(itemAtEnd.webPublicationDate)
-
-//                    result.addSource(getPagedListLiveData()) { newData ->
-//                        setValue(Resource.loading(newData))
-//                    }
+                            = createCall(itemAtEnd.webPublicationDate)
 
                     result.addSource(apiResponse) { response ->
                         result.removeSource(apiResponse)
@@ -171,8 +167,5 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType> {
     protected abstract fun dataSourceFactory(): DataSource.Factory<Int, NewsItem>
 
     @MainThread
-    protected abstract fun createInitialCall(): LiveData<ApiResponse<RequestType>>
-
-    @MainThread
-    protected abstract fun createNextCall(timestamp: Long): LiveData<ApiResponse<RequestType>>
+    protected abstract fun createCall(timestamp: Long? = null): LiveData<ApiResponse<RequestType>>
 }

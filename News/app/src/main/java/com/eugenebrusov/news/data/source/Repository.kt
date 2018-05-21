@@ -3,6 +3,7 @@ package com.eugenebrusov.news.data.source
 import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
+import android.util.Log
 import com.eugenebrusov.news.data.NewsItem
 import com.eugenebrusov.news.data.source.local.LocalDataSource
 import com.eugenebrusov.news.data.source.model.Resource
@@ -89,16 +90,19 @@ class Repository(
                 return true
             }
 
-            override fun createInitialCall(): LiveData<ApiResponse<NewsListResponse>> {
-                return (remoteDataSource as RemoteDataSource).searchNews(section, null)
-            }
-
-            override fun createNextCall(timestamp: Long): LiveData<ApiResponse<NewsListResponse>> {
+            override fun createCall(timestamp: Long?): LiveData<ApiResponse<NewsListResponse>> {
                 val toDate: String? =
-                        try {
-                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-                                    .format(Date(timestamp))
-                        } catch (e: ParseException) { null }
+                        if (timestamp != null) {
+                            try {
+                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+                                        .format(Date(timestamp))
+                            } catch (e: ParseException) {
+                                null
+                            }
+                        } else {
+                            null
+                        }
+
                 return (remoteDataSource as RemoteDataSource).searchNews(section, toDate)
             }
 
