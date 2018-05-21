@@ -2,7 +2,7 @@ package com.eugenebrusov.news.data.source.remote
 
 import android.arch.lifecycle.LiveData
 import com.eugenebrusov.news.Constants
-import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.source.DataSource
 import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
 import com.eugenebrusov.news.data.source.remote.models.NewsListResponse

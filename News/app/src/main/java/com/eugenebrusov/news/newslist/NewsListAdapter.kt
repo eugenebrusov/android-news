@@ -3,7 +3,7 @@ package com.eugenebrusov.news.newslist
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.databinding.ItemNewsListBinding
 
 /**

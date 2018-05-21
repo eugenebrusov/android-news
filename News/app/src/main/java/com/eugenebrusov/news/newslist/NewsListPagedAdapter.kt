@@ -7,8 +7,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
 import com.eugenebrusov.news.data.NetworkState
-import com.eugenebrusov.news.data.NewsItem
-import com.eugenebrusov.news.data.source.model.Resource
+import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.Resource
 
 class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 

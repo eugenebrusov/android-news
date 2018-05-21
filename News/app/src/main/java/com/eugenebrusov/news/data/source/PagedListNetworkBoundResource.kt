@@ -8,9 +8,9 @@ import android.arch.paging.PagedList
 import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
 import android.util.Log
-import com.eugenebrusov.news.data.NewsItem
-import com.eugenebrusov.news.data.source.model.Resource
-import com.eugenebrusov.news.data.source.model.Status
+import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.Resource
+import com.eugenebrusov.news.data.model.Status
 import com.eugenebrusov.news.data.source.remote.util.ApiEmptyResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiErrorResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse

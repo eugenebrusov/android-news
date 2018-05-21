@@ -1,4 +1,4 @@
-package com.eugenebrusov.news.data.source.model
+package com.eugenebrusov.news.data.model
 
 /**
  * A generic class that holds a value with its loading status.

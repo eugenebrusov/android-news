@@ -4,7 +4,7 @@ import android.app.Application
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
 import com.eugenebrusov.news.data.source.DataSource
-import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.source.Repository
 import com.eugenebrusov.news.newslist.util.capture
 import com.eugenebrusov.news.newslist.util.mock

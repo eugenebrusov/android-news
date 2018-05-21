@@ -1,7 +1,7 @@
 package com.eugenebrusov.news.data.source.local
 
 import com.eugenebrusov.news.data.source.DataSource
-import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.util.AppExecutors
 
 /**

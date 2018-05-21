@@ -1,4 +1,4 @@
-package com.eugenebrusov.news.data.source.model
+package com.eugenebrusov.news.data.model
 
 /**
  * Status of a resource that is provided to the UI.

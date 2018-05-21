@@ -3,8 +3,7 @@ package com.eugenebrusov.news.newsdetail
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import com.eugenebrusov.news.data.source.DataSource
-import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.source.Repository
 
 /**

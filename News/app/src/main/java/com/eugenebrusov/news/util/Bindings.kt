@@ -7,8 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.request.RequestOptions
 import com.eugenebrusov.news.GlideApp
-import com.eugenebrusov.news.data.NewsItem
-import com.eugenebrusov.news.data.source.model.Resource
+import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.newslist.NewsListPagedAdapter
 import java.text.SimpleDateFormat
 import java.util.Date

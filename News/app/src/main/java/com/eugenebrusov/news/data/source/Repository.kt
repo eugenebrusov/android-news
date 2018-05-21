@@ -2,9 +2,9 @@ package com.eugenebrusov.news.data.source
 
 import android.arch.lifecycle.LiveData
 import android.arch.paging.PagedList
-import com.eugenebrusov.news.data.NewsItem
+import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.source.local.LocalDataSource
-import com.eugenebrusov.news.data.source.model.Resource
+import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.source.remote.RemoteDataSource
 import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
@@ -49,7 +49,7 @@ class Repository(
                         }
 
                         NewsItem(id = id,
-                                webPublicationDate =  webPublicationDate,
+                                webPublicationDate = webPublicationDate,
                                 sectionName = it.sectionName?.toLowerCase(),
                                 headline = it.fields?.headline,
                                 trailText = it.fields?.trailText,
