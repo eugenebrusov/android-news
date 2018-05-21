@@ -34,7 +34,7 @@ ext {
 
     supportVersion = '27.1.1'
     archLifecycleVersion = '1.1.1'
-    archPagingVersion = '1.0.0-rc1'
+    archPagingVersion = '1.0.0'
     retrofitVersion = '2.3.0'
     glideVersion = '4.7.1'
     junitVersion = '4.12'
