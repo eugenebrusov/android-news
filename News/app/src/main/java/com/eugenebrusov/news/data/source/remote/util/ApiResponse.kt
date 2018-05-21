@@ -34,7 +34,7 @@ sealed class ApiResponse<T> {
             return if (response.isSuccessful) {
                 val body = response.body()
 
-                ApiSuccessResponse(body = body)
+                ApiSuccessResponse(body)
             } else {
                 val msg = response.errorBody()?.string()
                 val errorMsg = if (msg.isNullOrEmpty()) {
@@ -49,14 +49,6 @@ sealed class ApiResponse<T> {
     }
 }
 
-data class ApiSuccessResponse<T>(
-    val body: T?,
-    val links: Map<String, String>
-) : ApiResponse<T>() {
-    constructor(body: T?, linkHeader: String? = "") : this(
-        body = body,
-        links = emptyMap()
-    )
-}
+data class ApiSuccessResponse<T>(val body: T?) : ApiResponse<T>()
 
 data class ApiErrorResponse<T>(val errorMessage: String) : ApiResponse<T>()
