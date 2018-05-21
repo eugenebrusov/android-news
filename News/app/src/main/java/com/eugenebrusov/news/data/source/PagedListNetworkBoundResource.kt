@@ -15,8 +15,10 @@ import com.eugenebrusov.news.data.source.remote.util.ApiEmptyResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiErrorResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
+import com.eugenebrusov.news.data.source.util.AppExecutors
 
-abstract class PagedListNetworkBoundResource<ResultType, RequestType> {
+abstract class PagedListNetworkBoundResource<ResultType, RequestType>
+@MainThread constructor(private val appExecutors: AppExecutors) {
 
     private val result = MediatorLiveData<Resource<PagedList<NewsItem>>>()
     lateinit private var pagedListLiveData: LiveData<PagedList<NewsItem>>
@@ -42,11 +44,16 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType> {
                         Log.e("boundaryCallback", "response #130")
                         when (response) {
                             is ApiSuccessResponse -> {
-                                Log.e("boundaryCallback", "response #140 " + processResponse(response.body))
-                                saveCallResult(processResponse(response.body))
-                                result.removeSource(pagedListLiveData)
-                                result.addSource(pagedListLiveData) { newData ->
-                                    setValue(Resource.success(newData))
+                                appExecutors.diskIO().execute {
+                                    Log.e("boundaryCallback", "response #140 " + processResponse(response.body))
+
+                                    saveCallResult(processResponse(response.body))
+                                    appExecutors.mainThread().execute {
+                                        result.removeSource(pagedListLiveData)
+                                        result.addSource(pagedListLiveData) { newData ->
+                                            setValue(Resource.success(newData))
+                                        }
+                                    }
                                 }
                             }
                             is ApiEmptyResponse -> {
@@ -83,10 +90,14 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType> {
                         result.removeSource(apiResponse)
                         when (response) {
                             is ApiSuccessResponse -> {
-                                saveCallResult(processResponse(response.body))
-                                result.removeSource(pagedListLiveData)
-                                result.addSource(pagedListLiveData) { newData ->
-                                    setValue(Resource.success(newData))
+                                appExecutors.diskIO().execute {
+                                    saveCallResult(processResponse(response.body))
+                                    appExecutors.mainThread().execute {
+                                        result.removeSource(pagedListLiveData)
+                                        result.addSource(pagedListLiveData) { newData ->
+                                            setValue(Resource.success(newData))
+                                        }
+                                    }
                                 }
                             }
                             is ApiEmptyResponse -> {
@@ -124,33 +135,6 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType> {
             result.value = newValue
         }
     }
-
-//    private fun fetchFromNetwork() {
-//        val apiResponse = createInitialCall()
-//        result.addSource(apiResponse) { response ->
-//            result.removeSource(apiResponse)
-//            when (response) {
-//                is ApiSuccessResponse -> {
-//                    setValue(Resource.success(processResponse(response.body)))
-//                }
-//                is ApiEmptyResponse -> {
-////                    appExecutors.mainThread().execute {
-////                        // reload from disk whatever we had
-////                        result.addSource(loadFromDb()) { newData ->
-////                            setValue(Resource.success(newData))
-////                        }
-////                    }
-//                }
-//                is ApiErrorResponse -> {
-//                    onFetchFailed()
-//                    setValue(Resource.error(response.errorMessage, null))
-////                    result.addSource(dbSource) { newData ->
-////                        setValue(Resource.error(response.errorMessage, newData))
-////                    }
-//                }
-//            }
-//        }
-//    }
 
     fun asLiveData() = result as LiveData<Resource<PagedList<NewsItem>>>
 

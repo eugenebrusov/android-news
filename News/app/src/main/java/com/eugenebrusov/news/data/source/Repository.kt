@@ -3,11 +3,12 @@ package com.eugenebrusov.news.data.source
 import android.arch.lifecycle.LiveData
 import android.arch.paging.PagedList
 import com.eugenebrusov.news.data.model.NewsItem
-import com.eugenebrusov.news.data.source.local.LocalDataSource
 import com.eugenebrusov.news.data.model.Resource
-import com.eugenebrusov.news.data.source.remote.RemoteDataSource
+import com.eugenebrusov.news.data.source.local.Dao
+import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
 import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
+import com.eugenebrusov.news.data.source.util.AppExecutors
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,19 +18,16 @@ import java.util.*
  * Concrete implementation to load news from the data sources.
  */
 class Repository(
-        val remoteDataSource: DataSource,
-        val localDataSource: DataSource
-) : DataSource {
-
-    var cachedNewsItems: LinkedHashMap<String, NewsItem> = LinkedHashMap()
-
-    private var cacheIsDirty = false
+        private val appExecutors: AppExecutors,
+        private val dao: Dao,
+        private val guardianService: GuardianService
+) {
 
     fun searchNews(section: String): LiveData<Resource<PagedList<NewsItem>>> {
-        return object : PagedListNetworkBoundResource<List<NewsItem>, NewsListResponse>() {
+        return object : PagedListNetworkBoundResource<List<NewsItem>, NewsListResponse>(appExecutors) {
 
             override fun dataSourceFactory(): android.arch.paging.DataSource.Factory<Int, NewsItem> {
-                return (localDataSource as LocalDataSource).searchNews(section)
+                return dao.searchNews(section)
             }
 
             override fun processResponse(response: NewsListResponse): List<NewsItem> {
@@ -64,7 +62,7 @@ class Repository(
             }
 
             override fun saveCallResult(items: List<NewsItem>) {
-                (localDataSource as LocalDataSource).saveNewsItems(items)
+                dao.insertNewsItems(items)
             }
 
             override fun shouldFetch(data: List<NewsItem>?): Boolean {
@@ -84,7 +82,7 @@ class Repository(
                             null
                         }
 
-                return (remoteDataSource as RemoteDataSource).searchNews(section, toDate)
+                return guardianService.search(section = section, toDate = toDate)
             }
 
             override fun onFetchFailed() {
@@ -93,38 +91,15 @@ class Repository(
         }.asLiveData()
     }
 
-    override fun saveNewsItems(newsItems: List<NewsItem>) {
-        remoteDataSource.saveNewsItems(newsItems)
-        localDataSource.saveNewsItems(newsItems)
-    }
-
-    override fun deleteAllNews() {
-        remoteDataSource.deleteAllNews()
-        localDataSource.deleteAllNews()
-        cachedNewsItems.clear()
-    }
-
-    private fun refreshCache(news: List<NewsItem>) {
-        cachedNewsItems.clear()
-        news.forEach {
-            cachedNewsItems.put(it.id, it)
-        }
-        cacheIsDirty = false
-    }
-
-    private fun refreshLocalDataSource(news: List<NewsItem>) {
-        localDataSource.deleteAllNews()
-        localDataSource.saveNewsItems(news)
-    }
-
     companion object {
 
         private var INSTANCE: Repository? = null
 
-        @JvmStatic fun getInstance(remoteDataSource: DataSource,
-                                   localDataSource: DataSource) =
+        @JvmStatic fun getInstance(appExecutors: AppExecutors,
+                                   dao: Dao,
+                                   guardianService: GuardianService) =
                 INSTANCE ?: synchronized(Repository::class.java) {
-                    INSTANCE ?: Repository(remoteDataSource, localDataSource)
+                    INSTANCE ?: Repository(appExecutors, dao, guardianService)
                             .also { INSTANCE = it }
                 }
 
