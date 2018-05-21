@@ -11,7 +11,6 @@ import android.util.Log
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.model.Status
-import com.eugenebrusov.news.data.source.remote.util.ApiEmptyResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiErrorResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
@@ -47,7 +46,10 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
                                 appExecutors.diskIO().execute {
                                     Log.e("boundaryCallback", "response #140 " + processResponse(response.body))
 
-                                    saveCallResult(processResponse(response.body))
+                                    val results = processResponse(response.body)
+                                    if (results != null) {
+                                        saveCallResult(results)
+                                    }
                                     appExecutors.mainThread().execute {
                                         result.removeSource(pagedListLiveData)
                                         result.addSource(pagedListLiveData) { newData ->
@@ -56,9 +58,7 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
                                     }
                                 }
                             }
-                            is ApiEmptyResponse -> {
-                                Log.e("boundaryCallback", "response #150")
-                            }
+
                             is ApiErrorResponse -> {
                                 Log.e("boundaryCallback", "response #160")
                                 result.removeSource(pagedListLiveData)
@@ -91,7 +91,10 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
                         when (response) {
                             is ApiSuccessResponse -> {
                                 appExecutors.diskIO().execute {
-                                    saveCallResult(processResponse(response.body))
+                                    val results = processResponse(response.body)
+                                    if (results != null) {
+                                        saveCallResult(results)
+                                    }
                                     appExecutors.mainThread().execute {
                                         result.removeSource(pagedListLiveData)
                                         result.addSource(pagedListLiveData) { newData ->
@@ -99,9 +102,6 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
                                         }
                                     }
                                 }
-                            }
-                            is ApiEmptyResponse -> {
-
                             }
                             is ApiErrorResponse -> {
                                 result.removeSource(pagedListLiveData)
@@ -141,7 +141,7 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
     protected open fun onFetchFailed() {}
 
     @WorkerThread
-    protected abstract fun processResponse(response: RequestType): List<NewsItem>
+    protected abstract fun processResponse(response: RequestType?): List<NewsItem>?
 
     @WorkerThread
     protected abstract fun saveCallResult(items: List<NewsItem>)

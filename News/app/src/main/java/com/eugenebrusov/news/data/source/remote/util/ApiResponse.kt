@@ -33,11 +33,8 @@ sealed class ApiResponse<T> {
         fun <T> create(response: Response<T>): ApiResponse<T> {
             return if (response.isSuccessful) {
                 val body = response.body()
-                if (body == null || response.code() == 204) {
-                    ApiEmptyResponse()
-                } else {
-                    ApiSuccessResponse(body = body)
-                }
+
+                ApiSuccessResponse(body = body)
             } else {
                 val msg = response.errorBody()?.string()
                 val errorMsg = if (msg.isNullOrEmpty()) {
@@ -52,16 +49,11 @@ sealed class ApiResponse<T> {
     }
 }
 
-/**
- * separate class for HTTP 204 resposes so that we can make ApiSuccessResponse's body non-null.
- */
-class ApiEmptyResponse<T> : ApiResponse<T>()
-
 data class ApiSuccessResponse<T>(
-    val body: T,
+    val body: T?,
     val links: Map<String, String>
 ) : ApiResponse<T>() {
-    constructor(body: T, linkHeader: String? = "") : this(
+    constructor(body: T?, linkHeader: String? = "") : this(
         body = body,
         links = emptyMap()
     )

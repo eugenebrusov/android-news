@@ -30,11 +30,11 @@ class Repository(
                 return dao.searchNews(section)
             }
 
-            override fun processResponse(response: NewsListResponse): List<NewsItem> {
+            override fun processResponse(response: NewsListResponse?): List<NewsItem>? {
 
                 val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
 
-                return response.response?.results?.mapNotNull {
+                return response?.response?.results?.mapNotNull {
                     try {
                         val id = it.id ?: throw ParseException("Invalid news item id", 0)
                         val webPublicationDate = format.parse(it.webPublicationDate).time
@@ -58,7 +58,7 @@ class Repository(
                     } catch (e: ParseException) {
                         null
                     }
-                } ?: listOf()
+                }
             }
 
             override fun saveCallResult(items: List<NewsItem>) {
