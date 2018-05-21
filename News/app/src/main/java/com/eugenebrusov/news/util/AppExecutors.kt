@@ -18,9 +18,7 @@ package com.eugenebrusov.news.util
 
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.VisibleForTesting
 import com.eugenebrusov.news.util.util.DiskIOThreadExecutor
-
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 

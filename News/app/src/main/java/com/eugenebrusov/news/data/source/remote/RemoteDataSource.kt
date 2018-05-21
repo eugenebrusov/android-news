@@ -78,10 +78,6 @@ object RemoteDataSource : DataSource {
         service.getNews(section).enqueue(processResults(callback))
     }
 
-    override fun getNewsItem(newsItemId: String, callback: DataSource.LoadNewsItemCallback) {
-        // Not required for the remote data source
-    }
-
     override fun saveNewsItems(newsItems: List<NewsItem>) {
         // Not required for the remote data source
     }

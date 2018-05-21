@@ -18,14 +18,14 @@ class NewsDetailViewModel(
     val newsItem = MutableLiveData<NewsItem>()
 
     fun start(newsItemId: String) {
-        repository.getNewsItem(newsItemId, object : DataSource.LoadNewsItemCallback {
-            override fun onNewsItemLoaded(item: NewsItem) {
-                newsItem.value = item
-            }
-
-            override fun onDataNotAvailable() {
-                TODO("not implemented")
-            }
-        })
+//        repository.getNewsItem(newsItemId, object : DataSource.LoadNewsItemCallback {
+//            override fun onNewsItemLoaded(item: NewsItem) {
+//                newsItem.value = item
+//            }
+//
+//            override fun onDataNotAvailable() {
+//                TODO("not implemented")
+//            }
+//        })
     }
 }
