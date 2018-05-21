@@ -6,13 +6,10 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
-import com.eugenebrusov.news.data.NetworkState
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
 
 class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
-
-    private var networkState: NetworkState? = NetworkState.LOADING
 
     var results: Resource<PagedList<NewsItem>>? = null
         set(value) {
@@ -49,7 +46,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 //        return super.getItemCount() + if (hasExtraRow()) 1 else 0
 //    }
 
-    private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
+//    private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
 
     companion object {
         val ITEM_COMPARATOR = object : DiffUtil.ItemCallback<NewsItem>() {
