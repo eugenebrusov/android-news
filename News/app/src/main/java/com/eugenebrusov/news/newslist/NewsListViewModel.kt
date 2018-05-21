@@ -17,16 +17,11 @@ class NewsListViewModel(
 ) : AndroidViewModel(context) {
 
     private val section = MutableLiveData<String>()
-    val newsItems = switchMap(section, {
-        repository.loadNews(it)
-    })
+
     val resultsResource = switchMap(section, {
         repository.searchNews(it)
     })
 
-    val pagedList = map(resultsResource) { resource ->
-        resource.data
-    }
     val dataLoading = MutableLiveData<Boolean>()
     val dataError = MutableLiveData<Boolean>()
     internal val openNewsDetailsEvent = SingleLiveEvent<Int>()

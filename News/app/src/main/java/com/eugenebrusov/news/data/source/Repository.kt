@@ -29,21 +29,6 @@ class Repository(
 
     private var cacheIsDirty = false
 
-    fun loadNews(section: String): LiveData<PagedList<NewsItem>> {
-        // create a boundary callback which will observe when the user reaches to the edges of
-        // the list and update the database with extra data
-        val boundaryCallback = BoundaryCallback(section,
-                localDataSource = localDataSource as LocalDataSource,
-                remoteDataSource = remoteDataSource as RemoteDataSource)
-
-        // create a data source factory from Room
-        val dataSourceFactory = localDataSource.loadNews(section)
-        val builder = LivePagedListBuilder(dataSourceFactory, 20)
-                .setBoundaryCallback(boundaryCallback)
-
-        return builder.build()
-    }
-
     fun searchNews(section: String): LiveData<Resource<PagedList<NewsItem>>> {
         return object : PagedListNetworkBoundResource<List<NewsItem>, NewsListResponse>() {
 
