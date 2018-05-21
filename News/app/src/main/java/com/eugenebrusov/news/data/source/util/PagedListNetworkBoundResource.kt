@@ -1,4 +1,4 @@
-package com.eugenebrusov.news.data.source
+package com.eugenebrusov.news.data.source.util
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
@@ -14,7 +14,6 @@ import com.eugenebrusov.news.data.model.Status
 import com.eugenebrusov.news.data.source.remote.util.ApiErrorResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
-import com.eugenebrusov.news.data.source.util.AppExecutors
 
 abstract class PagedListNetworkBoundResource<ResultType, RequestType>
 @MainThread constructor(private val appExecutors: AppExecutors) {

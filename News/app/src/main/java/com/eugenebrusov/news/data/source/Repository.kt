@@ -9,6 +9,7 @@ import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
 import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
 import com.eugenebrusov.news.data.source.util.AppExecutors
+import com.eugenebrusov.news.data.source.util.PagedListNetworkBoundResource
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,32 +33,8 @@ class Repository(
 
             override fun processResponse(response: NewsListResponse?): List<NewsItem>? {
 
-                val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-
                 return response?.response?.results?.mapNotNull {
-                    try {
-                        val id = it.id ?: throw ParseException("Invalid news item id", 0)
-                        val webPublicationDate = format.parse(it.webPublicationDate).time
-
-                        var webTitle: String? = null
-                        var bylineImageUrl: String? = null
-                        if (it.tags?.isNotEmpty() == true) {
-                            webTitle = it.tags[0].webTitle
-                            bylineImageUrl = it.tags[0].bylineImageUrl
-                        }
-
-                        NewsItem(id = id,
-                                webPublicationDate = webPublicationDate,
-                                sectionName = it.sectionName?.toLowerCase(),
-                                headline = it.fields?.headline,
-                                trailText = it.fields?.trailText,
-                                thumbnail = it.fields?.thumbnail,
-                                bodyText = it.fields?.bodyText,
-                                webTitle = webTitle,
-                                bylineImageUrl = bylineImageUrl)
-                    } catch (e: ParseException) {
-                        null
-                    }
+                    NewsItem.create(it)
                 }
             }
 
