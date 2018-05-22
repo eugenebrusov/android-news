@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import com.eugenebrusov.news.R
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
+import com.eugenebrusov.news.data.model.Status
 
 class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 
     var results: Resource<PagedList<NewsItem>>? = null
         set(value) {
-            super.submitList(value?.data)
+            if (value?.status == Status.SUCCESS) {
+                super.submitList(value?.data)
+            }
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -56,8 +59,6 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 
             override fun areItemsTheSame(oldItem: NewsItem, newItem: NewsItem): Boolean =
                     oldItem.id == newItem.id
-
-            override fun getChangePayload(oldItem: NewsItem, newItem: NewsItem): Any? = null
         }
     }
 }
