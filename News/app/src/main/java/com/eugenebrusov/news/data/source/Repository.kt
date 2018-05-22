@@ -32,7 +32,6 @@ class Repository(
             }
 
             override fun processResponse(response: JSONSearchBody?): List<NewsItem>? {
-
                 return response?.response?.results?.mapNotNull {
                     NewsItem.create(it)
                 }
@@ -40,10 +39,6 @@ class Repository(
 
             override fun saveCallResult(items: List<NewsItem>) {
                 dao.insertNewsItems(items)
-            }
-
-            override fun shouldFetch(data: List<NewsItem>?): Boolean {
-                return true
             }
 
             override fun createCall(timestamp: Long?): LiveData<ApiResponse<JSONSearchBody>> {
@@ -60,10 +55,6 @@ class Repository(
                         }
 
                 return guardianService.search(section = section, toDate = toDate)
-            }
-
-            override fun onFetchFailed() {
-                //repoListRateLimit.reset(owner)
             }
         }.asLiveData()
     }

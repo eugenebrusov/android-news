@@ -94,16 +94,11 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
 
     fun asLiveData() = result as LiveData<Resource<PagedList<NewsItem>>>
 
-    protected open fun onFetchFailed() {}
-
     @WorkerThread
     protected abstract fun processResponse(response: RequestType?): List<NewsItem>?
 
     @WorkerThread
     protected abstract fun saveCallResult(items: List<NewsItem>)
-
-    @MainThread
-    protected abstract fun shouldFetch(data: ResultType?): Boolean
 
     @MainThread
     protected abstract fun dataSourceFactory(): DataSource.Factory<Int, NewsItem>
