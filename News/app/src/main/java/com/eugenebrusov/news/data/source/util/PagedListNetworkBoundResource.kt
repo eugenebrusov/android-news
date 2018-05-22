@@ -83,7 +83,7 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
 
                     Log.e("boundaryCallback", "onItemAtEndLoaded() #210")
                     val apiResponse
-                            = createCall(itemAtEnd.webPublicationDate)
+                            = createCall(itemAtEnd.webPublicationDate.minus(1))
 
                     result.addSource(apiResponse) { response ->
                         result.removeSource(apiResponse)

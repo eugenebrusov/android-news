@@ -3,11 +3,7 @@ package com.eugenebrusov.news.data.model
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import com.eugenebrusov.news.data.source.remote.models.NewsResult
-import com.eugenebrusov.news.data.source.remote.util.ApiErrorResponse
-import com.eugenebrusov.news.data.source.remote.util.ApiResponse
-import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
-import retrofit2.Response
+import com.eugenebrusov.news.data.source.remote.guardian.json.search.JSONSearchResult
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +27,7 @@ data class NewsItem @JvmOverloads constructor(
 ) {
     companion object {
 
-        fun create(result: NewsResult): NewsItem? {
+        fun create(result: JSONSearchResult): NewsItem? {
             try {
                 val id = result.id ?: throw ParseException("Invalid news item id", 0)
 

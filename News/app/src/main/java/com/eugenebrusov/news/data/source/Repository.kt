@@ -6,7 +6,7 @@ import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.source.local.Dao
 import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
-import com.eugenebrusov.news.data.source.remote.models.NewsListResponse
+import com.eugenebrusov.news.data.source.remote.guardian.json.search.JSONSearchBody
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
 import com.eugenebrusov.news.data.source.util.AppExecutors
 import com.eugenebrusov.news.data.source.util.PagedListNetworkBoundResource
@@ -25,13 +25,13 @@ class Repository(
 ) {
 
     fun searchNews(section: String): LiveData<Resource<PagedList<NewsItem>>> {
-        return object : PagedListNetworkBoundResource<List<NewsItem>, NewsListResponse>(appExecutors) {
+        return object : PagedListNetworkBoundResource<List<NewsItem>, JSONSearchBody>(appExecutors) {
 
             override fun dataSourceFactory(): android.arch.paging.DataSource.Factory<Int, NewsItem> {
                 return dao.searchNews(section)
             }
 
-            override fun processResponse(response: NewsListResponse?): List<NewsItem>? {
+            override fun processResponse(response: JSONSearchBody?): List<NewsItem>? {
 
                 return response?.response?.results?.mapNotNull {
                     NewsItem.create(it)
@@ -46,7 +46,7 @@ class Repository(
                 return true
             }
 
-            override fun createCall(timestamp: Long?): LiveData<ApiResponse<NewsListResponse>> {
+            override fun createCall(timestamp: Long?): LiveData<ApiResponse<JSONSearchBody>> {
                 val toDate: String? =
                         if (timestamp != null) {
                             try {
