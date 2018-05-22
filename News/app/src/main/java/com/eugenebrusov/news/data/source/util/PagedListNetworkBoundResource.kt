@@ -7,7 +7,6 @@ import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
-import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.model.Status
 import com.eugenebrusov.news.data.source.remote.util.ApiErrorResponse
@@ -17,19 +16,19 @@ import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
 abstract class PagedListNetworkBoundResource<ResultType, RequestType>
 @MainThread constructor(private val appExecutors: AppExecutors) {
 
-    private val result = MediatorLiveData<Resource<PagedList<NewsItem>>>()
-    private val pagedListLiveData: LiveData<PagedList<NewsItem>>
+    private val result = MediatorLiveData<Resource<PagedList<ResultType>>>()
+    private val pagedListLiveData: LiveData<PagedList<ResultType>>
 
     init {
 
-        val callback = object : PagedList.BoundaryCallback<NewsItem>() {
+        val callback = object : PagedList.BoundaryCallback<ResultType>() {
             @MainThread
             override fun onZeroItemsLoaded() {
                 processBoundaryCallback()
             }
 
             @MainThread
-            override fun onItemAtEndLoaded(itemAtEnd: NewsItem) {
+            override fun onItemAtEndLoaded(itemAtEnd: ResultType) {
                 processBoundaryCallback(itemAtEnd)
             }
         }
@@ -47,13 +46,13 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
     }
 
     @MainThread
-    private fun setValue(newValue: Resource<PagedList<NewsItem>>) {
+    private fun setValue(newValue: Resource<PagedList<ResultType>>) {
         if (result.value != newValue) {
             result.value = newValue
         }
     }
 
-    private fun processBoundaryCallback(itemAtEnd: NewsItem? = null) {
+    private fun processBoundaryCallback(itemAtEnd: ResultType? = null) {
         if (Status.LOADING != result.value?.status) {
             result.removeSource(pagedListLiveData)
             result.addSource(pagedListLiveData) { newData ->
@@ -62,7 +61,7 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
             }
 
             val apiResponse
-                    = createCall(itemAtEnd?.webPublicationDate?.minus(1))
+                    = createCall(itemAtEnd)
 
             result.addSource(apiResponse) { response ->
                 result.removeSource(apiResponse)
@@ -92,17 +91,17 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
         }
     }
 
-    fun asLiveData() = result as LiveData<Resource<PagedList<NewsItem>>>
+    fun asLiveData() = result as LiveData<Resource<PagedList<ResultType>>>
 
     @WorkerThread
-    protected abstract fun processResponse(response: RequestType?): List<NewsItem>?
+    protected abstract fun saveCallResult(items: List<ResultType>)
+
+    @MainThread
+    protected abstract fun dataSourceFactory(): DataSource.Factory<Int, ResultType>
+
+    @MainThread
+    protected abstract fun createCall(itemAtEnd: ResultType? = null): LiveData<ApiResponse<RequestType>>
 
     @WorkerThread
-    protected abstract fun saveCallResult(items: List<NewsItem>)
-
-    @MainThread
-    protected abstract fun dataSourceFactory(): DataSource.Factory<Int, NewsItem>
-
-    @MainThread
-    protected abstract fun createCall(timestamp: Long? = null): LiveData<ApiResponse<RequestType>>
+    protected abstract fun processResponse(response: RequestType?): List<ResultType>?
 }

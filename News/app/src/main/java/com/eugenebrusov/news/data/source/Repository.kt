@@ -1,6 +1,7 @@
 package com.eugenebrusov.news.data.source
 
 import android.arch.lifecycle.LiveData
+import android.arch.paging.DataSource
 import android.arch.paging.PagedList
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
@@ -25,28 +26,23 @@ class Repository(
 ) {
 
     fun searchNews(section: String): LiveData<Resource<PagedList<NewsItem>>> {
-        return object : PagedListNetworkBoundResource<List<NewsItem>, JSONSearchBody>(appExecutors) {
 
-            override fun dataSourceFactory(): android.arch.paging.DataSource.Factory<Int, NewsItem> {
-                return dao.searchNews(section)
-            }
-
-            override fun processResponse(response: JSONSearchBody?): List<NewsItem>? {
-                return response?.response?.results?.mapNotNull {
-                    NewsItem.create(it)
-                }
-            }
+        return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors) {
 
             override fun saveCallResult(items: List<NewsItem>) {
                 dao.insertNewsItems(items)
             }
 
-            override fun createCall(timestamp: Long?): LiveData<ApiResponse<JSONSearchBody>> {
+            override fun dataSourceFactory(): DataSource.Factory<Int, NewsItem> {
+                return dao.searchNews(section)
+            }
+
+            override fun createCall(itemAtEnd: NewsItem?): LiveData<ApiResponse<JSONSearchBody>> {
                 val toDate: String? =
-                        if (timestamp != null) {
+                        if (itemAtEnd != null) {
                             try {
                                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-                                        .format(Date(timestamp))
+                                        .format(Date(itemAtEnd.webPublicationDate.minus(1)))
                             } catch (e: ParseException) {
                                 null
                             }
@@ -55,6 +51,12 @@ class Repository(
                         }
 
                 return guardianService.search(section = section, toDate = toDate)
+            }
+
+            override fun processResponse(response: JSONSearchBody?): List<NewsItem>? {
+                return response?.response?.results?.mapNotNull {
+                    NewsItem.create(it)
+                }
             }
         }.asLiveData()
     }
