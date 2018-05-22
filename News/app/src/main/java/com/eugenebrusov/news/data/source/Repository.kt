@@ -1,147 +1,75 @@
 package com.eugenebrusov.news.data.source
 
-import java.util.LinkedHashMap
-import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.forEach
-import kotlin.collections.isNotEmpty
+import android.arch.lifecycle.LiveData
+import android.arch.paging.DataSource
+import android.arch.paging.PagedList
+import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.Resource
+import com.eugenebrusov.news.data.source.local.Dao
+import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
+import com.eugenebrusov.news.data.source.remote.guardian.json.search.JSONSearchBody
+import com.eugenebrusov.news.data.source.remote.util.ApiResponse
+import com.eugenebrusov.news.data.source.util.AppExecutors
+import com.eugenebrusov.news.data.source.util.PagedListNetworkBoundResource
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
- * Concrete implementation to load news
- * from the data sources into a cache.
+ * Concrete implementation to load news from the data sources.
  */
 class Repository(
-        val remoteDataSource: DataSource,
-        val localDataSource: DataSource
-) : DataSource {
+        private val appExecutors: AppExecutors,
+        private val dao: Dao,
+        private val guardianService: GuardianService
+) {
 
-    var cachedNewsItems: LinkedHashMap<String, NewsItem> = LinkedHashMap()
+    fun searchNews(section: String): LiveData<Resource<PagedList<NewsItem>>> {
 
-    private var cacheIsDirty = false
+        return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors) {
 
-    /**
-     * Gets news from cache, local data source (SQLite) or remote data source, whichever is
-     * available first.
-     *
-     *
-     * Note: [LoadNewsListCallback.onDataNotAvailable] is fired if all data sources fail to
-     * get the data.
-     */
-    override fun getNews(callback: DataSource.LoadNewsListCallback) {
-        // Respond immediately with cache if available and not dirty
-        if (cachedNewsItems.isNotEmpty() && !cacheIsDirty) {
-            callback.onNewsListLoaded(ArrayList(cachedNewsItems.values))
-            return
-        }
-
-        if (cacheIsDirty) {
-            // If the cache is dirty we need to fetch new data from the network.
-            remoteDataSource.getNews(object : DataSource.LoadNewsListCallback {
-                override fun onNewsListLoaded(items: List<NewsItem>) {
-                    refreshCache(items)
-                    refreshLocalDataSource(items)
-                    callback.onNewsListLoaded(ArrayList(cachedNewsItems.values))
-                }
-
-                override fun onDataNotAvailable() {
-                    callback.onDataNotAvailable()
-                }
-            })
-        } else {
-            // Query the local storage if available. If not, query the network.
-            localDataSource.getNews(object : DataSource.LoadNewsListCallback {
-                override fun onNewsListLoaded(items: List<NewsItem>) {
-                    refreshCache(items)
-                    callback.onNewsListLoaded(items)
-                }
-
-                override fun onDataNotAvailable() {
-                    remoteDataSource.getNews(object : DataSource.LoadNewsListCallback {
-                        override fun onNewsListLoaded(items: List<NewsItem>) {
-                            refreshCache(items)
-                            refreshLocalDataSource(items)
-                            callback.onNewsListLoaded(ArrayList(cachedNewsItems.values))
-                        }
-
-                        override fun onDataNotAvailable() {
-                            callback.onDataNotAvailable()
-                        }
-                    })
-                }
-
-            })
-        }
-    }
-
-    /**
-     * Gets news item from local data source (sqlite) unless the table is new or empty. In that case it
-     * uses the network data source.
-     *
-     *
-     * Note: [LoadNewsItemCallback.onDataNotAvailable] is fired if both data sources fail to
-     * get the data.
-     */
-    override fun getNewsItem(newsItemId: String, callback: DataSource.LoadNewsItemCallback) {
-        val newsItemInCache = cachedNewsItems[newsItemId]
-
-        // Respond immediately with cache if available
-        if (newsItemInCache != null) {
-            callback.onNewsItemLoaded(newsItemInCache)
-        }
-
-        // Try to load news item from local data source
-        // If news item doesn't exist load from remote data source
-        localDataSource.getNewsItem(newsItemId, object : DataSource.LoadNewsItemCallback {
-            override fun onNewsItemLoaded(item: NewsItem) {
-                callback.onNewsItemLoaded(item)
+            override fun saveCallResult(items: List<NewsItem>) {
+                dao.insertNewsItems(items)
             }
 
-            override fun onDataNotAvailable() {
-                remoteDataSource.getNewsItem(newsItemId, object : DataSource.LoadNewsItemCallback{
-                    override fun onNewsItemLoaded(item: NewsItem) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                    override fun onDataNotAvailable() {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-                })
+            override fun dataSourceFactory(): DataSource.Factory<Int, NewsItem> {
+                return dao.searchNews(section)
             }
-        })
-    }
 
-    override fun saveNewsItems(newsItems: List<NewsItem>) {
-        remoteDataSource.saveNewsItems(newsItems)
-        localDataSource.saveNewsItems(newsItems)
-    }
+            override fun createCall(itemAtEnd: NewsItem?): LiveData<ApiResponse<JSONSearchBody>> {
+                val toDate: String? =
+                        if (itemAtEnd != null) {
+                            try {
+                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+                                        .format(Date(itemAtEnd.webPublicationDate.minus(1)))
+                            } catch (e: ParseException) {
+                                null
+                            }
+                        } else {
+                            null
+                        }
 
-    override fun deleteAllNews() {
-        remoteDataSource.deleteAllNews()
-        localDataSource.deleteAllNews()
-        cachedNewsItems.clear()
-    }
+                return guardianService.search(section = section, toDate = toDate)
+            }
 
-    private fun refreshCache(news: List<NewsItem>) {
-        cachedNewsItems.clear()
-        news.forEach {
-            cachedNewsItems.put(it.id, it)
-        }
-        cacheIsDirty = false
-    }
-
-    private fun refreshLocalDataSource(news: List<NewsItem>) {
-        localDataSource.deleteAllNews()
-        localDataSource.saveNewsItems(news)
+            override fun processResponse(response: JSONSearchBody?): List<NewsItem>? {
+                return response?.response?.results?.mapNotNull {
+                    NewsItem.create(it)
+                }
+            }
+        }.asLiveData()
     }
 
     companion object {
 
         private var INSTANCE: Repository? = null
 
-        @JvmStatic fun getInstance(remoteDataSource: DataSource,
-                                   localDataSource: DataSource) =
+        @JvmStatic fun getInstance(appExecutors: AppExecutors,
+                                   dao: Dao,
+                                   guardianService: GuardianService) =
                 INSTANCE ?: synchronized(Repository::class.java) {
-                    INSTANCE ?: Repository(remoteDataSource, localDataSource)
+                    INSTANCE ?: Repository(appExecutors, dao, guardianService)
                             .also { INSTANCE = it }
                 }
 

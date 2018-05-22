@@ -9,8 +9,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import com.eugenebrusov.news.databinding.FragmentNewsListBinding
+import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 
 class NewsListFragment : Fragment() {
 
@@ -30,14 +30,13 @@ class NewsListFragment : Fragment() {
         val viewModel = (activity as NewsListActivity).obtainViewModel()
         binding.viewModel = viewModel
 
-        val adapter = NewsListAdapter(viewModel)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = NewsListPagedAdapter()
 
         viewModel.openNewsDetailsEvent.observe(
-                this@NewsListFragment,
-                Observer<Int> { position ->
+                this,
+                Observer { position ->
                     if (position != null) {
                         val holder = binding.recyclerView.findViewHolderForLayoutPosition(position)
                                 as NewsListAdapter.ViewHolder
@@ -47,17 +46,14 @@ class NewsListFragment : Fragment() {
 
                         val bundle = ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(
-                                        activity,
+                                        activity as NewsListActivity,
                                         holder.binding.thumbnailImage,
                                         holder.binding.thumbnailImage.transitionName)
                                 .toBundle()
                         startActivity(intent, bundle)
                     }
                 })
-    }
 
-    override fun onResume() {
-        super.onResume()
-        binding.viewModel?.start()
+        viewModel.loadNews("politics")
     }
 }
