@@ -3,9 +3,9 @@ package com.eugenebrusov.news.newslist
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations.map
+import android.arch.lifecycle.Transformations.switchMap
 import com.eugenebrusov.news.SingleLiveEvent
-import com.eugenebrusov.news.data.source.DataSource
-import com.eugenebrusov.news.data.source.NewsItem
 import com.eugenebrusov.news.data.source.Repository
 
 /**
@@ -16,37 +16,22 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    val items = MutableLiveData<List<NewsItem>>()
+    private val section = MutableLiveData<String>()
+
+    val resultsResource = switchMap(section, {
+        repository.searchNews(it)
+    })
+
     val dataLoading = MutableLiveData<Boolean>()
     val dataError = MutableLiveData<Boolean>()
     internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
 
-    fun start() {
-        loadNews()
-    }
-
-    fun loadNews() {
-        dataError.value = false
-        dataLoading.value = true
-
-        repository.getNews(object : DataSource.LoadNewsListCallback {
-            override fun onNewsListLoaded(items: List<NewsItem>) {
-                this@NewsListViewModel.items.value = items
-
-                dataLoading.value = false
-            }
-
-            override fun onDataNotAvailable() {
-                this@NewsListViewModel.items.value = null
-
-                dataError.value = true
-                dataLoading.value = false
-            }
-        })
+    fun loadNews(section: String) {
+        this.section.value = section
     }
 
     fun onRefresh() {
-        loadNews()
+        //loadNews()
     }
 
 }

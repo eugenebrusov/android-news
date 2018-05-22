@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.10'
-    ext.gradlePluginVersion = '3.1.0-alpha09'
+    ext.kotlin_version = '1.2.30'
+    ext.gradlePluginVersion = '3.1.2'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:$gradlePluginVersion"
+        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -28,10 +28,15 @@ task clean(type: Delete) {
 }
 
 ext {
-    supportVersion = '26.1.0'
-    archLifecycleVersion = '1.0.0'
+    minSdkVersion = 21
+    targetSdkVersion = 26
+    buildToolsVersion = '27.0.3'
+
+    supportVersion = '27.1.1'
+    archLifecycleVersion = '1.1.1'
+    archPagingVersion = '1.0.0'
     retrofitVersion = '2.3.0'
-    glideVersion = '4.3.1'
+    glideVersion = '4.7.1'
     junitVersion = '4.12'
     mockitoVersion = '2.8.47'
     hamcrestVersion = '1.3'

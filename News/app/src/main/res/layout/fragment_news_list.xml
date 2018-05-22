@@ -27,7 +27,8 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:items="@{viewModel.items}" />
+                android:scrollbars="vertical"
+                app:results="@{viewModel.resultsResource}" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
