@@ -4,6 +4,7 @@ import android.arch.paging.PagedList
 import android.databinding.BindingAdapter
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.request.RequestOptions
@@ -60,5 +61,12 @@ object Bindings {
     @BindingAdapter("app:refreshEnabled")
     @JvmStatic fun setRefreshEnabled(refreshLayout: SwipeRefreshLayout, enabled: Boolean?) {
         refreshLayout.isEnabled = (enabled == true)
+    }
+
+    @BindingAdapter("app:layout_height")
+    @JvmStatic fun setLayoutHeight(layout: ViewGroup, height: Int?) {
+        val layoutParams = layout.layoutParams
+        layoutParams.height = height ?: 0
+        layout.layoutParams = layoutParams
     }
 }
