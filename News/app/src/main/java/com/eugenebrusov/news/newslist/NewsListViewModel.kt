@@ -25,12 +25,12 @@ class NewsListViewModel(
 
     val nestedScrollingEnabled = map(resultsResource) { results ->
         val count = results.data?.size ?: 0
-        !(Status.LOADING == results.status && count == 0)
+        !((Status.LOADING == results.status || Status.ERROR == results.status)  && count == 0)
     }
 
     val refreshEnabled = map(resultsResource) { results ->
         val count = results.data?.size ?: 0
-        !(Status.LOADING == results.status && count == 0)
+        !((Status.LOADING == results.status || Status.ERROR == results.status) && count == 0)
     }
 
     val dataLoading = MutableLiveData<Boolean>()
