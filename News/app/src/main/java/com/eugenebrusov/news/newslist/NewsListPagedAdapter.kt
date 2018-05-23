@@ -10,6 +10,7 @@ import com.eugenebrusov.news.R
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.model.Status
+import com.eugenebrusov.news.databinding.ItemNewsListBinding
 import com.eugenebrusov.news.databinding.ItemNewsListErrorStateBinding
 import com.eugenebrusov.news.databinding.ItemNewsListLoadingStateBinding
 
@@ -17,9 +18,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 
     var results: Resource<PagedList<NewsItem>>? = null
         set(value) {
-            if (value?.status == Status.SUCCESS) {
-                super.submitList(value.data)
-            }
+            super.submitList(value?.data)
 
             val previousResults = field
             val hadExtraRow = hasExtraRow()
@@ -91,6 +90,19 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 
             override fun areItemsTheSame(oldItem: NewsItem, newItem: NewsItem): Boolean =
                     oldItem.id == newItem.id
+        }
+    }
+
+    class NewsListItemViewHolder(
+            val binding: ItemNewsListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        companion object {
+            fun create(parent: ViewGroup?): NewsListItemViewHolder {
+                val binding = ItemNewsListBinding
+                        .inflate(LayoutInflater.from(parent?.context), parent, false)
+                return NewsListItemViewHolder(binding)
+            }
         }
     }
 
