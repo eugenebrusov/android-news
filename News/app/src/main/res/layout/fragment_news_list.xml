@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{viewModel.dataError ? View.GONE : View.VISIBLE}"
+            app:refreshEnabled="@{viewModel.refreshEnabled}"
             app:onRefreshListener="@{viewModel::onRefresh}"
             app:refreshing="@{viewModel.dataLoading}">
 
@@ -28,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                android:nestedScrollingEnabled="false"
+                android:nestedScrollingEnabled="@{viewModel.nestedScrollingEnabled}"
                 app:results="@{viewModel.resultsResource}" />
 
         </android.support.v4.widget.SwipeRefreshLayout>

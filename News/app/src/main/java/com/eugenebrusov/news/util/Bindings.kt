@@ -2,6 +2,7 @@ package com.eugenebrusov.news.util
 
 import android.arch.paging.PagedList
 import android.databinding.BindingAdapter
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.widget.ImageView
 import android.widget.TextView
@@ -54,5 +55,10 @@ object Bindings {
     @BindingAdapter("app:body")
     @JvmStatic fun setBody(textView: TextView, bodyText: String?) {
         textView.text = bodyText?.replace(". ", ".\n\n")
+    }
+
+    @BindingAdapter("app:refreshEnabled")
+    @JvmStatic fun setRefreshEnabled(refreshLayout: SwipeRefreshLayout, enabled: Boolean?) {
+        refreshLayout.isEnabled = (enabled == true)
     }
 }

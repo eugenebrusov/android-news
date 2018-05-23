@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="android.widget.FrameLayout.LayoutParams" />
+
+        <variable name="position" type="int" />
 
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="32dp">
+        android:layout_height="300dp">
 
         <ProgressBar style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:layout_gravity="center"/>
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center" />
     </FrameLayout>
 
 </layout>
+
+    <!--android:layout_marginBottom="?attr/actionBarSize"-->
+    <!--app:layout_height="@{position == 0 ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT}"-->

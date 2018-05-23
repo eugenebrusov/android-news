@@ -4,6 +4,7 @@ import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
@@ -16,13 +17,12 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 
     var results: Resource<PagedList<NewsItem>>? = null
         set(value) {
-            val previousResults = field
-            val hadExtraRow = hasExtraRow()
-
             if (value?.status == Status.SUCCESS) {
                 super.submitList(value.data)
             }
 
+            val previousResults = field
+            val hadExtraRow = hasExtraRow()
             field = value
             val hasExtraRow = hasExtraRow()
             if (hadExtraRow != hasExtraRow) {
@@ -49,6 +49,12 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
             R.layout.item_news_list ->
                 (holder as NewsListItemViewHolder).apply {
                     binding.newsItem = getItem(position)
+                    binding.executePendingBindings()
+                }
+            R.layout.item_news_list_loading_state ->
+                (holder as NewsListItemLoadingStateViewHolder).apply {
+                    binding.position = position
+                    Log.e("binding", "binding.root ${binding.root}")
                     binding.executePendingBindings()
                 }
         }
@@ -80,7 +86,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
     }
 
     class NewsListItemLoadingStateViewHolder(
-            binding: ItemNewsListLoadingStateBinding
+            val binding: ItemNewsListLoadingStateBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         companion object {
