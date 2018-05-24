@@ -11,7 +11,7 @@ import com.eugenebrusov.news.ViewModelFactory
 import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import kotlinx.android.synthetic.main.activity_news_list.*
 
-class NewsListActivity : AppCompatActivity(), NewsListFragment.OnNewsItemSelectedListener {
+class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme);

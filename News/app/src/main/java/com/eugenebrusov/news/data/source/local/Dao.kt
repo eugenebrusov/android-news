@@ -1,5 +1,6 @@
 package com.eugenebrusov.news.data.source.local
 
+import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
@@ -28,4 +29,12 @@ import com.eugenebrusov.news.data.model.NewsItem
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewsItems(newsItems: List<NewsItem>)
+
+    /**
+     * Select news item by given id
+     *
+     * @return news item by given id
+     */
+    @Query("SELECT * FROM news WHERE id = :id")
+    fun findNewsItem(id: String): LiveData<NewsItem>
 }

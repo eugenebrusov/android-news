@@ -15,8 +15,9 @@ import com.eugenebrusov.news.databinding.ItemNewsListBinding
 import com.eugenebrusov.news.databinding.ItemNewsListErrorStateBinding
 import com.eugenebrusov.news.databinding.ItemNewsListLoadingStateBinding
 
-class NewsListPagedAdapter(private val itemClickCallback: ((String, View) -> Unit)?)
-    : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
+class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
+
+    var newsItemSelectedCallback: OnNewsItemSelectedListener? = null
 
     var results: Resource<Listing<NewsItem>>? = null
         set(value) {
@@ -59,7 +60,7 @@ class NewsListPagedAdapter(private val itemClickCallback: ((String, View) -> Uni
                     val newsItem = getItem(position)
                     binding.newsItem = newsItem
                     binding.clickListener = View.OnClickListener {
-                        itemClickCallback?.invoke(newsItem!!.id, binding.thumbnailImage)
+                        newsItemSelectedCallback?.onNewsItemSelected(newsItem!!.id, binding.thumbnailImage)
                     }
                     binding.executePendingBindings()
                 }

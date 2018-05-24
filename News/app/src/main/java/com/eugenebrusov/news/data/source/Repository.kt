@@ -62,6 +62,10 @@ class Repository(
         }.asLiveData()
     }
 
+    fun findNewsItem(id: String): LiveData<NewsItem> {
+        return dao.findNewsItem(id)
+    }
+
     companion object {
 
         private var INSTANCE: Repository? = null
