@@ -33,9 +33,7 @@ class NewsListFragment : Fragment() {
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.addItemDecoration(NewsListSpacesDecoration())
-        binding.recyclerView.adapter = NewsListPagedAdapter {
-            viewModel.retry()
-        }
+        binding.recyclerView.adapter = NewsListPagedAdapter()
 
         viewModel.openNewsDetailsEvent.observe(
                 this,

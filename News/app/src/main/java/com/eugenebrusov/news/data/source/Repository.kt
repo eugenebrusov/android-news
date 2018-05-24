@@ -3,6 +3,7 @@ package com.eugenebrusov.news.data.source
 import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
 import android.arch.paging.PagedList
+import com.eugenebrusov.news.data.model.Listing
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.source.local.Dao
@@ -25,16 +26,16 @@ class Repository(
         private val guardianService: GuardianService
 ) {
 
-    fun searchNews(request: Pair<String, Boolean>): LiveData<Resource<PagedList<NewsItem>>> {
+    fun searchNews(request: String): LiveData<Resource<Listing<NewsItem>>> {
 
-        return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors, request.second) {
+        return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors) {
 
             override fun saveCallResult(items: List<NewsItem>) {
                 dao.insertNewsItems(items)
             }
 
             override fun dataSourceFactory(): DataSource.Factory<Int, NewsItem> {
-                return dao.searchNews(request.first)
+                return dao.searchNews(request)
             }
 
             override fun createCall(itemAtEnd: NewsItem?): LiveData<ApiResponse<JSONSearchBody>> {
@@ -50,7 +51,7 @@ class Repository(
                             null
                         }
 
-                return guardianService.search(section = request.first, toDate = toDate)
+                return guardianService.search(section = request, toDate = toDate)
             }
 
             override fun processResponse(response: JSONSearchBody?): List<NewsItem>? {

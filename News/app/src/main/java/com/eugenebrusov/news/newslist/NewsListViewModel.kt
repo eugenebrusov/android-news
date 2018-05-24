@@ -17,19 +17,19 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    private val request = MutableLiveData<Pair<String, Boolean>>()
+    private val request = MutableLiveData<String>()
 
     val resultsResource = switchMap(request) { results ->
         repository.searchNews(results)
     }
 
     val nestedScrollingEnabled = map(resultsResource) { results ->
-        val count = results.data?.size ?: 0
+        val count = results.data?.pagedList?.size ?: 0
         !((Status.LOADING == results.status || Status.ERROR == results.status)  && count == 0)
     }
 
     val refreshEnabled = map(resultsResource) { results ->
-        val count = results.data?.size ?: 0
+        val count = results.data?.pagedList?.size ?: 0
         !((Status.LOADING == results.status || Status.ERROR == results.status) && count == 0)
     }
 
@@ -38,14 +38,10 @@ class NewsListViewModel(
     internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
 
     fun loadNews(section: String) {
-        this.request.value = Pair(section, false)
+        this.request.value = section
     }
 
     fun onRefresh() {
         //loadNews()
-    }
-
-    fun retry() {
-        this.request.value = Pair(request.value?.first ?: "", true)
     }
 }

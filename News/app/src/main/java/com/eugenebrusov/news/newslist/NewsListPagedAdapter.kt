@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
+import com.eugenebrusov.news.data.model.Listing
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.model.Status
@@ -15,16 +16,15 @@ import com.eugenebrusov.news.databinding.ItemNewsListBinding
 import com.eugenebrusov.news.databinding.ItemNewsListErrorStateBinding
 import com.eugenebrusov.news.databinding.ItemNewsListLoadingStateBinding
 
-class NewsListPagedAdapter(private val retryCallback: () -> Unit)
-    : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
+class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 
-    var results: Resource<PagedList<NewsItem>>? = null
+    var results: Resource<Listing<NewsItem>>? = null
         set(value) {
             if (value == null) {
                 return
             }
 
-            super.submitList(value.data)
+            super.submitList(value.data?.pagedList)
 
             val previousResults = field
             val hadExtraRow = hasExtraRow()
@@ -45,7 +45,9 @@ class NewsListPagedAdapter(private val retryCallback: () -> Unit)
         return when (viewType) {
             R.layout.item_news_list -> NewsListItemViewHolder.create(parent)
             R.layout.item_news_list_loading_state -> NewsListItemLoadingStateViewHolder.create(parent)
-            R.layout.item_news_list_error_state -> NewsListItemErrorStateViewHolder.create(parent, retryCallback)
+            R.layout.item_news_list_error_state -> NewsListItemErrorStateViewHolder.create(parent) {
+                results?.data?.retry?.invoke()
+            }
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }
