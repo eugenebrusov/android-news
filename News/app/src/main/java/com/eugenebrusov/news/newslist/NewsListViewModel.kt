@@ -17,9 +17,9 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    private val section = MutableLiveData<String>()
+    private val request = MutableLiveData<Pair<String, Boolean>>()
 
-    val resultsResource = switchMap(section) { results ->
+    val resultsResource = switchMap(request) { results ->
         repository.searchNews(results)
     }
 
@@ -38,7 +38,7 @@ class NewsListViewModel(
     internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
 
     fun loadNews(section: String) {
-        this.section.value = section
+        this.request.value = Pair(section, false)
     }
 
     fun onRefresh() {
@@ -46,7 +46,6 @@ class NewsListViewModel(
     }
 
     fun retry() {
-        section.value = section.value
+        this.request.value = Pair(request.value?.first ?: "", true)
     }
-
 }

@@ -13,6 +13,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="52dp"
         app:layout_height="@{position == 0 ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT}">
 
         <ProgressBar style="?android:attr/progressBarStyle"

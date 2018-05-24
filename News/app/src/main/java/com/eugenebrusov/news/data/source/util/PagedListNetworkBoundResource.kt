@@ -7,6 +7,7 @@ import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
+import android.util.Log
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.model.Status
 import com.eugenebrusov.news.data.source.remote.util.ApiErrorResponse
@@ -14,7 +15,8 @@ import com.eugenebrusov.news.data.source.remote.util.ApiResponse
 import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
 
 abstract class PagedListNetworkBoundResource<ResultType, RequestType>
-@MainThread constructor(private val appExecutors: AppExecutors) {
+@MainThread constructor(private val appExecutors: AppExecutors,
+                        private val retry: Boolean) {
 
     private val result = MediatorLiveData<Resource<PagedList<ResultType>>>()
     private val pagedListLiveData: LiveData<PagedList<ResultType>>
@@ -24,23 +26,38 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
         val callback = object : PagedList.BoundaryCallback<ResultType>() {
             @MainThread
             override fun onZeroItemsLoaded() {
+                Log.e("BoundResource", "onZeroItemsLoaded")
                 processBoundaryCallback()
             }
 
             @MainThread
             override fun onItemAtEndLoaded(itemAtEnd: ResultType) {
+                Log.e("BoundResource", "onItemAtEndLoaded")
                 processBoundaryCallback(itemAtEnd)
             }
         }
 
         // create a data source factory from Room
+
         @Suppress("LeakingThis")
         pagedListLiveData = LivePagedListBuilder(dataSourceFactory(), 20)
                 .setBoundaryCallback(callback).build()
 
+        Log.e("BoundResource", "init #110")
         result.addSource(pagedListLiveData) { newData ->
             result.removeSource(pagedListLiveData)
-            setValue(Resource.success(newData))
+            Log.e("BoundResource", "init #120 ${newData?.size}")
+
+            if (retry) {
+                Log.e("BoundResource", "init #130")
+                if (newData != null && newData.size > 0) {
+                    val itemAtEnd = newData.get(newData.size - 1)
+                    Log.e("BoundResource", "init #125 $itemAtEnd")
+                    processBoundaryCallback(itemAtEnd)
+                }
+            } else {
+                setValue(Resource.success(newData))
+            }
         }
 
     }

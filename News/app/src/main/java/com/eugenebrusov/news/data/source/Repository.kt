@@ -25,16 +25,16 @@ class Repository(
         private val guardianService: GuardianService
 ) {
 
-    fun searchNews(section: String): LiveData<Resource<PagedList<NewsItem>>> {
+    fun searchNews(request: Pair<String, Boolean>): LiveData<Resource<PagedList<NewsItem>>> {
 
-        return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors) {
+        return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors, request.second) {
 
             override fun saveCallResult(items: List<NewsItem>) {
                 dao.insertNewsItems(items)
             }
 
             override fun dataSourceFactory(): DataSource.Factory<Int, NewsItem> {
-                return dao.searchNews(section)
+                return dao.searchNews(request.first)
             }
 
             override fun createCall(itemAtEnd: NewsItem?): LiveData<ApiResponse<JSONSearchBody>> {
@@ -50,7 +50,7 @@ class Repository(
                             null
                         }
 
-                return guardianService.search(section = section, toDate = toDate)
+                return guardianService.search(section = request.first, toDate = toDate)
             }
 
             override fun processResponse(response: JSONSearchBody?): List<NewsItem>? {
