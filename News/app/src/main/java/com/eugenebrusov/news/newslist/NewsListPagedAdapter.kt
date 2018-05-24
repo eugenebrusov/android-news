@@ -1,6 +1,5 @@
 package com.eugenebrusov.news.newslist
 
-import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -16,7 +15,8 @@ import com.eugenebrusov.news.databinding.ItemNewsListBinding
 import com.eugenebrusov.news.databinding.ItemNewsListErrorStateBinding
 import com.eugenebrusov.news.databinding.ItemNewsListLoadingStateBinding
 
-class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
+class NewsListPagedAdapter(private val itemClickCallback: ((String, View) -> Unit)?)
+    : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 
     var results: Resource<Listing<NewsItem>>? = null
         set(value) {
@@ -56,7 +56,11 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
         when (getItemViewType(position)) {
             R.layout.item_news_list ->
                 (holder as NewsListItemViewHolder).apply {
-                    binding.newsItem = getItem(position)
+                    val newsItem = getItem(position)
+                    binding.newsItem = newsItem
+                    binding.clickListener = View.OnClickListener {
+                        itemClickCallback?.invoke(newsItem!!.id, binding.thumbnailImage)
+                    }
                     binding.executePendingBindings()
                 }
             R.layout.item_news_list_loading_state ->
