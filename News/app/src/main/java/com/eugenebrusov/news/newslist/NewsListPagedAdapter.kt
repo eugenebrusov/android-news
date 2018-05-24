@@ -5,6 +5,7 @@ import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
 import com.eugenebrusov.news.data.model.NewsItem
@@ -14,7 +15,8 @@ import com.eugenebrusov.news.databinding.ItemNewsListBinding
 import com.eugenebrusov.news.databinding.ItemNewsListErrorStateBinding
 import com.eugenebrusov.news.databinding.ItemNewsListLoadingStateBinding
 
-class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
+class NewsListPagedAdapter(private val retryCallback: () -> Unit)
+    : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 
     var results: Resource<PagedList<NewsItem>>? = null
         set(value) {
@@ -43,7 +45,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
         return when (viewType) {
             R.layout.item_news_list -> NewsListItemViewHolder.create(parent)
             R.layout.item_news_list_loading_state -> NewsListItemLoadingStateViewHolder.create(parent)
-            R.layout.item_news_list_error_state -> NewsListItemErrorStateViewHolder.create(parent)
+            R.layout.item_news_list_error_state -> NewsListItemErrorStateViewHolder.create(parent, retryCallback)
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }
@@ -128,9 +130,13 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
     ) : RecyclerView.ViewHolder(binding.root) {
 
         companion object {
-            fun create(parent: ViewGroup?): NewsListItemErrorStateViewHolder {
+            fun create(parent: ViewGroup?, retryCallback: () -> Unit): NewsListItemErrorStateViewHolder {
                 val binding = ItemNewsListErrorStateBinding
                         .inflate(LayoutInflater.from(parent?.context), parent, false)
+
+                binding.clickListener = View.OnClickListener {
+                    retryCallback()
+                }
                 return NewsListItemErrorStateViewHolder(binding)
             }
         }

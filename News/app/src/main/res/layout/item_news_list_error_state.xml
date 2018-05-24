@@ -4,9 +4,12 @@
 
     <data>
 
+        <import type="android.view.View" />
         <import type="android.widget.LinearLayout.LayoutParams" />
 
         <variable name="position" type="int" />
+
+        <variable name="clickListener" type="android.view.View.OnClickListener"/>
 
     </data>
 
@@ -37,7 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/news_list_error_button_retry" />
+            android:text="@string/news_list_error_button_retry"
+            android:onClick="@{clickListener}"/>
 
     </LinearLayout>
 

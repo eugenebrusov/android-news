@@ -45,4 +45,8 @@ class NewsListViewModel(
         //loadNews()
     }
 
+    fun retry() {
+        section.value = section.value
+    }
+
 }
