@@ -4,7 +4,6 @@ import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
@@ -25,21 +24,17 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 
             super.submitList(value.data)
 
-            Log.e("NewsListPagedAdapter", "value?.status ${value.status}")
             val previousResults = field
             val hadExtraRow = hasExtraRow()
             field = value
             val hasExtraRow = hasExtraRow()
             if (hadExtraRow != hasExtraRow) {
                 if (hadExtraRow) {
-                    Log.e("NewsListPagedAdapter", "#110")
                     notifyItemRemoved(super.getItemCount())
                 } else {
-                    Log.e("NewsListPagedAdapter", "#130")
                     notifyItemInserted(super.getItemCount())
                 }
             } else if (hasExtraRow && previousResults?.status != value.status) {
-                Log.e("NewsListPagedAdapter", "#140")
                 notifyItemChanged(itemCount - 1)
             }
         }
