@@ -34,33 +34,6 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
-        <!--<LinearLayout-->
-            <!--android:id="@+id/error_layout"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:orientation="vertical"-->
-            <!--android:visibility="@{viewModel.dataError ? View.VISIBLE : View.GONE}">-->
-
-            <!--<ImageView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:srcCompat="@drawable/ic_cloud_off_black_24dp" />-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center"-->
-                <!--android:textAppearance="@style/TextAppearance.AppCompat.Body2"-->
-                <!--android:text="@string/news_list_error_message" />-->
-
-            <!--<Button-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/news_list_try_again"-->
-                <!--android:onClick="@{() -> viewModel.onRefresh()}"/>-->
-
-        <!--</LinearLayout>-->
     </FrameLayout>
 
 </layout>
