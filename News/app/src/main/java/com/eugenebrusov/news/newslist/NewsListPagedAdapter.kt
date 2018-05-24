@@ -4,6 +4,7 @@ import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
@@ -18,19 +19,27 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
 
     var results: Resource<PagedList<NewsItem>>? = null
         set(value) {
-            super.submitList(value?.data)
+            if (value == null) {
+                return
+            }
 
+            super.submitList(value.data)
+
+            Log.e("NewsListPagedAdapter", "value?.status ${value.status}")
             val previousResults = field
             val hadExtraRow = hasExtraRow()
             field = value
             val hasExtraRow = hasExtraRow()
             if (hadExtraRow != hasExtraRow) {
                 if (hadExtraRow) {
+                    Log.e("NewsListPagedAdapter", "#110")
                     notifyItemRemoved(super.getItemCount())
                 } else {
+                    Log.e("NewsListPagedAdapter", "#130")
                     notifyItemInserted(super.getItemCount())
                 }
-            } else if (hasExtraRow && previousResults?.status != value?.status) {
+            } else if (hasExtraRow && previousResults?.status != value.status) {
+                Log.e("NewsListPagedAdapter", "#140")
                 notifyItemChanged(itemCount - 1)
             }
         }
@@ -80,7 +89,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
-    private fun hasExtraRow() = (Status.SUCCESS != results?.status)
+    private fun hasExtraRow() = (Status.LOADING == results?.status || Status.ERROR == results?.status)
 
     companion object {
         val ITEM_COMPARATOR = object : DiffUtil.ItemCallback<NewsItem>() {

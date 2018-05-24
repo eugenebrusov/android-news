@@ -65,6 +65,7 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
 
             result.addSource(apiResponse) { response ->
                 result.removeSource(apiResponse)
+                result.removeSource(pagedListLiveData)
                 when (response) {
                     is ApiSuccessResponse -> {
                         appExecutors.diskIO().execute {
@@ -73,7 +74,6 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
                                 saveCallResult(results)
                             }
                             appExecutors.mainThread().execute {
-                                result.removeSource(pagedListLiveData)
                                 result.addSource(pagedListLiveData) { newData ->
                                     setValue(Resource.success(newData))
                                 }
@@ -81,7 +81,6 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
                         }
                     }
                     is ApiErrorResponse -> {
-                        result.removeSource(pagedListLiveData)
                         result.addSource(pagedListLiveData) { newData ->
                             setValue(Resource.error(response.errorMessage, newData))
                         }
