@@ -13,15 +13,7 @@ import com.eugenebrusov.news.data.model.NewsItem
 @Dao interface Dao {
 
     /**
-     * Select all news from the news table
-     *
-     * @return all news
-     */
-    @Query("SELECT * FROM news WHERE sectionName = :section ORDER BY webPublicationDate DESC")
-    fun loadNews(section: String): DataSource.Factory<Int, NewsItem>
-
-    /**
-     * Select all news from the news table
+     * Select all the news for the specified section name
      *
      * @return all news
      */
@@ -29,34 +21,11 @@ import com.eugenebrusov.news.data.model.NewsItem
     fun searchNews(section: String): DataSource.Factory<Int, NewsItem>
 
     /**
-     * Select all news from the news table
-     *
-     * @return all news
-     */
-    @Query("SELECT * FROM news")
-    fun getNews(): List<NewsItem>
-
-    /**
-     * Insert a news item in the database
+     * Insert news items in the database
      * If the news item already exists, replace it
      *
-     * @param task the news item to be inserted
+     * @param newsItems the news items list to be inserted
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewsItems(newsItems: List<NewsItem>)
-
-    /**
-     * Insert a news item in the database
-     * If the news item already exists, replace it
-     *
-     * @param task the news item to be inserted
-     */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNewsItem(newsItem: NewsItem)
-
-    /**
-     * Delete all news
-     */
-    @Query("DELETE FROM news")
-    fun deleteNews()
 }
