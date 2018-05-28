@@ -31,6 +31,13 @@ import com.eugenebrusov.news.data.model.NewsItem
     fun insertNewsItems(newsItems: List<NewsItem>)
 
     /**
+     * Delete news items by section name
+     *
+     */
+    @Query("DELETE FROM news WHERE sectionName = :section")
+    fun deleteNews(section: String)
+
+    /**
      * Select news item by given id
      *
      * @return news item by given id

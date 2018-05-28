@@ -39,8 +39,8 @@ class NewsListFragment : Fragment() {
         /**
          *
          * Probably, interaction between fragment and activity should be arranged via shared ViewModel,
-         * but since it's required to transfer sharedView using LiveData for handle values of View type
-         * might bring unexpected problems
+         * but it might bring unexpected problems if LiveData handles values of View class
+         * since it's required to transfer sharedView to animate transition between news list and new detail
          *
          */
         try {

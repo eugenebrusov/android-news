@@ -16,10 +16,10 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    private val request = MutableLiveData<String>()
+    private val section = MutableLiveData<String>()
 
-    val resultsResource = switchMap(request) { results ->
-        repository.searchNews(results)
+    val resultsResource = switchMap(section) { section ->
+        repository.searchNews(section)
     }
 
     val nestedScrollingEnabled = map(resultsResource) { results ->
@@ -32,7 +32,16 @@ class NewsListViewModel(
         !((Status.LOADING == results.status || Status.ERROR == results.status) && count == 0)
     }
 
+    val refreshing = map(resultsResource) { results ->
+        val count = results.data?.pagedList?.size ?: 0
+        Status.LOADING == results.status && count == 0
+    }
+
     fun loadNews(section: String) {
-        this.request.value = section
+        this.section.value = section
+    }
+
+    fun refresh() {
+        resultsResource.value?.data?.refresh?.invoke()
     }
 }
