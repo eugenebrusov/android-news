@@ -3,4 +3,7 @@
     <color name="teal_500">#009688</color>
     <color name="teal_700">#00796B</color>
     <color name="deep_orange_a200">#FFAB40</color>
+
+    <color name="colorPrimaryTextDefaultMaterialLight">#DE000000</color>
+    <color name="colorSecondaryTextDefaultMaterialLight">#8A000000</color>
 </resources>

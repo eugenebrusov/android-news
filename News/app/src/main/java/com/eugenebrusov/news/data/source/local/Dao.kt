@@ -1,5 +1,6 @@
 package com.eugenebrusov.news.data.source.local
 
+import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
@@ -13,15 +14,7 @@ import com.eugenebrusov.news.data.model.NewsItem
 @Dao interface Dao {
 
     /**
-     * Select all news from the news table
-     *
-     * @return all news
-     */
-    @Query("SELECT * FROM news WHERE sectionName = :section ORDER BY webPublicationDate DESC")
-    fun loadNews(section: String): DataSource.Factory<Int, NewsItem>
-
-    /**
-     * Select all news from the news table
+     * Select all the news for the specified section name
      *
      * @return all news
      */
@@ -29,34 +22,26 @@ import com.eugenebrusov.news.data.model.NewsItem
     fun searchNews(section: String): DataSource.Factory<Int, NewsItem>
 
     /**
-     * Select all news from the news table
-     *
-     * @return all news
-     */
-    @Query("SELECT * FROM news")
-    fun getNews(): List<NewsItem>
-
-    /**
-     * Insert a news item in the database
+     * Insert news items in the database
      * If the news item already exists, replace it
      *
-     * @param task the news item to be inserted
+     * @param newsItems the news items list to be inserted
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewsItems(newsItems: List<NewsItem>)
 
     /**
-     * Insert a news item in the database
-     * If the news item already exists, replace it
+     * Delete news items by section name
      *
-     * @param task the news item to be inserted
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNewsItem(newsItem: NewsItem)
+    @Query("DELETE FROM news WHERE sectionName = :section")
+    fun deleteNews(section: String)
 
     /**
-     * Delete all news
+     * Select news item by given id
+     *
+     * @return news item by given id
      */
-    @Query("DELETE FROM news")
-    fun deleteNews()
+    @Query("SELECT * FROM news WHERE id = :id")
+    fun findNewsItem(id: String): LiveData<NewsItem>
 }

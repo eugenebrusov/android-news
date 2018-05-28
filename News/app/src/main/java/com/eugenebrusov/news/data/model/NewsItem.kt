@@ -14,16 +14,16 @@ import java.util.*
  * @param entryId          unique id of the news item
  */
 @Entity(tableName = "news")
-data class NewsItem @JvmOverloads constructor(
-        @PrimaryKey @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString(),
-        @ColumnInfo(name = "webPublicationDate") var webPublicationDate: Long = -1,
-        @ColumnInfo(name = "sectionName") var sectionName: String? = null,
-        @ColumnInfo(name = "headline") var headline: String? = null,
-        @ColumnInfo(name = "trailText") var trailText: String? = null,
-        @ColumnInfo(name = "thumbnail") var thumbnail: String? = null,
-        @ColumnInfo(name = "bodyText") var bodyText: String? = null,
-        @ColumnInfo(name = "webTitle") var webTitle: String? = null,
-        @ColumnInfo(name = "bylineImageUrl") var bylineImageUrl: String? = null
+data class NewsItem constructor(
+        @PrimaryKey @ColumnInfo(name = "id") val id: String,
+        @ColumnInfo(name = "webPublicationDate") val webPublicationDate: Long,
+        @ColumnInfo(name = "sectionName") val sectionName: String?,
+        @ColumnInfo(name = "headline") val headline: String?,
+        @ColumnInfo(name = "trailText") val trailText: String?,
+        @ColumnInfo(name = "thumbnail") val thumbnail: String?,
+        @ColumnInfo(name = "bodyText") val bodyText: String?,
+        @ColumnInfo(name = "webTitle") val webTitle: String?,
+        @ColumnInfo(name = "bylineImageUrl") val bylineImageUrl: String?
 ) {
     companion object {
 

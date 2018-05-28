@@ -1,16 +1,13 @@
 package com.eugenebrusov.news.newslist
 
-import android.arch.lifecycle.Observer
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.databinding.FragmentNewsListBinding
-import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 
 class NewsListFragment : Fragment() {
 
@@ -29,31 +26,28 @@ class NewsListFragment : Fragment() {
 
         val viewModel = (activity as NewsListActivity).obtainViewModel()
         binding.viewModel = viewModel
-
-        binding.recyclerView.setHasFixedSize(true)
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = NewsListPagedAdapter()
-
-        viewModel.openNewsDetailsEvent.observe(
-                this,
-                Observer { position ->
-                    if (position != null) {
-                        val holder = binding.recyclerView.findViewHolderForLayoutPosition(position)
-                                as NewsListAdapter.ViewHolder
-
-                        val intent = Intent(context, NewsDetailActivity::class.java)
-                        intent.putExtra(NewsDetailActivity.EXTRA_NEWS_ID, holder.binding.newsItem?.id)
-
-                        val bundle = ActivityOptionsCompat
-                                .makeSceneTransitionAnimation(
-                                        activity as NewsListActivity,
-                                        holder.binding.thumbnailImage,
-                                        holder.binding.thumbnailImage.transitionName)
-                                .toBundle()
-                        startActivity(intent, bundle)
-                    }
-                })
-
         viewModel.loadNews("politics")
+
+        val recyclerView = binding.recyclerView
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.addItemDecoration(NewsListSpacesDecoration())
+
+        val adapter = NewsListPagedAdapter()
+        recyclerView.adapter = adapter
+
+        /**
+         *
+         * Probably, interaction between fragment and activity should be arranged via shared ViewModel,
+         * but it might bring unexpected problems if LiveData handles values of View class
+         * since it's required to transfer sharedView to animate transition between news list and new detail
+         *
+         */
+        try {
+            adapter.newsItemSelectedCallback = context as? OnNewsItemSelectedListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context!!.toString() + " must implement OnNewsItemSelectedListener")
+        }
     }
+
 }

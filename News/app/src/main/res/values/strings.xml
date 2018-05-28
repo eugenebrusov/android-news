@@ -4,5 +4,5 @@
 
     <!-- News list -->
     <string name="news_list_error_message">Unable to load data</string>
-    <string name="news_list_try_again">Try again</string>
+    <string name="news_list_error_button_retry">Retry</string>
 </resources>

@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations.map
 import android.arch.lifecycle.Transformations.switchMap
-import com.eugenebrusov.news.SingleLiveEvent
+import com.eugenebrusov.news.data.model.Status
 import com.eugenebrusov.news.data.source.Repository
 
 /**
@@ -18,20 +18,30 @@ class NewsListViewModel(
 
     private val section = MutableLiveData<String>()
 
-    val resultsResource = switchMap(section, {
-        repository.searchNews(it)
-    })
+    val resultsResource = switchMap(section) { section ->
+        repository.searchNews(section)
+    }
 
-    val dataLoading = MutableLiveData<Boolean>()
-    val dataError = MutableLiveData<Boolean>()
-    internal val openNewsDetailsEvent = SingleLiveEvent<Int>()
+    val nestedScrollingEnabled = map(resultsResource) { results ->
+        val count = results.data?.pagedList?.size ?: 0
+        !((Status.LOADING == results.status || Status.ERROR == results.status)  && count == 0)
+    }
+
+    val refreshEnabled = map(resultsResource) { results ->
+        val count = results.data?.pagedList?.size ?: 0
+        !((Status.LOADING == results.status || Status.ERROR == results.status) && count == 0)
+    }
+
+    val refreshing = map(resultsResource) { results ->
+        val count = results.data?.pagedList?.size ?: 0
+        Status.LOADING == results.status && count == 0
+    }
 
     fun loadNews(section: String) {
         this.section.value = section
     }
 
-    fun onRefresh() {
-        //loadNews()
+    fun refresh() {
+        resultsResource.value?.data?.refresh?.invoke()
     }
-
 }

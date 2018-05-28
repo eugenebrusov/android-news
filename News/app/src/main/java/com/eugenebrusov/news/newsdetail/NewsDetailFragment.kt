@@ -27,7 +27,7 @@ class NewsDetailFragment : Fragment() {
 
         val viewModel = (activity as NewsDetailActivity).obtainViewModel()
         binding.viewModel = viewModel
-        binding.viewModel?.start((activity as NewsDetailActivity).intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID))
+        binding.viewModel?.findNewsItem((activity as NewsDetailActivity).intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID))
     }
 
 }

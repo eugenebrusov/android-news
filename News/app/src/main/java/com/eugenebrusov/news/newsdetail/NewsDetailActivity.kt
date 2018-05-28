@@ -23,6 +23,7 @@ class NewsDetailActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityNewsDetailBinding>(
                 this, R.layout.activity_news_detail)
                 .apply {
+                    setLifecycleOwner(this@NewsDetailActivity)
                     viewModel = obtainViewModel()
                 }
 
@@ -30,11 +31,9 @@ class NewsDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Set transparent status bar on devices with SDK 21+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
-        }
+        val window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
     }
 
     /**
@@ -54,6 +53,5 @@ class NewsDetailActivity : AppCompatActivity() {
     companion object {
 
         const val EXTRA_NEWS_ID = "news_id"
-
     }
 }
