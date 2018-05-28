@@ -1,4 +1,4 @@
-# Native News Android app
+# News - Native Android app
 News is a native Android app that brings together news, popular stories and conversations around any interest or passion. It's designed and built in strict compliance with Material Design.
 
 All the data provided by [The Guardian - Open Platform](https://open-platform.theguardian.com)
