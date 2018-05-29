@@ -20,7 +20,7 @@ class NewsListViewModel(
 
     val pagesVisible = map(pagesResource) { resource ->
         when (resource.status) {
-            Status.SUCCESS -> resource?.data?.size?.compareTo(0) != 0
+            Status.SUCCESS -> resource?.data?.isEmpty() == false
             Status.LOADING -> false
             Status.ERROR -> false
         }

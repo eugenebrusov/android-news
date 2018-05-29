@@ -39,21 +39,22 @@ class Repository(
             }
 
             override fun shouldFetch(data: List<NewsSection>?): Boolean {
-                return (data == null || data.size == 0)
+                return (data == null || data.isEmpty())
             }
 
             override fun loadFromDb(): LiveData<List<NewsSection>> {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun processResponse(response: ApiSuccessResponse<JSONSectionsBody>): List<NewsSection> {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+               return dao.sections()
             }
 
             override fun createCall(): LiveData<ApiResponse<JSONSectionsBody>> {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                return guardianService.sections()
             }
 
+            override fun processResponse(response: ApiSuccessResponse<JSONSectionsBody>): List<NewsSection> {
+                return response.body?.response?.results?.mapNotNull { result ->
+                    NewsSection.create(result)
+                } ?: listOf()
+            }
         }.asLiveData()
     }
 
@@ -61,7 +62,6 @@ class Repository(
      * Returns a Listing contains PagedList<NewsItem> for the given section.
      */
     fun searchNews(section: String): LiveData<Resource<Listing<NewsItem>>> {
-
         return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors) {
 
             override fun saveCallResult(items: List<NewsItem>) {

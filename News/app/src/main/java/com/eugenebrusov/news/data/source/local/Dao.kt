@@ -19,7 +19,7 @@ import com.eugenebrusov.news.data.model.NewsSection
      *
      * @return all news sections
      */
-    @Query("SELECT * FROM sections ORDER BY webTitle DESC")
+    @Query("SELECT * FROM sections ORDER BY webTitle")
     fun sections(): LiveData<List<NewsSection>>
 
     /**
