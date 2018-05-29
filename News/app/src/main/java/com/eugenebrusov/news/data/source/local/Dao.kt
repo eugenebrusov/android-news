@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.NewsSection
 
 /**
  * Data Access Object for the news table
@@ -14,9 +15,26 @@ import com.eugenebrusov.news.data.model.NewsItem
 @Dao interface Dao {
 
     /**
-     * Select all the news for the specified section name
+     * Select all the news sections
      *
-     * @return all news
+     * @return all news sections
+     */
+    @Query("SELECT * FROM sections ORDER BY webTitle DESC")
+    fun sections(): LiveData<List<NewsSection>>
+
+    /**
+     * Insert news sections in the database
+     * If the news sections already exists, replace it
+     *
+     * @param newsSections the news items list to be inserted
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertNewsSections(newsSections: List<NewsSection>)
+
+    /**
+     * Select all the news items for the specified section name
+     *
+     * @return all news items
      */
     @Query("SELECT * FROM news WHERE sectionName = :section ORDER BY webPublicationDate DESC")
     fun searchNews(section: String): DataSource.Factory<Int, NewsItem>

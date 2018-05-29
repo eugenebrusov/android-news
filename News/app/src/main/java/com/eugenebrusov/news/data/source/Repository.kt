@@ -11,8 +11,11 @@ import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.source.local.Dao
 import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
 import com.eugenebrusov.news.data.source.remote.guardian.json.search.JSONSearchBody
+import com.eugenebrusov.news.data.source.remote.guardian.json.sections.JSONSectionsBody
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
+import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
 import com.eugenebrusov.news.data.source.util.AppExecutors
+import com.eugenebrusov.news.data.source.util.NetworkBoundResource
 import com.eugenebrusov.news.data.source.util.PagedListNetworkBoundResource
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -29,9 +32,29 @@ class Repository(
 ) {
 
     fun sections(): LiveData<Resource<List<NewsSection>>> {
-        val mutableLiveData = MutableLiveData<Resource<List<NewsSection>>>()
-        mutableLiveData.value = Resource.loading(listOf())
-        return mutableLiveData
+        return object : NetworkBoundResource<List<NewsSection>, JSONSectionsBody>(appExecutors) {
+
+            override fun saveCallResult(result: List<NewsSection>) {
+                dao.insertNewsSections(result)
+            }
+
+            override fun shouldFetch(data: List<NewsSection>?): Boolean {
+                return (data == null || data.size == 0)
+            }
+
+            override fun loadFromDb(): LiveData<List<NewsSection>> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun processResponse(response: ApiSuccessResponse<JSONSectionsBody>): List<NewsSection> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun createCall(): LiveData<ApiResponse<JSONSectionsBody>> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        }.asLiveData()
     }
 
     /**
