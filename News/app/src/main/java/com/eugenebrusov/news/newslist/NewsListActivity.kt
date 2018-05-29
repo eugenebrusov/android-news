@@ -18,6 +18,8 @@ import com.eugenebrusov.news.data.model.Status
 import com.eugenebrusov.news.databinding.ActivityNewsListBinding
 import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import kotlinx.android.synthetic.main.activity_news_list.*
+import android.view.ViewGroup
+
 
 class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
 
@@ -89,6 +91,10 @@ class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
                 Status.ERROR -> ""
                 else -> throw IllegalArgumentException("Unknown resource state")
             }
+        }
+
+        override fun getItemPosition(`object`: Any): Int {
+            return POSITION_NONE
         }
     }
 
