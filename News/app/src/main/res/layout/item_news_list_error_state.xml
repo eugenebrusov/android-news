@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_height="@{position == 0 ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT}">
+        app:layoutHeight="@{position == 0 ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT}">
 
         <ImageView
             android:layout_width="wrap_content"

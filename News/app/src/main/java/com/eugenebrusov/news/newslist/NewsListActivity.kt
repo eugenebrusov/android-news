@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.eugenebrusov.news.R
 import com.eugenebrusov.news.ViewModelFactory
+import com.eugenebrusov.news.data.model.NewsSection
+import com.eugenebrusov.news.data.model.Resource
+import com.eugenebrusov.news.data.model.Status
 import com.eugenebrusov.news.databinding.ActivityNewsListBinding
 import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import kotlinx.android.synthetic.main.activity_news_list.*
@@ -25,10 +28,11 @@ class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
         DataBindingUtil.setContentView<ActivityNewsListBinding>(
                 this, R.layout.activity_news_list)
                 .apply {
+                    viewPager.adapter = ViewPagerAdapter(supportFragmentManager)
+                    tabLayout.setupWithViewPager(viewPager)
+
                     setLifecycleOwner(this@NewsListActivity)
                     viewModel = obtainViewModel()
-                    viewPager.adapter = PagerAdapter(supportFragmentManager)
-                    tabLayout.setupWithViewPager(viewPager)
                 }
 
         setSupportActionBar(toolbar)
@@ -52,17 +56,39 @@ class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
             ViewModelProviders.of(this,
                     ViewModelFactory.getInstance(application)).get(NewsListViewModel::class.java)
 
-    private class PagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-        override fun getCount(): Int  = 10
+        var pagesResource: Resource<List<NewsSection>>? = null
+            set(value) {
+                field = value
+                notifyDataSetChanged()
+            }
+
+        override fun getCount(): Int {
+            return when (pagesResource?.status) {
+                Status.SUCCESS -> pagesResource?.data?.size ?: 0
+                Status.LOADING -> 1
+                Status.ERROR -> 1
+                else -> 0
+            }
+        }
 
         override fun getItem(i: Int): Fragment {
-            val fragment = NewsListFragment()
-            return fragment
+            return when (pagesResource?.status) {
+                Status.SUCCESS -> NewsListFragment()
+                Status.LOADING -> NewsListLoadingFragment()
+                Status.ERROR -> NewsListLoadingFragment()
+                else -> throw IllegalArgumentException("Unknown resource state")
+            }
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            return "OBJECT " + (position + 1)
+            return when (pagesResource?.status) {
+                Status.SUCCESS -> pagesResource?.data?.get(position)?.webTitle ?: ""
+                Status.LOADING -> ""
+                Status.ERROR -> ""
+                else -> throw IllegalArgumentException("Unknown resource state")
+            }
         }
     }
 

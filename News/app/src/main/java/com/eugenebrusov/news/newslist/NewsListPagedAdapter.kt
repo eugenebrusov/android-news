@@ -49,7 +49,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
             R.layout.item_news_list_error_state -> NewsListItemErrorStateViewHolder.create(parent) {
                 results?.data?.retry?.invoke()
             }
-            else -> throw IllegalArgumentException("unknown view type $viewType")
+            else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
     }
 

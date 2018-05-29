@@ -1,9 +1,12 @@
 package com.eugenebrusov.news.data.source
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.DataSource
+import android.util.Log
 import com.eugenebrusov.news.data.model.Listing
 import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.NewsSection
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.source.local.Dao
 import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
@@ -25,8 +28,14 @@ class Repository(
         private val guardianService: GuardianService
 ) {
 
+    fun sections(): LiveData<Resource<List<NewsSection>>> {
+        val mutableLiveData = MutableLiveData<Resource<List<NewsSection>>>()
+        mutableLiveData.value = Resource.loading(listOf())
+        return mutableLiveData
+    }
+
     /**
-     * Returns a Listing for the given section.
+     * Returns a Listing contains PagedList<NewsItem> for the given section.
      */
     fun searchNews(section: String): LiveData<Resource<Listing<NewsItem>>> {
 
@@ -57,6 +66,7 @@ class Repository(
                             null
                         }
 
+                Log.e("searchNews", "toDate $toDate")
                 return guardianService.search(section = section, toDate = toDate)
             }
 

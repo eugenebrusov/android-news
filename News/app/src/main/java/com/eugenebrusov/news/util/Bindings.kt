@@ -2,6 +2,7 @@ package com.eugenebrusov.news.util
 
 import android.arch.paging.PagedList
 import android.databinding.BindingAdapter
+import android.support.v4.view.ViewPager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
@@ -11,7 +12,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.eugenebrusov.news.GlideApp
 import com.eugenebrusov.news.data.model.Listing
 import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.NewsSection
 import com.eugenebrusov.news.data.model.Resource
+import com.eugenebrusov.news.newslist.NewsListActivity
 import com.eugenebrusov.news.newslist.NewsListPagedAdapter
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -26,6 +29,13 @@ object Bindings {
     @JvmStatic fun setItems(recyclerView: RecyclerView, results: Resource<Listing<NewsItem>>?) {
         with(recyclerView.adapter as NewsListPagedAdapter) {
             this.results = results
+        }
+    }
+
+    @BindingAdapter("app:pagesResource")
+    @JvmStatic fun setPages(viewPager: ViewPager, pagesResource: Resource<List<NewsSection>>?) {
+        with(viewPager.adapter as NewsListActivity.ViewPagerAdapter) {
+            this.pagesResource = pagesResource
         }
     }
 
@@ -64,7 +74,7 @@ object Bindings {
         refreshLayout.isEnabled = (enabled == true)
     }
 
-    @BindingAdapter("app:layout_height")
+    @BindingAdapter("app:layoutHeight")
     @JvmStatic fun setLayoutHeight(layout: ViewGroup, height: Int?) {
         val layoutParams = layout.layoutParams
         layoutParams.height = height ?: 0

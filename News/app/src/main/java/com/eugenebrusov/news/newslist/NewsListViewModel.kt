@@ -16,6 +16,16 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
+    val pagesResource = repository.sections()
+
+    val pagesVisible = map(pagesResource) { resource ->
+        when (resource.status) {
+            Status.SUCCESS -> resource?.data?.size?.compareTo(0) != 0
+            Status.LOADING -> false
+            Status.ERROR -> false
+        }
+    }
+
     private val section = MutableLiveData<String>()
 
     val resultsResource = switchMap(section) { section ->

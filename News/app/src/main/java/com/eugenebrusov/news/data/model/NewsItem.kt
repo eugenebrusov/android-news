@@ -11,10 +11,10 @@ import java.util.*
 /**
  * Immutable model class for a NewsItem.
  *
- * @param entryId          unique id of the news item
+ * @param id unique id of the news item
  */
 @Entity(tableName = "news")
-data class NewsItem constructor(
+data class NewsItem(
         @PrimaryKey @ColumnInfo(name = "id") val id: String,
         @ColumnInfo(name = "webPublicationDate") val webPublicationDate: Long,
         @ColumnInfo(name = "sectionName") val sectionName: String?,
