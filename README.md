@@ -3,6 +3,8 @@ News is a native Android app that brings together news, popular stories and conv
 
 All the data provided by [The Guardian - Open Platform](https://open-platform.theguardian.com)
 
+App is also available on [GooglePlay](https://play.google.com/store/apps/details?id=com.eugenebrusov.news)
+
 Introduction
 ------------
 This sample demonstrates native Android app implementation in Kotlin using Android Architecture Components. It also includes following components:
