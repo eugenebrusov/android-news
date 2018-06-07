@@ -1,6 +1,5 @@
 package com.eugenebrusov.news.newslist
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -14,17 +13,15 @@ import com.eugenebrusov.news.R
 import com.eugenebrusov.news.ViewModelFactory
 import com.eugenebrusov.news.data.model.NewsSection
 import com.eugenebrusov.news.data.model.Resource
-import com.eugenebrusov.news.data.model.Status.SUCCESS
-import com.eugenebrusov.news.data.model.Status.ERROR
-import com.eugenebrusov.news.data.model.Status.LOADING
+import com.eugenebrusov.news.data.model.Status.*
 import com.eugenebrusov.news.databinding.ActivityNewsListBinding
 import com.eugenebrusov.news.newsdetail.NewsDetailActivity
 import kotlinx.android.synthetic.main.activity_news_list.*
 
-class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
+class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme);
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         DataBindingUtil.setContentView<ActivityNewsListBinding>(
@@ -34,7 +31,8 @@ class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
                     tabLayout.setupWithViewPager(viewPager)
 
                     setLifecycleOwner(this@NewsListActivity)
-                    viewModel = obtainViewModel()
+                    viewModel = ViewModelFactory
+                            .obtainViewModel(this@NewsListActivity, NewsListViewModel::class.java)
                 }
 
         setSupportActionBar(toolbar)
@@ -54,14 +52,14 @@ class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
         startActivity(intent, bundle)
     }
 
-    fun obtainViewModel(): NewsListViewModel =
-            ViewModelProviders.of(this,
-                    ViewModelFactory.getInstance(application)).get(NewsListViewModel::class.java)
-
     class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         var pagesResource: Resource<List<NewsSection>>? = null
             set(value) {
+                if (value == null) {
+                    return
+                }
+
                 field = value
                 notifyDataSetChanged()
             }
@@ -75,9 +73,9 @@ class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
             }
         }
 
-        override fun getItem(i: Int): Fragment {
+        override fun getItem(position: Int): Fragment {
             return when (pagesResource?.status) {
-                SUCCESS -> NewsListFragment()
+                SUCCESS -> NewsListResultsFragment.newInstance(pagesResource?.data?.get(position)?.id!!)
                 LOADING -> NewsListLoadingFragment()
                 ERROR -> NewsListLoadingFragment()
                 else -> throw IllegalArgumentException("Unknown resource state")
@@ -94,7 +92,11 @@ class NewsListActivity : AppCompatActivity(), OnNewsItemSelectedListener {
         }
 
         override fun getItemPosition(`object`: Any): Int {
-            return POSITION_NONE
+            return if (`object` is NewsListLoadingFragment && LOADING != pagesResource?.status) {
+                POSITION_NONE
+            } else {
+                POSITION_UNCHANGED
+            }
         }
     }
 

@@ -3,7 +3,7 @@ package com.eugenebrusov.news.newslist
 import android.view.View
 
 /**
- * Interface that allows NewsListFragment to communicate with NewsListActivity
+ * Interface that allows NewsListResultsFragment to communicate with NewsListActivity
  *
  * Probably, interaction between fragment and activity should be arranged via shared ViewModel,
  * but it might bring unexpected problems if LiveData handles values of View class

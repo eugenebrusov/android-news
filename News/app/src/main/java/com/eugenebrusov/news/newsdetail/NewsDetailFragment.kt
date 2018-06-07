@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.eugenebrusov.news.ViewModelFactory
 import com.eugenebrusov.news.databinding.FragmentNewsDetailsBinding
 
 /**
@@ -25,7 +26,7 @@ class NewsDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = (activity as NewsDetailActivity).obtainViewModel()
+        val viewModel = ViewModelFactory.obtainViewModel(this, NewsDetailViewModel::class.java)
         binding.viewModel = viewModel
         binding.viewModel?.findNewsItem((activity as NewsDetailActivity).intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID))
     }

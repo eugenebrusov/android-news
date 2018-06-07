@@ -1,6 +1,7 @@
 package com.eugenebrusov.news.data.model
 
 import android.arch.persistence.room.Entity
+import com.eugenebrusov.news.R
 import com.eugenebrusov.news.data.source.remote.guardian.json.sections.JSONSectionsResult
 import java.text.ParseException
 
@@ -27,7 +28,22 @@ data class NewsSection(
                     return null
                 }
 
-                return NewsSection(id = id, webTitle = webTitle)
+                // Temporary skip following sections
+                return when (id) {
+                    "about" -> null
+                    "artanddesign" -> null
+                    "animals-farmed" -> null
+                    "australia-news" -> null
+                    "better-business" -> null
+                    "business-to-business" -> null
+                    "cardiff" -> null
+                    "childrens-books-site" -> null
+                    else -> NewsSection(id = id, webTitle = webTitle)
+                }
+//                return when (id) {
+//                    "artanddesign" -> NewsSection(id = id, webTitle = webTitle)
+//                    else -> null
+//                }
             } catch (e: ParseException) {
                 return null
             }

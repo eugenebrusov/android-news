@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.R
 
+/**
+ * Exposes loading state on news list
+ */
 class NewsListLoadingFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

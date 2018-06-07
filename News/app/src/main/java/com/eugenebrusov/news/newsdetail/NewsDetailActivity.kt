@@ -23,7 +23,8 @@ class NewsDetailActivity : AppCompatActivity() {
                 this, R.layout.activity_news_detail)
                 .apply {
                     setLifecycleOwner(this@NewsDetailActivity)
-                    viewModel = obtainViewModel()
+                    viewModel = ViewModelFactory
+                            .obtainViewModel(this@NewsDetailActivity, NewsDetailViewModel::class.java)
                 }
 
         setSupportActionBar(toolbar)
@@ -44,10 +45,6 @@ class NewsDetailActivity : AppCompatActivity() {
         }
         return true
     }
-
-    fun obtainViewModel(): NewsDetailViewModel =
-            ViewModelProviders.of(this,
-                    ViewModelFactory.getInstance(application)).get(NewsDetailViewModel::class.java)
 
     companion object {
 

@@ -16,7 +16,7 @@ class NewsDetailViewModel(
 ) : AndroidViewModel(context) {
 
     private val id = MutableLiveData<String>()
-    val newsItem= Transformations.switchMap(id) { id ->
+    val newsItem = Transformations.switchMap(id) { id ->
         repository.findNewsItem(id)
     }
 
