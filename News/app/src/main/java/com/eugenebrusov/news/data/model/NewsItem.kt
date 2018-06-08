@@ -17,7 +17,7 @@ import java.util.*
 data class NewsItem(
         @PrimaryKey @ColumnInfo(name = "id") val id: String,
         @ColumnInfo(name = "webPublicationDate") val webPublicationDate: Long,
-        @ColumnInfo(name = "sectionName") val sectionName: String?,
+        @ColumnInfo(name = "sectionId") val sectionId: String,
         @ColumnInfo(name = "headline") val headline: String?,
         @ColumnInfo(name = "trailText") val trailText: String?,
         @ColumnInfo(name = "thumbnail") val thumbnail: String?,
@@ -41,9 +41,12 @@ data class NewsItem(
                     bylineImageUrl = result.tags[0].bylineImageUrl
                 }
 
+                val sectionId = result.sectionId
+                        ?: throw ParseException("Invalid news item section id", 0)
+
                 return NewsItem(id = id,
                         webPublicationDate = webPublicationDate,
-                        sectionName = result.sectionName?.toLowerCase(),
+                        sectionId = sectionId.toLowerCase(),
                         headline = result.fields?.headline,
                         trailText = result.fields?.trailText,
                         thumbnail = result.fields?.thumbnail,

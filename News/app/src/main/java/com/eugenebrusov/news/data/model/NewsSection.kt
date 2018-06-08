@@ -31,19 +31,19 @@ data class NewsSection(
                 // Temporary skip following sections
                 return when (id) {
                     "about" -> null
-                    "artanddesign" -> null
                     "animals-farmed" -> null
                     "australia-news" -> null
                     "better-business" -> null
                     "business-to-business" -> null
                     "cardiff" -> null
                     "childrens-books-site" -> null
+                    "commentisfree" -> null
+                    "crosswords" -> null
+                    "culture-network" -> null
+                    "culture-professionals-network" -> null
+                    "edinburgh" -> null
                     else -> NewsSection(id = id, webTitle = webTitle)
                 }
-//                return when (id) {
-//                    "artanddesign" -> NewsSection(id = id, webTitle = webTitle)
-//                    else -> null
-//                }
             } catch (e: ParseException) {
                 return null
             }

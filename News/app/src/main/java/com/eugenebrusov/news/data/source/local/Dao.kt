@@ -36,7 +36,7 @@ import com.eugenebrusov.news.data.model.NewsSection
      *
      * @return all news items
      */
-    @Query("SELECT * FROM news WHERE sectionName = :section ORDER BY webPublicationDate DESC")
+    @Query("SELECT * FROM news WHERE sectionId = :section ORDER BY webPublicationDate DESC")
     fun searchNews(section: String): DataSource.Factory<Int, NewsItem>
 
     /**
@@ -52,7 +52,7 @@ import com.eugenebrusov.news.data.model.NewsSection
      * Delete news items by section name
      *
      */
-    @Query("DELETE FROM news WHERE sectionName = :section")
+    @Query("DELETE FROM news WHERE sectionId = :section")
     fun deleteNews(section: String)
 
     /**
