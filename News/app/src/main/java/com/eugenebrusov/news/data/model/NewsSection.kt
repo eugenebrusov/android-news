@@ -23,26 +23,36 @@ data class NewsSection(
                 val id = result.id ?: throw ParseException("Invalid section id", 0)
                 val webTitle = result.webTitle ?: throw ParseException("Invalid section title", 0)
 
-                // Temporary skip long section names
-                if (webTitle.length > 25) {
-                    return null
-                }
-
-                // Temporary skip following sections
+                // Temporary show only sections listed below
                 return when (id) {
-                    "about" -> null
-                    "animals-farmed" -> null
-                    "australia-news" -> null
-                    "better-business" -> null
-                    "business-to-business" -> null
-                    "cardiff" -> null
-                    "childrens-books-site" -> null
-                    "commentisfree" -> null
-                    "crosswords" -> null
-                    "culture-network" -> null
-                    "culture-professionals-network" -> null
-                    "edinburgh" -> null
-                    else -> NewsSection(id = id, webTitle = webTitle)
+                    "artanddesign" -> NewsSection(id = id, webTitle = webTitle)
+                    "books" -> NewsSection(id = id, webTitle = webTitle)
+                    "business" -> NewsSection(id = id, webTitle = webTitle)
+                    "cities" -> NewsSection(id = id, webTitle = webTitle)
+                    "commentisfree" -> NewsSection(id = id, webTitle = webTitle)
+                    "community" -> NewsSection(id = id, webTitle = webTitle)
+                    "culture" -> NewsSection(id = id, webTitle = webTitle)
+                    "education" -> NewsSection(id = id, webTitle = webTitle)
+                    "environment" -> NewsSection(id = id, webTitle = webTitle)
+                    "fashion" -> NewsSection(id = id, webTitle = webTitle)
+                    "film" -> NewsSection(id = id, webTitle = webTitle)
+                    "football" -> NewsSection(id = id, webTitle = webTitle)
+                    "law" -> NewsSection(id = id, webTitle = webTitle)
+                    "lifeandstyle" -> NewsSection(id = id, webTitle = webTitle)
+                    "media" -> NewsSection(id = id, webTitle = webTitle)
+                    "money" -> NewsSection(id = id, webTitle = webTitle)
+                    "music" -> NewsSection(id = id, webTitle = webTitle)
+                    "politics" -> NewsSection(id = id, webTitle = webTitle)
+                    "science" -> NewsSection(id = id, webTitle = webTitle)
+                    "society" -> NewsSection(id = id, webTitle = webTitle)
+                    "sport" -> NewsSection(id = id, webTitle = webTitle)
+                    "stage" -> NewsSection(id = id, webTitle = webTitle)
+                    "technology" -> NewsSection(id = id, webTitle = webTitle)
+                    "theguardian" -> NewsSection(id = id, webTitle = webTitle)
+                    "travel" -> NewsSection(id = id, webTitle = webTitle)
+                    "weather" -> NewsSection(id = id, webTitle = webTitle)
+                    "world" -> NewsSection(id = id, webTitle = webTitle)
+                    else -> null
                 }
             } catch (e: ParseException) {
                 return null
