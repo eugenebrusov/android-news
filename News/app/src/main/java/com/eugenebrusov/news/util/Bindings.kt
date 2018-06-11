@@ -32,10 +32,10 @@ object Bindings {
         }
     }
 
-    @BindingAdapter("app:pagesResource")
-    @JvmStatic fun setPages(viewPager: ViewPager, pagesResource: Resource<List<NewsSection>>?) {
+    @BindingAdapter("app:sectionsResource")
+    @JvmStatic fun setSectionsResource(viewPager: ViewPager, sectionsResource: Resource<List<NewsSection>>?) {
         with(viewPager.adapter as NewsListActivity.ViewPagerAdapter) {
-            this.pagesResource = pagesResource
+            this.sectionsResource = sectionsResource
         }
     }
 

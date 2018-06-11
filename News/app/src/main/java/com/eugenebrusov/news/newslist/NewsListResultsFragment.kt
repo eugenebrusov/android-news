@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eugenebrusov.news.ViewModelFactory
-import com.eugenebrusov.news.databinding.FragmentNewsListBinding
+import com.eugenebrusov.news.databinding.FragmentNewsListResultsBinding
 
 private const val ARG_SECTION = "section"
 
@@ -17,7 +17,7 @@ private const val ARG_SECTION = "section"
  */
 class NewsListResultsFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewsListBinding
+    private lateinit var binding: FragmentNewsListResultsBinding
     private lateinit var section: String
 
     private var listener: OnNewsItemSelectedListener? = null
@@ -31,7 +31,7 @@ class NewsListResultsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = FragmentNewsListBinding
+        binding = FragmentNewsListResultsBinding
                 .inflate(inflater, container, false)
                 .apply {
                     setLifecycleOwner(this@NewsListResultsFragment)

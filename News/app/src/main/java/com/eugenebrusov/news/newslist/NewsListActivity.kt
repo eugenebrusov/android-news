@@ -54,7 +54,7 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
 
     class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-        var pagesResource: Resource<List<NewsSection>>? = null
+        var sectionsResource: Resource<List<NewsSection>>? = null
             set(value) {
                 if (value == null) {
                     return
@@ -65,8 +65,8 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
             }
 
         override fun getCount(): Int {
-            return when (pagesResource?.status) {
-                SUCCESS -> pagesResource?.data?.size ?: 0
+            return when (sectionsResource?.status) {
+                SUCCESS -> sectionsResource?.data?.size ?: 0
                 LOADING -> 1
                 ERROR -> 1
                 else -> 0
@@ -74,8 +74,8 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
         }
 
         override fun getItem(position: Int): Fragment {
-            return when (pagesResource?.status) {
-                SUCCESS -> NewsListResultsFragment.newInstance(pagesResource?.data?.get(position)?.id!!)
+            return when (sectionsResource?.status) {
+                SUCCESS -> NewsListResultsFragment.newInstance(sectionsResource?.data?.get(position)?.id!!)
                 LOADING -> NewsListLoadingFragment()
                 ERROR -> NewsListLoadingFragment()
                 else -> throw IllegalArgumentException("Unknown resource state")
@@ -83,8 +83,8 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            return when (pagesResource?.status) {
-                SUCCESS -> pagesResource?.data?.get(position)?.webTitle ?: ""
+            return when (sectionsResource?.status) {
+                SUCCESS -> sectionsResource?.data?.get(position)?.webTitle ?: ""
                 LOADING -> ""
                 ERROR -> ""
                 else -> throw IllegalArgumentException("Unknown resource state")
@@ -92,7 +92,7 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
         }
 
         override fun getItemPosition(`object`: Any): Int {
-            return if (`object` is NewsListLoadingFragment && LOADING != pagesResource?.status) {
+            return if (`object` is NewsListLoadingFragment && LOADING != sectionsResource?.status) {
                 POSITION_NONE
             } else {
                 POSITION_UNCHANGED

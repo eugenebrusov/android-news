@@ -16,9 +16,9 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    val pagesResource = repository.sections()
+    val sectionsResource = repository.sections()
 
-    val pagesVisible = map(pagesResource) { resource ->
+    val sectionsVisible = map(sectionsResource) { resource ->
         when (resource.status) {
             Status.SUCCESS -> resource?.data?.isEmpty() == false
             Status.LOADING -> false

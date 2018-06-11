@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabMode="scrollable"
-                app:layoutHeight="@{viewModel.pagesVisible ? LayoutParams.WRAP_CONTENT : 0}"/>
+                app:layoutHeight="@{viewModel.sectionsVisible ? LayoutParams.WRAP_CONTENT : 0}"/>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:pagesResource="@{viewModel.pagesResource}" />
+            app:sectionsResource="@{viewModel.sectionsResource}" />
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>
