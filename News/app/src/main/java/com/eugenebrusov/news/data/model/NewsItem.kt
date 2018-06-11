@@ -1,8 +1,6 @@
 package com.eugenebrusov.news.data.model
 
-import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import com.eugenebrusov.news.data.source.remote.guardian.json.search.JSONSearchResult
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -11,19 +9,18 @@ import java.util.*
 /**
  * Immutable model class for a NewsItem.
  *
- * @param id unique id of the news item
  */
-@Entity(tableName = "news")
+@Entity(tableName = "news", primaryKeys = ["id"])
 data class NewsItem(
-        @PrimaryKey @ColumnInfo(name = "id") val id: String,
-        @ColumnInfo(name = "webPublicationDate") val webPublicationDate: Long,
-        @ColumnInfo(name = "sectionId") val sectionId: String,
-        @ColumnInfo(name = "headline") val headline: String?,
-        @ColumnInfo(name = "trailText") val trailText: String?,
-        @ColumnInfo(name = "thumbnail") val thumbnail: String?,
-        @ColumnInfo(name = "bodyText") val bodyText: String?,
-        @ColumnInfo(name = "webTitle") val webTitle: String?,
-        @ColumnInfo(name = "bylineImageUrl") val bylineImageUrl: String?
+        val id: String,
+        val webPublicationDate: Long,
+        val sectionId: String,
+        val headline: String?,
+        val trailText: String?,
+        val thumbnail: String?,
+        val bodyText: String?,
+        val webTitle: String?,
+        val bylineImageUrl: String?
 ) {
     companion object {
 

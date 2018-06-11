@@ -1,6 +1,5 @@
 package com.eugenebrusov.news.util
 
-import android.arch.paging.PagedList
 import android.databinding.BindingAdapter
 import android.support.v4.view.ViewPager
 import android.support.v4.widget.SwipeRefreshLayout
@@ -17,8 +16,7 @@ import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.newslist.NewsListActivity
 import com.eugenebrusov.news.newslist.NewsListPagedAdapter
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 /**
  * Created by Eugene Brusov on 1/7/18.

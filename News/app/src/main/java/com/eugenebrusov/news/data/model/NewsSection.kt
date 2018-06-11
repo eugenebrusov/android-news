@@ -8,7 +8,6 @@ import java.text.ParseException
 /**
  * Immutable model class for a NewsSection.
  *
- * @param id unique id of the news item
  */
 @Entity(tableName = "sections", primaryKeys = ["id"])
 data class NewsSection(
