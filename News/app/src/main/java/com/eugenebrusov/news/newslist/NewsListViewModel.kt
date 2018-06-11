@@ -13,7 +13,7 @@ import com.eugenebrusov.news.data.source.Repository
  */
 class NewsListViewModel(
         val context: Application,
-        val repository: Repository
+        private val repository: Repository
 ) : AndroidViewModel(context) {
 
     private val reloadSectionsLiveData = MutableLiveData<Boolean>()

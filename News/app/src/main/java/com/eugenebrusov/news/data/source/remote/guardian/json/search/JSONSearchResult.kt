@@ -5,6 +5,7 @@ package com.eugenebrusov.news.data.source.remote.guardian.json.search
  */
 data class JSONSearchResult(val id: String?,
                             val sectionId: String?,
+                            val sectionName: String?,
                             val webPublicationDate: String?,
                             val fields: JSONSearchResultFields?,
                             val tags: List<JSONSearchResultTag>?)

@@ -12,7 +12,7 @@ import com.eugenebrusov.news.data.source.Repository
  */
 class NewsDetailViewModel(
         val context: Application,
-        val repository: Repository
+        private val repository: Repository
 ) : AndroidViewModel(context) {
 
     private val id = MutableLiveData<String>()
