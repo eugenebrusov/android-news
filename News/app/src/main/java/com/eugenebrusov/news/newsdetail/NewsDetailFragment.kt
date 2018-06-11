@@ -17,18 +17,19 @@ class NewsDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = FragmentNewsDetailsBinding.inflate(inflater, container, false).apply {
-            setLifecycleOwner(this@NewsDetailFragment)
-        }
+        binding = FragmentNewsDetailsBinding
+                .inflate(inflater, container, false)
+                .apply {
+                    setLifecycleOwner(this@NewsDetailFragment)
+                }
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = ViewModelFactory.obtainViewModel(this, NewsDetailViewModel::class.java)
+        val viewModel = ViewModelFactory.obtainViewModel(activity!!, NewsDetailViewModel::class.java)
         binding.viewModel = viewModel
-        binding.viewModel?.findNewsItem((activity as NewsDetailActivity).intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID))
     }
 
 }

@@ -31,9 +31,11 @@ class NewsListResultsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = FragmentNewsListBinding.inflate(inflater, container, false).apply {
-            setLifecycleOwner(this@NewsListResultsFragment)
-        }
+        binding = FragmentNewsListBinding
+                .inflate(inflater, container, false)
+                .apply {
+                    setLifecycleOwner(this@NewsListResultsFragment)
+                }
         return binding.root
     }
 
@@ -49,21 +51,10 @@ class NewsListResultsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.addItemDecoration(NewsListSpacesDecoration())
 
-        val adapter = NewsListPagedAdapter()
+        val adapter = NewsListPagedAdapter { id, sharedView ->
+            listener?.onNewsItemSelected(id, sharedView)
+        }
         recyclerView.adapter = adapter
-
-//        /**
-//         *
-//         * Probably, interaction between fragment and activity should be arranged via shared ViewModel,
-//         * but it might bring unexpected problems if LiveData handles values of View class
-//         * since it's required to transfer sharedView to animate transition between news list and new detail
-//         *
-//         */
-//        try {
-//            adapter.newsItemSelectedCallback = context as? OnNewsItemSelectedListener
-//        } catch (e: ClassCastException) {
-//            throw ClassCastException(context!!.toString() + " must implement OnNewsItemSelectedListener")
-//        }
     }
 
     override fun onAttach(context: Context) {
@@ -85,6 +76,10 @@ class NewsListResultsFragment : Fragment() {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
+     *
+     * Probably, interaction between fragment and activity should be arranged via shared ViewModel,
+     * but since it's required to transfer sharedView it's better to send it via interface
+     * rather than via LiveData
      *
      * See the Android Training lesson [Communicating with Other Fragments]
      * (http://developer.android.com/training/basics/fragments/communicating.html)

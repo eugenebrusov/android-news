@@ -1,6 +1,5 @@
 package com.eugenebrusov.news.newsdetail
 
-import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -19,12 +18,15 @@ class NewsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val viewModel = ViewModelFactory
+                .obtainViewModel(this@NewsDetailActivity, NewsDetailViewModel::class.java)
+
         DataBindingUtil.setContentView<ActivityNewsDetailBinding>(
                 this, R.layout.activity_news_detail)
                 .apply {
-                    setLifecycleOwner(this@NewsDetailActivity)
-                    viewModel = ViewModelFactory
-                            .obtainViewModel(this@NewsDetailActivity, NewsDetailViewModel::class.java)
+                    this.setLifecycleOwner(this@NewsDetailActivity)
+                    this.viewModel = viewModel
                 }
 
         setSupportActionBar(toolbar)
@@ -34,6 +36,10 @@ class NewsDetailActivity : AppCompatActivity() {
         val window = window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+
+        // Get news details by id
+        val newsId = intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID)
+        viewModel.findNewsItem(newsId)
     }
 
     /**
