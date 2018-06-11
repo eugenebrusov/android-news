@@ -16,7 +16,11 @@ class NewsListViewModel(
         val repository: Repository
 ) : AndroidViewModel(context) {
 
-    val sectionsResource = repository.sections()
+    private val reloadSectionsLiveData = MutableLiveData<Boolean>()
+
+    val sectionsResource = switchMap(reloadSectionsLiveData) {
+        repository.sections()
+    }
 
     val sectionsVisible = map(sectionsResource) { resource ->
         when (resource.status) {
@@ -47,11 +51,15 @@ class NewsListViewModel(
         Status.LOADING == results.status && count == 0
     }
 
-    fun loadNews(section: String) {
+    fun loadNews(section: String?) {
         this.section.value = section
     }
 
     fun refresh() {
         resultsResource.value?.data?.refresh?.invoke()
+    }
+
+    fun reloadSections() {
+        reloadSectionsLiveData.value = true
     }
 }

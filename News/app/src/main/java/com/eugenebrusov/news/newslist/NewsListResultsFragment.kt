@@ -18,16 +18,8 @@ private const val ARG_SECTION = "section"
 class NewsListResultsFragment : Fragment() {
 
     private lateinit var binding: FragmentNewsListResultsBinding
-    private lateinit var section: String
 
     private var listener: OnNewsItemSelectedListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            section = it.getString(ARG_SECTION)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -44,7 +36,6 @@ class NewsListResultsFragment : Fragment() {
 
         val viewModel = ViewModelFactory.obtainViewModel(this, NewsListViewModel::class.java)
         binding.viewModel = viewModel
-        viewModel.loadNews(section = section)
 
         val recyclerView = binding.recyclerView
         recyclerView.setHasFixedSize(true)
@@ -55,6 +46,9 @@ class NewsListResultsFragment : Fragment() {
             listener?.onNewsItemSelected(id, sharedView)
         }
         recyclerView.adapter = adapter
+
+        val section = arguments?.getString(ARG_SECTION)
+        viewModel.loadNews(section = section)
     }
 
     override fun onAttach(context: Context) {

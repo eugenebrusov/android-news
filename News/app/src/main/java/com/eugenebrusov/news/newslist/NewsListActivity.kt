@@ -24,18 +24,22 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
+        val viewModel = ViewModelFactory
+                .obtainViewModel(this@NewsListActivity, NewsListViewModel::class.java)
+
         DataBindingUtil.setContentView<ActivityNewsListBinding>(
                 this, R.layout.activity_news_list)
                 .apply {
-                    viewPager.adapter = ViewPagerAdapter(supportFragmentManager)
-                    tabLayout.setupWithViewPager(viewPager)
+                    this.viewPager.adapter = ViewPagerAdapter(supportFragmentManager)
+                    this.tabLayout.setupWithViewPager(viewPager)
 
-                    setLifecycleOwner(this@NewsListActivity)
-                    viewModel = ViewModelFactory
-                            .obtainViewModel(this@NewsListActivity, NewsListViewModel::class.java)
+                    this.setLifecycleOwner(this@NewsListActivity)
+                    this.viewModel = viewModel
                 }
 
         setSupportActionBar(toolbar)
+
+        viewModel.reloadSections()
     }
 
     override fun onNewsItemSelected(id: String, sharedView: View) {
@@ -77,7 +81,7 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
             return when (sectionsResource?.status) {
                 SUCCESS -> NewsListResultsFragment.newInstance(sectionsResource?.data?.get(position)?.id!!)
                 LOADING -> NewsListLoadingFragment()
-                ERROR -> NewsListLoadingFragment()
+                ERROR -> NewsListErrorFragment()
                 else -> throw IllegalArgumentException("Unknown resource state")
             }
         }
@@ -93,6 +97,8 @@ class NewsListActivity : AppCompatActivity(), NewsListResultsFragment.OnNewsItem
 
         override fun getItemPosition(`object`: Any): Int {
             return if (`object` is NewsListLoadingFragment && LOADING != sectionsResource?.status) {
+                POSITION_NONE
+            } else if (`object` is NewsListErrorFragment && ERROR != sectionsResource?.status) {
                 POSITION_NONE
             } else {
                 POSITION_UNCHANGED
