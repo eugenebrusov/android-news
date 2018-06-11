@@ -1,9 +1,7 @@
 package com.eugenebrusov.news.data.source
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.DataSource
-import android.util.Log
 import com.eugenebrusov.news.data.model.Listing
 import com.eugenebrusov.news.data.model.NewsItem
 import com.eugenebrusov.news.data.model.NewsSection
@@ -89,7 +87,6 @@ class Repository(
                             null
                         }
 
-                Log.e("searchNews", "toDate $toDate")
                 return guardianService.search(section = section, toDate = toDate)
             }
 
