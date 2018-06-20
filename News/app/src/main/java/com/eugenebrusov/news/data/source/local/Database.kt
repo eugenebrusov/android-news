@@ -10,7 +10,7 @@ import com.eugenebrusov.news.data.model.NewsSection
 /**
  * The Room Database that contains the news and sections table.
  */
-@Database(entities = arrayOf(NewsItem::class, NewsSection::class), version = 1)
+@Database(entities = arrayOf(NewsItem::class, NewsSection::class), version = 1, exportSchema = false)
 abstract class Database : RoomDatabase() {
 
     abstract fun dao(): Dao

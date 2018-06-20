@@ -23,26 +23,26 @@ import java.util.*
  */
 object Bindings {
 
-    @BindingAdapter("app:results")
-    @JvmStatic fun setItems(recyclerView: RecyclerView, results: Resource<Listing<NewsItem>>?) {
+    @BindingAdapter("results")
+    @JvmStatic fun setResults(recyclerView: RecyclerView, results: Resource<Listing<NewsItem>>?) {
         with(recyclerView.adapter as NewsListPagedAdapter) {
             this.results = results
         }
     }
 
-    @BindingAdapter("app:sectionsResource")
+    @BindingAdapter("sectionsResource")
     @JvmStatic fun setSectionsResource(viewPager: ViewPager, sectionsResource: Resource<List<NewsSection>>?) {
         with(viewPager.adapter as NewsListActivity.ViewPagerAdapter) {
             this.sectionsResource = sectionsResource
         }
     }
 
-    @BindingAdapter("app:thumbnail")
+    @BindingAdapter("thumbnail")
     @JvmStatic fun setThumbnail(imageView: ImageView, thumbnail: String?) {
         GlideApp.with(imageView.context).load(thumbnail).into(imageView)
     }
 
-    @BindingAdapter("app:byline")
+    @BindingAdapter("byline")
     @JvmStatic fun setByline(imageView: ImageView, bylineImageUrl: String?) {
         GlideApp.with(imageView.context)
                 .load(bylineImageUrl)
@@ -50,7 +50,7 @@ object Bindings {
                 .into(imageView)
     }
 
-    @BindingAdapter("app:webPublicationDate")
+    @BindingAdapter("webPublicationDate")
     @JvmStatic fun setWebPublicationDate(textView: TextView, webPublicationDate: Long?) {
         textView.text = ""
         if (webPublicationDate != null) {
@@ -62,17 +62,17 @@ object Bindings {
         }
     }
 
-    @BindingAdapter("app:body")
+    @BindingAdapter("body")
     @JvmStatic fun setBody(textView: TextView, bodyText: String?) {
         textView.text = bodyText?.replace(". ", ".\n\n")
     }
 
-    @BindingAdapter("app:refreshEnabled")
+    @BindingAdapter("refreshEnabled")
     @JvmStatic fun setRefreshEnabled(refreshLayout: SwipeRefreshLayout, enabled: Boolean?) {
         refreshLayout.isEnabled = (enabled == true)
     }
 
-    @BindingAdapter("app:layoutHeight")
+    @BindingAdapter("layoutHeight")
     @JvmStatic fun setLayoutHeight(layout: ViewGroup, height: Int?) {
         val layoutParams = layout.layoutParams
         layoutParams.height = height ?: 0

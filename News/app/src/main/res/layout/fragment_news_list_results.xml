@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:onRefreshListener="@{viewModel::refresh}"
-            app:refreshing="@{viewModel.refreshing}"
+            app:refreshing="@{safeUnbox(viewModel.refreshing)}"
             app:refreshEnabled="@{viewModel.refreshEnabled}">
 
             <android.support.v7.widget.RecyclerView
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                android:nestedScrollingEnabled="@{viewModel.nestedScrollingEnabled}"
+                android:nestedScrollingEnabled="@{safeUnbox(viewModel.nestedScrollingEnabled)}"
                 app:results="@{viewModel.resultsResource}" />
 
         </android.support.v4.widget.SwipeRefreshLayout>

@@ -2,6 +2,7 @@ package com.eugenebrusov.news
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
@@ -20,6 +21,7 @@ class ViewModelFactory private constructor(
         private val repository: Repository
 ) : ViewModelProvider.NewInstanceFactory() {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>) =
             with(modelClass) {
                 when {

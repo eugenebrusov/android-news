@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabMode="scrollable"
-                app:layoutHeight="@{viewModel.sectionsVisible ? LayoutParams.WRAP_CONTENT : 0}"/>
+                app:layoutHeight="@{safeUnbox(viewModel.sectionsVisible) ? LayoutParams.WRAP_CONTENT : 0}"/>
 
         </android.support.design.widget.AppBarLayout>
 
