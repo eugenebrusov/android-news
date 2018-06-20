@@ -5,20 +5,17 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="android.widget.LinearLayout.LayoutParams" />
 
-        <variable name="position" type="int" />
-
-        <variable name="clickListener" type="android.view.View.OnClickListener"/>
+        <variable name="viewModel"
+            type="com.eugenebrusov.news.newslist.NewsListViewModel" />
 
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical"
-        app:layoutHeight="@{position == 0 ? LayoutParams.MATCH_PARENT : LayoutParams.WRAP_CONTENT}">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -41,7 +38,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="@string/news_list_error_button_retry"
-            android:onClick="@{clickListener}"/>
+            android:onClick="@{() -> viewModel.reloadSections()}"/>
 
     </LinearLayout>
 

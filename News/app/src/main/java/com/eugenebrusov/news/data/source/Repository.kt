@@ -4,12 +4,16 @@ import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
 import com.eugenebrusov.news.data.model.Listing
 import com.eugenebrusov.news.data.model.NewsItem
+import com.eugenebrusov.news.data.model.NewsSection
 import com.eugenebrusov.news.data.model.Resource
 import com.eugenebrusov.news.data.source.local.Dao
 import com.eugenebrusov.news.data.source.remote.guardian.GuardianService
 import com.eugenebrusov.news.data.source.remote.guardian.json.search.JSONSearchBody
+import com.eugenebrusov.news.data.source.remote.guardian.json.sections.JSONSectionsBody
 import com.eugenebrusov.news.data.source.remote.util.ApiResponse
+import com.eugenebrusov.news.data.source.remote.util.ApiSuccessResponse
 import com.eugenebrusov.news.data.source.util.AppExecutors
+import com.eugenebrusov.news.data.source.util.NetworkBoundResource
 import com.eugenebrusov.news.data.source.util.PagedListNetworkBoundResource
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -25,11 +29,37 @@ class Repository(
         private val guardianService: GuardianService
 ) {
 
+    fun sections(): LiveData<Resource<List<NewsSection>>> {
+        return object : NetworkBoundResource<List<NewsSection>, JSONSectionsBody>(appExecutors) {
+
+            override fun saveCallResult(result: List<NewsSection>) {
+                dao.insertNewsSections(result)
+            }
+
+            override fun shouldFetch(data: List<NewsSection>?): Boolean {
+                return (data == null || data.isEmpty())
+            }
+
+            override fun loadFromDb(): LiveData<List<NewsSection>> {
+               return dao.sections()
+            }
+
+            override fun createCall(): LiveData<ApiResponse<JSONSectionsBody>> {
+                return guardianService.sections()
+            }
+
+            override fun processResponse(response: ApiSuccessResponse<JSONSectionsBody>): List<NewsSection> {
+                return response.body?.response?.results?.mapNotNull { result ->
+                    NewsSection.create(result)
+                } ?: listOf()
+            }
+        }.asLiveData()
+    }
+
     /**
-     * Returns a Listing for the given section.
+     * Returns a Listing contains PagedList<NewsItem> for the given section.
      */
     fun searchNews(section: String): LiveData<Resource<Listing<NewsItem>>> {
-
         return object : PagedListNetworkBoundResource<NewsItem, JSONSearchBody>(appExecutors) {
 
             override fun saveCallResult(items: List<NewsItem>) {

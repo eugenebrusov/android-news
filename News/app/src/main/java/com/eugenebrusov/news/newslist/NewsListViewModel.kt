@@ -13,8 +13,22 @@ import com.eugenebrusov.news.data.source.Repository
  */
 class NewsListViewModel(
         val context: Application,
-        val repository: Repository
+        private val repository: Repository
 ) : AndroidViewModel(context) {
+
+    private val reloadSectionsLiveData = MutableLiveData<Boolean>()
+
+    val sectionsResource = switchMap(reloadSectionsLiveData) {
+        repository.sections()
+    }
+
+    val sectionsVisible = map(sectionsResource) { resource ->
+        when (resource.status) {
+            Status.SUCCESS -> resource?.data?.isEmpty() == false
+            Status.LOADING -> false
+            Status.ERROR -> false
+        }
+    }
 
     private val section = MutableLiveData<String>()
 
@@ -37,11 +51,15 @@ class NewsListViewModel(
         Status.LOADING == results.status && count == 0
     }
 
-    fun loadNews(section: String) {
+    fun loadNews(section: String?) {
         this.section.value = section
     }
 
     fun refresh() {
         resultsResource.value?.data?.refresh?.invoke()
+    }
+
+    fun reloadSections() {
+        reloadSectionsLiveData.value = true
     }
 }

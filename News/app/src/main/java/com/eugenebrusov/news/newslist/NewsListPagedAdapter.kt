@@ -15,9 +15,9 @@ import com.eugenebrusov.news.databinding.ItemNewsListBinding
 import com.eugenebrusov.news.databinding.ItemNewsListErrorStateBinding
 import com.eugenebrusov.news.databinding.ItemNewsListLoadingStateBinding
 
-class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
-
-    var newsItemSelectedCallback: OnNewsItemSelectedListener? = null
+class NewsListPagedAdapter(
+        private val handler: (String, View) -> Unit
+) : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 
     var results: Resource<Listing<NewsItem>>? = null
         set(value) {
@@ -49,7 +49,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
             R.layout.item_news_list_error_state -> NewsListItemErrorStateViewHolder.create(parent) {
                 results?.data?.retry?.invoke()
             }
-            else -> throw IllegalArgumentException("unknown view type $viewType")
+            else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
     }
 
@@ -60,7 +60,7 @@ class NewsListPagedAdapter : PagedListAdapter<NewsItem, RecyclerView.ViewHolder>
                     val newsItem = getItem(position)
                     binding.newsItem = newsItem
                     binding.clickListener = View.OnClickListener {
-                        newsItemSelectedCallback?.onNewsItemSelected(newsItem!!.id, binding.thumbnailImage)
+                        handler.invoke(newsItem!!.id, binding.thumbnailImage)
                     }
                     binding.executePendingBindings()
                 }

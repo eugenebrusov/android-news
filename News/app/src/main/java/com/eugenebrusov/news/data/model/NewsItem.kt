@@ -1,8 +1,6 @@
 package com.eugenebrusov.news.data.model
 
-import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import com.eugenebrusov.news.data.source.remote.guardian.json.search.JSONSearchResult
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -11,19 +9,19 @@ import java.util.*
 /**
  * Immutable model class for a NewsItem.
  *
- * @param entryId          unique id of the news item
  */
-@Entity(tableName = "news")
-data class NewsItem constructor(
-        @PrimaryKey @ColumnInfo(name = "id") val id: String,
-        @ColumnInfo(name = "webPublicationDate") val webPublicationDate: Long,
-        @ColumnInfo(name = "sectionName") val sectionName: String?,
-        @ColumnInfo(name = "headline") val headline: String?,
-        @ColumnInfo(name = "trailText") val trailText: String?,
-        @ColumnInfo(name = "thumbnail") val thumbnail: String?,
-        @ColumnInfo(name = "bodyText") val bodyText: String?,
-        @ColumnInfo(name = "webTitle") val webTitle: String?,
-        @ColumnInfo(name = "bylineImageUrl") val bylineImageUrl: String?
+@Entity(tableName = "news", primaryKeys = ["id"])
+data class NewsItem(
+        val id: String,
+        val webPublicationDate: Long,
+        val sectionId: String,
+        val sectionName: String?,
+        val headline: String?,
+        val trailText: String?,
+        val thumbnail: String?,
+        val bodyText: String?,
+        val webTitle: String?,
+        val bylineImageUrl: String?
 ) {
     companion object {
 
@@ -41,9 +39,13 @@ data class NewsItem constructor(
                     bylineImageUrl = result.tags[0].bylineImageUrl
                 }
 
+                val sectionId = result.sectionId
+                        ?: throw ParseException("Invalid news item section id", 0)
+
                 return NewsItem(id = id,
                         webPublicationDate = webPublicationDate,
-                        sectionName = result.sectionName?.toLowerCase(),
+                        sectionId = sectionId.toLowerCase(),
+                        sectionName = result.sectionName,
                         headline = result.fields?.headline,
                         trailText = result.fields?.trailText,
                         thumbnail = result.fields?.thumbnail,
