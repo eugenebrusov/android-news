@@ -29,6 +29,12 @@ data class NewsItem(
             try {
                 val id = result.id ?: throw ParseException("Invalid news item id", 0)
 
+                val sectionId = result.sectionId
+                        ?: throw ParseException("Invalid news item section id", 0)
+
+                val thumbnail = result.fields?.thumbnail
+                        ?: throw ParseException("Invalid news item thumbnail", 0)
+
                 val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
                 val webPublicationDate = format.parse(result.webPublicationDate).time
 
@@ -39,17 +45,18 @@ data class NewsItem(
                     bylineImageUrl = result.tags[0].bylineImageUrl
                 }
 
-                val sectionId = result.sectionId
-                        ?: throw ParseException("Invalid news item section id", 0)
+                if (bylineImageUrl == null) {
+                    throw ParseException("Invalid news item bylineImageUrl", 0)
+                }
 
                 return NewsItem(id = id,
                         webPublicationDate = webPublicationDate,
                         sectionId = sectionId.toLowerCase(),
                         sectionName = result.sectionName,
-                        headline = result.fields?.headline,
-                        trailText = result.fields?.trailText,
-                        thumbnail = result.fields?.thumbnail,
-                        bodyText = result.fields?.bodyText,
+                        headline = result.fields.headline,
+                        trailText = result.fields.trailText,
+                        thumbnail = thumbnail,
+                        bodyText = result.fields.bodyText,
                         webTitle = webTitle,
                         bylineImageUrl = bylineImageUrl)
             } catch (e: ParseException) {

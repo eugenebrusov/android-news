@@ -29,7 +29,6 @@ data class NewsSection(
                     "business" -> NewsSection(id = id, webTitle = webTitle)
                     "cities" -> NewsSection(id = id, webTitle = webTitle)
                     "commentisfree" -> NewsSection(id = id, webTitle = webTitle)
-                    "community" -> NewsSection(id = id, webTitle = webTitle)
                     "culture" -> NewsSection(id = id, webTitle = webTitle)
                     "education" -> NewsSection(id = id, webTitle = webTitle)
                     "environment" -> NewsSection(id = id, webTitle = webTitle)
