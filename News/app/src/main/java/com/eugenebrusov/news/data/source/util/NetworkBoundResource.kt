@@ -74,6 +74,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                         setValue(Resource.error(response.errorMessage, newData))
                     }
                 }
+                else -> {}
             }
         }
     }

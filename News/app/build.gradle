@@ -5,6 +5,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    namespace 'com.eugenebrusov.news'
+
     compileSdkVersion rootProject.targetSdkVersion
     defaultConfig {
         applicationId "com.eugenebrusov.news"
