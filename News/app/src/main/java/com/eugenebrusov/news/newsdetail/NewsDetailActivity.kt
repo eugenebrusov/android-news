@@ -38,7 +38,7 @@ class NewsDetailActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
 
         // Get news details by id
-        val newsId = intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID)
+        val newsId = intent.getStringExtra(NewsDetailActivity.EXTRA_NEWS_ID)!!
         viewModel.findNewsItem(newsId)
     }
 
