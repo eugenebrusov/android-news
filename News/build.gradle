@@ -6,7 +6,7 @@ buildscript {
         gradleVersion = '8.0.0'
 
         minSdkVersion = 21
-        targetSdkVersion = 30
+        targetSdkVersion = 34
 
         supportVersion = '27.1.1'
         constraintLayoutVersion = '1.0.2'
