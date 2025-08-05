@@ -124,6 +124,8 @@ abstract class PagedListNetworkBoundResource<ResultType, RequestType>
                             setValue(Resource.error(response.errorMessage, listing))
                         }
                     }
+
+                    else -> {}
                 }
             }
         }
